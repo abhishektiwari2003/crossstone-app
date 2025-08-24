@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 type Props = { projectId: string };
 
@@ -56,22 +59,28 @@ export default function AddPayment({ projectId }: Props) {
   }
 
   return (
-    <div>
-      {!open ? (
-        <button onClick={() => setOpen(true)} className="rounded-md bg-violet-600 text-white px-3 py-2 text-sm">Add payment</button>
-      ) : (
-        <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row sm:items-end">
-          <div>
-            <label className="block text-sm mb-1">Amount</label>
-            <input value={amount} onChange={e=>setAmount(e.target.value)} className="w-28 rounded-md border px-3 py-2 bg-transparent" />
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Currency</label>
-            <input value={currency} onChange={e=>setCurrency(e.target.value)} className="w-24 rounded-md border px-3 py-2 bg-transparent" />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button size="sm">Add payment</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add payment</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={onSubmit} className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Amount</label>
+              <Input value={amount} onChange={e => setAmount(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Currency</label>
+              <Input value={currency} onChange={e => setCurrency(e.target.value)} />
+            </div>
           </div>
           <div>
             <label className="block text-sm mb-1">Status</label>
-            <select value={status} onChange={e=>setStatus(e.target.value)} className="w-40 rounded-md border px-3 py-2 bg-transparent">
+            <select value={status} onChange={e => setStatus(e.target.value)} className="w-full rounded-md border px-3 py-2 bg-transparent">
               <option value="PENDING">PENDING</option>
               <option value="PARTIAL">PARTIAL</option>
               <option value="PAID">PAID</option>
@@ -79,16 +88,16 @@ export default function AddPayment({ projectId }: Props) {
             </select>
           </div>
           <div>
-            <label className="block text-sm mb-1">Receipt</label>
-            <input type="file" accept="image/*,application/pdf" onChange={e=>setFile(e.target.files?.[0] ?? null)} className="block" />
+            <label className="block text-sm mb-1">Receipt (optional)</label>
+            <Input type="file" accept="image/*,application/pdf" onChange={e => setFile(e.target.files?.[0] ?? null)} />
           </div>
-          <div className="flex gap-2">
-            <button disabled={loading} className="rounded-md bg-violet-600 text-white px-3 py-2 text-sm disabled:opacity-50">{loading?"Saving...":"Save"}</button>
-            <button type="button" onClick={()=>setOpen(false)} className="rounded-md border px-3 py-2 text-sm">Cancel</button>
-          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button disabled={loading} type="submit">{loading ? "Saving..." : "Save"}</Button>
+          </DialogFooter>
         </form>
-      )}
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

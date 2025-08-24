@@ -1,6 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { canManageProjects } from "@/lib/authz";
+import { cookies } from "next/headers";
+import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 type ProjectListItem = { id: string; name: string; status: string };
 
@@ -11,22 +14,25 @@ async function getProjects(cookie: string): Promise<{ projects: ProjectListItem[
 
 export default async function ProjectsPage() {
 	const session = await getServerSession(authOptions);
-	const cookie = (await import("next/headers")).cookies().toString();
+	const cookieStore = await cookies();
+	const cookie = cookieStore.toString();
 	const { projects } = await getProjects(cookie);
 	const isAdmin = canManageProjects((session?.user as { role?: "SUPER_ADMIN" | "ADMIN" | "PROJECT_MANAGER" | "SITE_ENGINEER" | "CLIENT" } | null)?.role);
 
 	return (
-		<div className="p-6 space-y-6">
+		<div className="space-y-6">
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Projects</h1>
-				{isAdmin ? <a href="/projects/new" className="rounded-md bg-violet-600 text-white px-3 py-2">New</a> : null}
+				{isAdmin ? <Link href="/projects/new" className="rounded-md bg-violet-600 text-white px-3 py-2">New</Link> : null}
 			</div>
-			<div className="grid gap-4">
+			<div className="grid gap-3">
 				{projects?.length ? projects.map((p) => (
-					<a key={p.id} href={`/projects/${p.id}`} className="rounded-lg border p-4 hover:bg-zinc-50 dark:hover:bg-zinc-900">
-						<div className="font-medium">{p.name}</div>
-						<div className="text-sm text-zinc-600">{p.status}</div>
-					</a>
+					<Link key={p.id} href={`/projects/${p.id}`}>
+						<Card className="p-4 hover:bg-zinc-50">
+							<div className="font-medium">{p.name}</div>
+							<div className="text-sm text-zinc-600">{p.status}</div>
+						</Card>
+					</Link>
 				)) : <p className="text-sm text-zinc-600">No projects yet.</p>}
 			</div>
 		</div>

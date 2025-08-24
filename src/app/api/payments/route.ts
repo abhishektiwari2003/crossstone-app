@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { canEditPayments } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import type { Role, PaymentStatus } from "@/generated/prisma";
+import { canEditPayments } from "@/lib/authz";
 
 const CreatePaymentSchema = z.object({
 	projectId: z.string().min(1),
@@ -15,6 +15,16 @@ const CreatePaymentSchema = z.object({
 	notes: z.string().optional(),
 });
 
+const includeProject = {
+	project: {
+		select: {
+			id: true,
+			name: true,
+			client: { select: { id: true, name: true, email: true } },
+		},
+	},
+} as const;
+
 export async function GET() {
 	const session = await getServerSession(authOptions);
 	if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -22,16 +32,16 @@ export async function GET() {
 	const userId = (session.user as { id: string }).id;
 
 	if (role === "CLIENT") {
-		const payments = await prisma.payment.findMany({ where: { project: { clientId: userId } } });
+		const payments = await prisma.payment.findMany({ where: { project: { clientId: userId } }, include: includeProject });
 		return NextResponse.json({ payments });
 	}
 
 	if (role === "PROJECT_MANAGER" || role === "SITE_ENGINEER") {
-		const payments = await prisma.payment.findMany({ where: { project: { OR: [{ managerId: userId }, { members: { some: { userId } } }] } } });
+		const payments = await prisma.payment.findMany({ where: { project: { OR: [{ managerId: userId }, { members: { some: { userId } } }] } }, include: includeProject });
 		return NextResponse.json({ payments });
 	}
 
-	const payments = await prisma.payment.findMany({});
+	const payments = await prisma.payment.findMany({ include: includeProject });
 	return NextResponse.json({ payments });
 }
 

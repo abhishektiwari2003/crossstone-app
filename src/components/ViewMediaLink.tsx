@@ -8,6 +8,7 @@ export default function ViewMediaLink({ fileKey, label }: Props) {
   const [viewUrl, setViewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function fetchViewUrl() {
     const data = await fetch(`/api/media/view?key=${encodeURIComponent(fileKey)}`).then(r=>r.json());
     if (!data?.url) throw new Error('Failed to get view URL');
@@ -19,13 +20,14 @@ export default function ViewMediaLink({ fileKey, label }: Props) {
     let mounted = true;
     fetchViewUrl().catch(() => {}).finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
-  }, [fileKey]);
+  }, [fetchViewUrl, fileKey]);
 
   async function open() {
     try {
       // Refresh URL on click to avoid expiry
       const url = await fetchViewUrl();
       window.open(url, '_blank');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {}
   }
 

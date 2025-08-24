@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = { projectId: string };
 
@@ -58,30 +62,34 @@ export default function AddProjectUpdate({ projectId }: Props) {
   }
 
   return (
-    <div>
-      {!open ? (
-        <button onClick={() => setOpen(true)} className="rounded-md bg-violet-600 text-white px-3 py-2 text-sm">Add update</button>
-      ) : (
-        <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row sm:items-end">
-          <div className="flex-1">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button size="sm">Add update</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add project update</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={onSubmit} className="space-y-3">
+          <div>
             <label className="block text-sm mb-1">Notes</label>
-            <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className="w-full rounded-md border px-3 py-2 bg-transparent" />
+            <Textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3} />
           </div>
           <div>
-            <label className="block text-sm mb-1">Status</label>
-            <input value={status} onChange={e => setStatus(e.target.value)} className="w-40 rounded-md border px-3 py-2 bg-transparent" placeholder="Optional" />
+            <label className="block text-sm mb-1">Status (optional)</label>
+            <Input value={status} onChange={e => setStatus(e.target.value)} />
           </div>
           <div>
             <label className="block text-sm mb-1">Image</label>
-            <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)} className="block" />
+            <Input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)} />
           </div>
-          <div className="flex gap-2">
-            <button disabled={loading} className="rounded-md bg-violet-600 text-white px-3 py-2 text-sm disabled:opacity-50">{loading ? "Saving..." : "Save"}</button>
-            <button type="button" onClick={() => setOpen(false)} className="rounded-md border px-3 py-2 text-sm">Cancel</button>
-          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button disabled={loading} type="submit">{loading ? "Saving..." : "Save"}</Button>
+          </DialogFooter>
         </form>
-      )}
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

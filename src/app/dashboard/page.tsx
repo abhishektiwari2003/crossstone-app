@@ -1,32 +1,33 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
+import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import SignOutButton from "@/components/SignOutButton";
 
 export default async function DashboardPage() {
 	const session = await getServerSession(authOptions);
 	const role = (session?.user as { role?: Role } | null)?.role;
 
 	return (
-		<div className="p-6 space-y-4">
-			<h1 className="text-2xl font-semibold">Dashboard</h1>
-			<p className="text-zinc-600">Welcome{session?.user?.name ? `, ${session.user.name}` : ""}.</p>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<div className="rounded-lg border p-4">
-					<h2 className="font-medium mb-2">Quick Stats</h2>
-					<p>Role: {role}</p>
-				</div>
-				<div className="rounded-lg border p-4">
-					<h2 className="font-medium mb-2">Shortcuts</h2>
-					<ul className="list-disc pl-6 text-sm">
-						{role === "SUPER_ADMIN" || role === "ADMIN" ? (
-							<li>Manage users, projects, payments</li>
-						) : role === "PROJECT_MANAGER" || role === "SITE_ENGINEER" ? (
-							<li>Update assigned projects and upload inspection images</li>
-						) : (
-							<li>View project tracking and payments</li>
-						)}
-					</ul>
-				</div>
+		<div className="space-y-6">
+			<div className="flex items-center justify-between">
+				<h1 className="text-2xl font-semibold">Dashboard</h1>
+				<SignOutButton />
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+				<Card className="p-4">
+					<div className="text-sm text-zinc-600">Role</div>
+					<div className="text-xl font-semibold">{role}</div>
+				</Card>
+				<Card className="p-4">
+					<div className="text-sm text-zinc-600">Projects</div>
+					<Link className="underline" href="/projects">Go to projects</Link>
+				</Card>
+				<Card className="p-4">
+					<div className="text-sm text-zinc-600">Payments</div>
+					<Link className="underline" href="/payments">Go to payments</Link>
+				</Card>
 			</div>
 		</div>
 	);
