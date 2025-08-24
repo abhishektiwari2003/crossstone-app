@@ -1,8 +1,10 @@
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import type { Role } from "@/generated/prisma";
 
 export default async function DashboardPage() {
-	const session = await auth();
-	const role = (session?.user as any)?.role as string | undefined;
+	const session = await getServerSession(authOptions);
+	const role = (session?.user as { role?: Role } | null)?.role;
 
 	return (
 		<div className="p-6 space-y-4">

@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { canEditPayments } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import type { Role, PaymentStatus } from "@/generated/prisma";
 
 const CreatePaymentSchema = z.object({
 	projectId: z.string().min(1),
@@ -14,10 +16,10 @@ const CreatePaymentSchema = z.object({
 });
 
 export async function GET() {
-	const session = await auth();
+	const session = await getServerSession(authOptions);
 	if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-	const role = (session.user as any).role as string;
-	const userId = (session.user as any).id as string;
+	const role = (session.user as { role?: Role }).role as Role;
+	const userId = (session.user as { id: string }).id;
 
 	if (role === "CLIENT") {
 		const payments = await prisma.payment.findMany({ where: { project: { clientId: userId } } });
@@ -34,8 +36,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-	const session = await auth();
-	if (!canEditPayments((session?.user as any)?.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+	const session = await getServerSession(authOptions);
+	const user = (session?.user as { id: string; role?: Role } | null) ?? null;
+	if (!canEditPayments(user?.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 	const body = await req.json().catch(() => null);
 	const parsed = CreatePaymentSchema.safeParse(body);
 	if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
@@ -43,11 +46,10 @@ export async function POST(req: Request) {
 	const payment = await prisma.payment.create({
 		data: {
 			projectId,
-			createdById: (session?.user as any)?.id,
+			createdById: user!.id,
 			amount,
 			currency,
-			status: status as any,
-			// @ts-expect-error Prisma accepts Date
+			status: status as PaymentStatus,
 			dueDate: dueDate ? new Date(dueDate) : null,
 			notes,
 		},

@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { NextResponse, type NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import type { Role } from "@/generated/prisma";
 
 const BodySchema = z.object({
 	key: z.string().min(1),
@@ -10,13 +12,15 @@ const BodySchema = z.object({
 	fileSize: z.number().int().positive(),
 });
 
-export async function POST(_: Request, { params }: { params: { id: string } }) {
-	const session = await auth();
-	if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-	const json = await _.json().catch(() => null);
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+	const session = await getServerSession(authOptions);
+	const user = (session?.user as { id: string; role?: Role } | null) ?? null;
+	if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	const json = await req.json().catch(() => null);
 	const parsed = BodySchema.safeParse(json);
 	if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
-	const update = await prisma.projectUpdate.findUnique({ where: { id: params.id } });
+	const { id } = await context.params;
+	const update = await prisma.projectUpdate.findUnique({ where: { id } });
 	if (!update) return NextResponse.json({ error: "Update not found" }, { status: 404 });
 	const media = await prisma.media.create({
 		data: {
@@ -27,7 +31,7 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
 			fileUrl: parsed.data.url,
 			mimeType: parsed.data.mimeType,
 			fileSize: parsed.data.fileSize,
-			createdById: (session.user as any).id,
+			createdById: user.id,
 		},
 	});
 	return NextResponse.json({ media });

@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { presignPutObject } from "@/lib/s3";
+import type { Role } from "@/generated/prisma";
 
 const BodySchema = z.object({
 	type: z.enum(["inspection", "receipt"]),
@@ -16,9 +18,9 @@ const IMAGE_MIME = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const RECEIPT_MIME = [...IMAGE_MIME, "application/pdf"];
 
 export async function POST(req: Request) {
-	const session = await auth();
+	const session = await getServerSession(authOptions);
 	if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-	const role = (session.user as any).role as string | undefined;
+	const role = (session.user as { role?: Role }).role;
 
 	const json = await req.json().catch(() => null);
 	const parsed = BodySchema.safeParse(json);
@@ -43,7 +45,7 @@ export async function POST(req: Request) {
 	}
 
 	// Simple role check: PM/Engineer/Admin/SuperAdmin can upload; clients cannot
-	if (["CLIENT"].includes(String(role))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+	if (role === "CLIENT") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
 	const ext = mimeType === "application/pdf" ? "pdf" : mimeType.split("/")[1]?.replace("jpeg", "jpg");
 	const id = crypto.randomUUID();

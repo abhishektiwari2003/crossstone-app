@@ -1,14 +1,18 @@
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { isAdmin } from "@/lib/authz";
+import type { Role } from "@/generated/prisma";
 
-async function getUsers(cookie: string) {
+type UserSummary = { id: string; name: string; email: string; role: Role };
+
+async function getUsers(cookie: string): Promise<{ users: UserSummary[] }> {
 	const res = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/users`, { headers: { cookie }, cache: "no-store" });
 	return res.json();
 }
 
 export default async function UsersPage() {
-	const session = await auth();
-	if (!isAdmin((session?.user as any)?.role)) return <div className="p-6">Forbidden</div>;
+	const session = await getServerSession(authOptions);
+	if (!isAdmin((session?.user as { role?: Role } | null)?.role)) return <div className="p-6">Forbidden</div>;
 	const cookie = (await import("next/headers")).cookies().toString();
 	const { users } = await getUsers(cookie);
 	return (
@@ -18,7 +22,7 @@ export default async function UsersPage() {
 				<a href="/users/new" className="rounded-md bg-violet-600 text-white px-3 py-2">New</a>
 			</div>
 			<div className="grid gap-2">
-				{users?.length ? users.map((u: any) => (
+				{users?.length ? users.map((u) => (
 					<div key={u.id} className="flex items-center justify-between rounded-lg border p-3">
 						<div>
 							<div className="font-medium">{u.name}</div>
