@@ -13,3 +13,170 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  PROJECT_MANAGER
+  SITE_ENGINEER
+  CLIENT
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+}
+
+enum ProjectMemberRole {
+  PM
+  ENGINEER
+}
+
+enum MediaType {
+  INSPECTION_IMAGE
+  RECEIPT
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          Role
+  isActive      Boolean  @default(true)
+  createdById   String?
+  createdBy     User?    @relation("UserCreatedUsers", fields: [createdById], references: [id])
+  createdUsers  User[]   @relation("UserCreatedUsers")
+  createdAt     DateTime @default(now())
+
+  // Relations
+  managedProjects  Project[] @relation("ManagedProjects")
+  clientProjects   Project[] @relation("ClientProjects")
+  projectMembers   ProjectMember[]
+  projectUpdates   ProjectUpdate[] @relation("UpdateAuthor")
+  media            Media[]
+  paymentsCreated  Payment[]
+  notifications    Notification[]
+  projectsCreated  Project[]  @relation("ProjectCreatedBy")
+}
+
+model Project {
+  id            String         @id @default(cuid())
+  name          String
+  description   String?
+  status        ProjectStatus  @default(PLANNED)
+  isArchived    Boolean        @default(false)
+  createdById   String
+  managerId     String
+  clientId      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  createdBy   User   @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  manager     User   @relation("ManagedProjects", fields: [managerId], references: [id])
+  client      User   @relation("ClientProjects", fields: [clientId], references: [id])
+
+  members       ProjectMember[]
+  updates       ProjectUpdate[]
+  media         Media[]
+  payments      Payment[]
+
+  @@index([managerId])
+  @@index([clientId])
+}
+
+model ProjectMember {
+  id            String            @id @default(cuid())
+  projectId     String
+  userId        String
+  roleOnProject ProjectMemberRole
+  createdAt     DateTime          @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+  @@index([userId])
+}
+
+model ProjectUpdate {
+  id             String    @id @default(cuid())
+  projectId      String
+  authorId       String
+  notes          String
+  statusSnapshot String?
+  createdAt      DateTime  @default(now())
+
+  project  Project @relation(fields: [projectId], references: [id])
+  author   User    @relation("UpdateAuthor", fields: [authorId], references: [id])
+  media    Media[]
+
+  @@index([projectId])
+  @@index([authorId])
+}
+
+model Media {
+  id               String     @id @default(cuid())
+  projectId        String
+  projectUpdateId  String?
+  paymentId        String?
+  type             MediaType
+  fileKey          String
+  fileUrl          String
+  mimeType         String
+  fileSize         Int
+  createdById      String
+  createdAt        DateTime   @default(now())
+
+  project       Project        @relation(fields: [projectId], references: [id])
+  projectUpdate ProjectUpdate? @relation(fields: [projectUpdateId], references: [id])
+  payment       Payment?       @relation(fields: [paymentId], references: [id])
+  createdBy     User           @relation(fields: [createdById], references: [id])
+
+  @@index([projectId])
+  @@index([projectUpdateId])
+  @@index([paymentId])
+}
+
+model Payment {
+  id           String        @id @default(cuid())
+  projectId    String
+  createdById  String
+  amount       Decimal       @db.Decimal(12, 2)
+  currency     String        @default("INR")
+  status       PaymentStatus @default(PENDING)
+  dueDate      DateTime?
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  createdBy User    @relation(fields: [createdById], references: [id])
+  media     Media[]
+
+  @@index([projectId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
