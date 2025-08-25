@@ -1,15 +1,15 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-export default function LoginPage() {
-	const router = useRouter();
+function LoginInner() {
+	const searchParams = useSearchParams();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
@@ -31,17 +31,28 @@ export default function LoginPage() {
 		e.preventDefault();
 		setLoading(true);
 		setError(null);
+		// Resolve safe callback URL; default to dashboard
+		let callbackUrl = "/dashboard";
+		try {
+			const raw = searchParams.get("callbackUrl") ?? undefined;
+			if (raw) {
+				// Only allow same-origin relative paths to avoid open redirects
+				if (raw.startsWith("/") && !raw.startsWith("//") && !raw.includes("/login?callbackUrl")) {
+					callbackUrl = raw;
+				}
+			}
+		} catch { }
 		const res = await signIn("credentials", {
-			redirect: false,
+			redirect: true,
 			email,
 			password,
+			callbackUrl,
 		});
-		setLoading(false);
-		if (res?.error) {
+		// If redirect is prevented for some reason, handle error
+		if (res && (res as { error?: string | null }).error) {
+			setLoading(false);
 			setError("Invalid credentials");
-			return;
 		}
-		router.replace("/dashboard");
 	}
 
 	return (
@@ -66,5 +77,13 @@ export default function LoginPage() {
 				</CardContent>
 			</Card>
 		</div>
+	);
+}
+
+export default function LoginPage() {
+	return (
+		<Suspense fallback={<div className="min-h-dvh flex items-center justify-center p-6">Loading…</div>}>
+			<LoginInner />
+		</Suspense>
 	);
 }
