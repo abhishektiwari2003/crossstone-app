@@ -1,8 +1,16 @@
-export { default as middleware } from "next-auth/middleware";
+import { withAuth } from "next-auth/middleware";
+
+export default withAuth({
+	pages: {
+		signIn: "/login",
+	},
+});
 
 export const config = {
 	matcher: [
-		// Protect everything except Next internals, API auth, public assets, and auth pages
-		"/((?!api/auth|_next/static|_next/image|favicon.ico|login$|login/|public).*)",
+		"/dashboard/:path*",
+		"/projects/:path*",
+		"/payments/:path*",
+		"/users/:path*",
 	],
 };

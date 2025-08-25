@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,18 @@ export default function LoginPage() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
+
+	// If a nested callbackUrl appears, normalize it to /dashboard to avoid loops
+	useEffect(() => {
+		try {
+			const url = new URL(window.location.href);
+			const callback = url.searchParams.get("callbackUrl");
+			if (callback && callback.includes("/login?callbackUrl")) {
+				url.searchParams.set("callbackUrl", "/dashboard");
+				window.history.replaceState({}, "", url.toString());
+			}
+		} catch { }
+	}, []);
 
 	async function onSubmit(e: React.FormEvent) {
 		e.preventDefault();

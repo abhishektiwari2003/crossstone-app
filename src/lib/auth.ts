@@ -56,6 +56,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Prevent redirect loops back to /login and sanitize external URLs
+    async redirect({ url, baseUrl }) {
+      try {
+        const urlObj = new URL(url, baseUrl);
+        // If NextAuth tries to redirect to /login again, send to dashboard instead
+        if (urlObj.pathname === "/login") return "/dashboard";
+        // Only allow same-origin redirects
+        if (urlObj.origin === baseUrl) return urlObj.toString();
+        return baseUrl;
+      } catch {
+        return baseUrl;
+      }
+    },
     async jwt({ token, user }) {
       const t = token as JwtToken;
       if (user) {
