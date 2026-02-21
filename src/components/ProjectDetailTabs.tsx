@@ -54,10 +54,10 @@ function formatStatus(status: string) {
 export default function ProjectDetailTabs(props: Props) {
 	return (
 		<Tabs defaultValue="overview" className="w-full">
-			<TabsList className="bg-slate-100/80 p-1 rounded-xl h-auto gap-1">
-				<TabsTrigger value="overview" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Overview</TabsTrigger>
-				<TabsTrigger value="updates" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Updates</TabsTrigger>
-				<TabsTrigger value="payments" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
+			<TabsList className="bg-slate-100/80 p-1 rounded-xl h-auto gap-1 flex flex-wrap w-full sm:inline-flex sm:w-auto">
+				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Overview</TabsTrigger>
+				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Updates</TabsTrigger>
+				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}

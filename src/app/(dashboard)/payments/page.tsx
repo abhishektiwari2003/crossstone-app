@@ -56,7 +56,7 @@ export default async function PaymentsPage() {
 			</div>
 
 			{/* Summary KPI Cards */}
-			<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 				{summaryCards.map((card) => (
 					<div key={card.label} className={`${card.gradient} rounded-2xl p-4 shadow-lg ${card.shadow}`}>
 						<div className="flex items-center gap-2 mb-2">

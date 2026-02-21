@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Props = { projectId: string };
 
@@ -84,12 +85,17 @@ export default function AddPayment({ projectId }: Props) {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm outline-none">
-              <option value="PENDING">Pending</option>
-              <option value="PARTIAL">Partial</option>
-              <option value="PAID">Paid</option>
-              <option value="OVERDUE">Overdue</option>
-            </select>
+            <Select value={status} onValueChange={setStatus} required>
+              <SelectTrigger className="w-full rounded-xl border border-slate-200 px-4 py-2.5 h-auto bg-white hover:bg-slate-50 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm shadow-none">
+                <SelectValue placeholder="Select a status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="PARTIAL">Partial</SelectItem>
+                <SelectItem value="PAID">Paid</SelectItem>
+                <SelectItem value="OVERDUE">Overdue</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Receipt (optional)</label>

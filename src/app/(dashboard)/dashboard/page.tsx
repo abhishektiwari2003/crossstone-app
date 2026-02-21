@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
 import Link from "next/link";
-import SignOutButton from "@/components/SignOutButton";
 import { prisma } from "@/lib/prisma";
 import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity } from "lucide-react";
 
@@ -61,7 +60,6 @@ export default async function DashboardPage() {
 					</h1>
 					<p className="text-slate-500 mt-1">Here&apos;s what&apos;s happening with your projects today.</p>
 				</div>
-				<SignOutButton />
 			</div>
 
 			{/* KPI Cards */}

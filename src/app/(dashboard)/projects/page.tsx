@@ -66,7 +66,7 @@ export default async function ProjectsPage() {
 			<div className="grid gap-4">
 				{projects?.length ? projects.map((p) => (
 					<Link key={p.id} href={`/projects/${p.id}`}>
-						<div className={`glass-card hover-lift border-l-4 ${getStatusBorderColor(p.status)} p-5 flex items-center justify-between group`}>
+						<div className={`glass-card hover-lift border-l-4 ${getStatusBorderColor(p.status)} p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 group`}>
 							<div className="flex items-center gap-4 min-w-0">
 								<div className="flex items-center justify-center w-11 h-11 rounded-xl bg-slate-100 shrink-0">
 									<FolderKanban className="h-5 w-5 text-slate-600" />
@@ -78,11 +78,11 @@ export default async function ProjectsPage() {
 									)}
 								</div>
 							</div>
-							<div className="flex items-center gap-3 shrink-0">
+							<div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
 								<span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(p.status)}`}>
 									{formatStatus(p.status)}
 								</span>
-								<ArrowRight className="h-4 w-4 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+								<ArrowRight className="h-4 w-4 text-slate-400 opacity-0 -translate-x-1 sm:group-hover:opacity-100 sm:group-hover:translate-x-0 transition-all hidden sm:block" />
 							</div>
 						</div>
 					</Link>

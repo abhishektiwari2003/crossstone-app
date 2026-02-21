@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeft, FolderKanban } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type User = { id: string; name: string; email: string; role: string };
 
@@ -69,17 +70,25 @@ export default function NewProjectPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Manager</label>
-            <select value={managerId} onChange={e => setManagerId(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 bg-white/60 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm outline-none" required>
-              <option value="">Select a manager</option>
-              {managers.map(u => <option key={u.id} value={u.id}>{u.name} ({u.role.replace(/_/g, " ")})</option>)}
-            </select>
+            <Select value={managerId} onValueChange={setManagerId} required>
+              <SelectTrigger className="w-full rounded-xl border border-slate-200 px-4 py-2.5 h-auto bg-white/60 hover:bg-white/80 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm shadow-none">
+                <SelectValue placeholder="Select a manager" />
+              </SelectTrigger>
+              <SelectContent>
+                {managers.map(u => <SelectItem key={u.id} value={u.id}>{u.name} ({u.role.replace(/_/g, " ")})</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Client</label>
-            <select value={clientId} onChange={e => setClientId(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 bg-white/60 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm outline-none" required>
-              <option value="">Select a client</option>
-              {clients.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-            </select>
+            <Select value={clientId} onValueChange={setClientId} required>
+              <SelectTrigger className="w-full rounded-xl border border-slate-200 px-4 py-2.5 h-auto bg-white/60 hover:bg-white/80 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm shadow-none">
+                <SelectValue placeholder="Select a client" />
+              </SelectTrigger>
+              <SelectContent>
+                {clients.map(u => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex gap-3 pt-2">
             <button disabled={loading} className="rounded-xl gradient-blue text-white px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-110 transition-all disabled:opacity-50">

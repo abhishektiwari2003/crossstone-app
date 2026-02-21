@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ArrowLeft, Users } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function NewUserPage() {
   const router = useRouter();
@@ -59,13 +60,18 @@ export default function NewUserPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Role</label>
-            <select value={role} onChange={e => setRole(e.target.value)} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 bg-white/60 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm outline-none">
-              <option value="SUPER_ADMIN">Super Admin</option>
-              <option value="ADMIN">Admin</option>
-              <option value="PROJECT_MANAGER">Project Manager</option>
-              <option value="SITE_ENGINEER">Site Engineer</option>
-              <option value="CLIENT">Client</option>
-            </select>
+            <Select value={role} onValueChange={setRole} required>
+              <SelectTrigger className="w-full rounded-xl border border-slate-200 px-4 py-2.5 h-auto bg-white/60 hover:bg-white/80 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm shadow-none">
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
+                <SelectItem value="ADMIN">Admin</SelectItem>
+                <SelectItem value="PROJECT_MANAGER">Project Manager</SelectItem>
+                <SelectItem value="SITE_ENGINEER">Site Engineer</SelectItem>
+                <SelectItem value="CLIENT">Client</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Temporary Password</label>

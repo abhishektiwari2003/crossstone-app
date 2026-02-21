@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import SignOutButton from "@/components/SignOutButton";
 import { Home, FolderKanban, CreditCard, Users, Building2, ChevronRight } from "lucide-react";
 
 function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.ComponentType<{ className?: string }>; label: string }) {
@@ -23,12 +25,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 sidebar-gradient border-r border-white/[0.06] z-50">
                 {/* Logo */}
                 <div className="flex items-center gap-3 px-5 h-16 border-b border-white/[0.06]">
-                    <div className="flex items-center justify-center w-9 h-9 rounded-xl gradient-blue shadow-lg shadow-blue-500/20">
-                        <Building2 className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                        <span className="text-white font-bold text-lg tracking-tight">CrossStone</span>
-                        <p className="text-[10px] text-slate-500 font-medium tracking-widest uppercase -mt-0.5">Construction ERM</p>
+                    <div className="flex items-center h-10 w-32 relative">
+                        <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain object-left" />
                     </div>
                 </div>
 
@@ -60,7 +58,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {/* Top bar (desktop) */}
                 <header className="sticky top-0 z-40 h-16 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl hidden md:flex items-center px-8">
                     <div className="flex-1" />
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
+                        <SignOutButton />
                         <div className="h-8 w-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xs font-bold text-white">
                             U
                         </div>
@@ -68,17 +67,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </header>
 
                 {/* Mobile Header */}
-                <header className="sticky top-0 z-40 h-14 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl flex items-center px-4 md:hidden">
-                    <div className="flex items-center gap-2">
-                        <div className="flex items-center justify-center w-7 h-7 rounded-lg gradient-blue">
-                            <Building2 className="h-4 w-4 text-white" />
-                        </div>
-                        <span className="font-bold text-base text-slate-900 tracking-tight">CrossStone</span>
+                <header className="sticky top-0 z-40 h-14 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl flex items-center justify-between px-4 md:hidden">
+                    <div className="flex items-center h-8 w-28 relative">
+                        <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain object-left" />
                     </div>
+                    <SignOutButton />
                 </header>
 
                 {/* Page content */}
-                <main className="min-h-0 page-bg">
+                <main className="min-h-0 page-bg pb-24 md:pb-8">
                     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
                         {children}
                     </div>
