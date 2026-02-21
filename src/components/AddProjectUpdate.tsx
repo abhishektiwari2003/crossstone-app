@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Plus } from "lucide-react";
 
 type Props = { projectId: string };
 
@@ -64,33 +65,34 @@ export default function AddProjectUpdate({ projectId }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">Add update</Button>
+        <Button size="sm" className="rounded-xl gradient-blue border-0 text-white font-semibold gap-1.5 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:brightness-110 transition-all">
+          <Plus className="h-3.5 w-3.5" />
+          Add Update
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-2xl border-slate-200 shadow-2xl">
         <DialogHeader>
-          <DialogTitle>Add project update</DialogTitle>
+          <DialogTitle className="text-lg font-bold text-slate-900">Add project update</DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-3">
+        <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm mb-1">Notes</label>
-            <Textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3} />
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Notes</label>
+            <Textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3} className="rounded-xl border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20" />
           </div>
           <div>
-            <label className="block text-sm mb-1">Status (optional)</label>
-            <Input value={status} onChange={e => setStatus(e.target.value)} />
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Status (optional)</label>
+            <Input value={status} onChange={e => setStatus(e.target.value)} className="rounded-xl border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20" />
           </div>
           <div>
-            <label className="block text-sm mb-1">Image</label>
-            <Input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)} />
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Inspection Image</label>
+            <Input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)} className="rounded-xl border-slate-200" />
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button disabled={loading} type="submit">{loading ? "Saving..." : "Save"}</Button>
+          <DialogFooter className="gap-2">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl">Cancel</Button>
+            <Button disabled={loading} type="submit" className="rounded-xl gradient-blue border-0 text-white font-semibold shadow-lg shadow-blue-500/20">{loading ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
-
-

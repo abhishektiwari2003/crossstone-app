@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Props = { projectId: string };
 
@@ -61,44 +63,50 @@ export default function AddPayment({ projectId }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">Add payment</Button>
+        <Button size="sm" className="rounded-xl gradient-emerald border-0 text-white font-semibold gap-1.5 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:brightness-110 transition-all">
+          <Plus className="h-3.5 w-3.5" />
+          Add Payment
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-2xl border-slate-200 shadow-2xl">
         <DialogHeader>
-          <DialogTitle>Add payment</DialogTitle>
+          <DialogTitle className="text-lg font-bold text-slate-900">Add payment</DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-3">
+        <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm mb-1">Amount</label>
-              <Input value={amount} onChange={e => setAmount(e.target.value)} />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount</label>
+              <Input value={amount} onChange={e => setAmount(e.target.value)} className="rounded-xl border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20" />
             </div>
             <div>
-              <label className="block text-sm mb-1">Currency</label>
-              <Input value={currency} onChange={e => setCurrency(e.target.value)} />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Currency</label>
+              <Input value={currency} onChange={e => setCurrency(e.target.value)} className="rounded-xl border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20" />
             </div>
           </div>
           <div>
-            <label className="block text-sm mb-1">Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value)} className="w-full rounded-md border px-3 py-2 bg-transparent">
-              <option value="PENDING">PENDING</option>
-              <option value="PARTIAL">PARTIAL</option>
-              <option value="PAID">PAID</option>
-              <option value="OVERDUE">OVERDUE</option>
-            </select>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
+            <Select value={status} onValueChange={setStatus} required>
+              <SelectTrigger className="w-full rounded-xl border border-slate-200 px-4 py-2.5 h-auto bg-white hover:bg-slate-50 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all text-sm shadow-none">
+                <SelectValue placeholder="Select a status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="PARTIAL">Partial</SelectItem>
+                <SelectItem value="PAID">Paid</SelectItem>
+                <SelectItem value="OVERDUE">Overdue</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
-            <label className="block text-sm mb-1">Receipt (optional)</label>
-            <Input type="file" accept="image/*,application/pdf" onChange={e => setFile(e.target.files?.[0] ?? null)} />
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Receipt (optional)</label>
+            <Input type="file" accept="image/*,application/pdf" onChange={e => setFile(e.target.files?.[0] ?? null)} className="rounded-xl border-slate-200" />
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button disabled={loading} type="submit">{loading ? "Saving..." : "Save"}</Button>
+          <DialogFooter className="gap-2">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl">Cancel</Button>
+            <Button disabled={loading} type="submit" className="rounded-xl gradient-emerald border-0 text-white font-semibold shadow-lg shadow-emerald-500/20">{loading ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
-
-
