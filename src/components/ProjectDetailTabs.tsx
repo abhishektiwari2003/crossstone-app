@@ -4,7 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddProjectUpdate from "@/components/AddProjectUpdate";
 import AddPayment from "@/components/AddPayment";
 import ViewMediaLink from "@/components/ViewMediaLink";
-import { User, CreditCard, FileText, Clock } from "lucide-react";
+import ProjectEngineerList from "@/components/ProjectEngineerList";
+import ProjectEngineerSelector from "@/components/ProjectEngineerSelector";
+import { User, CreditCard, FileText, Clock, HardHat } from "lucide-react";
 
 type Update = {
 	id: string;
@@ -35,6 +37,8 @@ type Props = {
 	payments: Payment[];
 	canEditUpdates: boolean;
 	canEditPayments: boolean;
+	canManageMembers: boolean;
+	existingMemberUserIds?: string[];
 };
 
 function getPaymentStatusStyle(status: string) {
@@ -58,6 +62,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Overview</TabsTrigger>
 				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Updates</TabsTrigger>
 				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
+				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Team</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -177,6 +182,26 @@ export default function ProjectDetailTabs(props: Props) {
 						</div>
 					)}
 				</div>
+			</TabsContent>
+
+			{/* ─── Team Tab ─── */}
+			<TabsContent value="team" className="space-y-4 mt-6">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-2">
+						<HardHat className="h-5 w-5 text-amber-600" />
+						<h2 className="text-lg font-semibold text-slate-900">Assigned Engineers</h2>
+					</div>
+					{props.canManageMembers && (
+						<ProjectEngineerSelector
+							projectId={props.projectId}
+							existingMemberUserIds={props.existingMemberUserIds}
+						/>
+					)}
+				</div>
+				<ProjectEngineerList
+					projectId={props.projectId}
+					canManageMembers={props.canManageMembers}
+				/>
 			</TabsContent>
 		</Tabs>
 	);

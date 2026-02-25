@@ -3,9 +3,9 @@ import { authOptions } from "@/lib/auth";
 import { canManageProjects } from "@/lib/authz";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { FolderKanban, Plus, ArrowRight } from "lucide-react";
+import { FolderKanban, Plus, ArrowRight, HardHat } from "lucide-react";
 
-type ProjectListItem = { id: string; name: string; status: string; description?: string | null };
+type ProjectListItem = { id: string; name: string; status: string; description?: string | null; members?: { id: string; user: { id: string; name: string | null } }[] };
 
 async function getProjects(cookie: string): Promise<{ projects: ProjectListItem[] }> {
 	const res = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/projects`, { headers: { cookie }, cache: "no-store" });
@@ -79,6 +79,12 @@ export default async function ProjectsPage() {
 								</div>
 							</div>
 							<div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
+								{(p.members?.length ?? 0) > 0 && (
+									<span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-semibold">
+										<HardHat className="h-3 w-3" />
+										{p.members!.length} {p.members!.length === 1 ? "Engineer" : "Engineers"}
+									</span>
+								)}
 								<span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(p.status)}`}>
 									{formatStatus(p.status)}
 								</span>
