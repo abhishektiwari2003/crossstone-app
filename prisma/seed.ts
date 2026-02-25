@@ -1,4 +1,4 @@
-import { PrismaClient, Role, ProjectStatus } from "../src/generated/prisma";
+import { PrismaClient, Role, ProjectStatus, ProjectMemberRole } from "../src/generated/prisma";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
@@ -23,6 +23,12 @@ async function main() {
 		create: { name: "Project Manager", email: "pm@crossstone.local", role: Role.PROJECT_MANAGER, passwordHash: password, createdById: superAdmin.id },
 	});
 
+	const engineer = await prisma.user.upsert({
+		where: { email: "engineer@crossstone.local" },
+		update: {},
+		create: { name: "Site Engineer", email: "engineer@crossstone.local", role: Role.SITE_ENGINEER, passwordHash: password, createdById: superAdmin.id },
+	});
+
 	const project = await prisma.project.upsert({
 		where: { id: "demo-project" },
 		update: {},
@@ -40,10 +46,16 @@ async function main() {
 	await prisma.projectMember.upsert({
 		where: { projectId_userId: { projectId: project.id, userId: pm.id } },
 		update: {},
-		create: { projectId: project.id, userId: pm.id, roleOnProject: "PM" },
+		create: { projectId: project.id, userId: pm.id, role: ProjectMemberRole.PROJECT_MANAGER },
 	});
 
-	console.log("Seeded:", { superAdmin: superAdmin.email, pm: pm.email, client: client.email, project: project.name });
+	await prisma.projectMember.upsert({
+		where: { projectId_userId: { projectId: project.id, userId: engineer.id } },
+		update: {},
+		create: { projectId: project.id, userId: engineer.id, role: ProjectMemberRole.SITE_ENGINEER },
+	});
+
+	console.log("Seeded:", { superAdmin: superAdmin.email, pm: pm.email, engineer: engineer.email, client: client.email, project: project.name });
 }
 
 main().finally(async () => {

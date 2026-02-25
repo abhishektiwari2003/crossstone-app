@@ -30,8 +30,8 @@ enum ProjectStatus {
 }
 
 enum ProjectMemberRole {
-  PM
-  ENGINEER
+  PROJECT_MANAGER
+  SITE_ENGINEER
 }
 
 enum MediaType {
@@ -98,7 +98,7 @@ model ProjectMember {
   id            String            @id @default(cuid())
   projectId     String
   userId        String
-  roleOnProject ProjectMemberRole
+  role          ProjectMemberRole
   createdAt     DateTime          @default(now())
 
   project Project @relation(fields: [projectId], references: [id])
