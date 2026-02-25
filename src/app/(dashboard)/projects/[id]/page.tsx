@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Role } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { isAdmin } from "@/lib/authz";
 import ProjectDetailTabs from "@/components/ProjectDetailTabs";
 import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
@@ -32,12 +33,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       client: { select: { id: true, name: true, email: true } },
       updates: { orderBy: { createdAt: "desc" }, include: { media: true, author: { select: { name: true } } } },
       payments: { orderBy: { createdAt: "desc" }, include: { media: true } },
+      members: { include: { user: { select: { id: true, name: true, email: true, role: true } } } },
     },
   });
   if (!project) return notFound();
 
   const canEditUpdates = userRole === "SUPER_ADMIN" || userRole === "ADMIN" || userRole === "PROJECT_MANAGER" || userRole === "SITE_ENGINEER";
   const canEditPayments = userRole === "SUPER_ADMIN" || userRole === "ADMIN" || userRole === "PROJECT_MANAGER";
+  const canManageMembers = isAdmin(userRole as import("@/lib/authz").AppRole);
+  const existingMemberUserIds = project.members?.map(m => m.user.id) ?? [];
 
   return (
     <div className="space-y-6">
@@ -89,6 +93,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         payments={project.payments.map(p => ({ id: p.id, amount: p.amount.toString(), currency: p.currency, status: p.status, createdAt: p.createdAt.toISOString(), media: p.media.map(m => ({ id: m.id, fileKey: m.fileKey })) }))}
         canEditUpdates={canEditUpdates}
         canEditPayments={canEditPayments}
+        canManageMembers={canManageMembers}
+        existingMemberUserIds={existingMemberUserIds}
       />
     </div>
   );
