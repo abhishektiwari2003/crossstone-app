@@ -9,6 +9,7 @@ import ProjectEngineerSelector from "@/components/ProjectEngineerSelector";
 import Link from "next/link";
 import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
 import ProjectServicesMenu from "@/components/ProjectServicesMenu";
+import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
 import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -75,13 +76,14 @@ export default function ProjectDetailTabs(props: Props) {
 
 	return (
 		<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-			<TabsList className="bg-slate-100/80 p-1.5 rounded-xl h-auto gap-1 flex w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto">
+			<TabsList className="bg-slate-100/80 p-1.5 rounded-xl h-auto gap-1 flex justify-start w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto sm:justify-center">
 				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Overview</TabsTrigger>
 				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Updates</TabsTrigger>
 				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Payments</TabsTrigger>
 				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Team</TabsTrigger>
 				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
 				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
+				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -246,6 +248,11 @@ export default function ProjectDetailTabs(props: Props) {
 						<ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
 					</div>
 				</Link>
+			</TabsContent>
+
+			{/* ─── Quarries & Issues Tab ─── */}
+			<TabsContent value="quarries" className="mt-6">
+				<ProjectQuarriesTab projectId={props.projectId} userRole={props.userRole} />
 			</TabsContent>
 
 			{/* ─── Design & Documents Tab ─── */}

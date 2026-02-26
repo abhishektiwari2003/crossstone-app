@@ -39,7 +39,7 @@ export default function MobileBottomNav({ role }: Props) {
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/60 bg-white/95 backdrop-blur-xl md:hidden pb-safe">
-            <div className={`grid grid-cols-${links.length} text-xs`}>
+            <div className="grid grid-cols-4 text-xs">
                 {links.map((link) => {
                     // Match exact path or subpaths (e.g. /projects/123)
                     const isActive = pathname === link.href || (link.href !== "/dashboard" && pathname.startsWith(link.href + "/"));
