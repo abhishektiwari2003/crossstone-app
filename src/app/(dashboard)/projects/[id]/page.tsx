@@ -60,8 +60,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <div className="relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{project.name}</h1>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight break-words hyphens-auto">{project.name}</h1>
                 {project.description && (
                   <p className="text-slate-400 mt-1 max-w-lg">{project.description}</p>
                 )}

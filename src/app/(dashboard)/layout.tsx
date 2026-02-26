@@ -2,6 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
 import { Home, FolderKanban, CreditCard, Users, Building2, ChevronRight } from "lucide-react";
+import MobileBottomNav from "@/components/ui/MobileBottomNav";
+import FloatingActionButton from "@/components/ui/FloatingActionButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import type { Role } from "@/generated/prisma";
 
 function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.ComponentType<{ className?: string }>; label: string }) {
     return (
@@ -18,7 +23,10 @@ function SidebarLink({ href, icon: Icon, label }: { href: string; icon: React.Co
     );
 }
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+    const session = await getServerSession(authOptions);
+    const role = (session?.user as { role?: Role } | null)?.role;
+
     return (
         <div className="min-h-dvh flex">
             {/* Sidebar (hidden on mobile) */}
@@ -54,7 +62,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 md:ml-64">
+            <div className="flex-1 md:ml-64 w-full overflow-x-hidden">
                 {/* Top bar (desktop) */}
                 <header className="sticky top-0 z-40 h-16 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl hidden md:flex items-center px-8">
                     <div className="flex-1" />
@@ -82,27 +90,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </main>
             </div>
 
-            {/* Mobile Bottom Nav */}
-            <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200/60 bg-white/90 backdrop-blur-xl md:hidden">
-                <div className="grid grid-cols-4 text-xs">
-                    <Link className="p-3 flex flex-col items-center gap-1 text-slate-500 hover:text-blue-600 transition-colors" href="/dashboard">
-                        <Home className="h-5 w-5" />
-                        <span className="font-medium">Home</span>
-                    </Link>
-                    <Link className="p-3 flex flex-col items-center gap-1 text-slate-500 hover:text-blue-600 transition-colors" href="/projects">
-                        <FolderKanban className="h-5 w-5" />
-                        <span className="font-medium">Projects</span>
-                    </Link>
-                    <Link className="p-3 flex flex-col items-center gap-1 text-slate-500 hover:text-blue-600 transition-colors" href="/payments">
-                        <CreditCard className="h-5 w-5" />
-                        <span className="font-medium">Payments</span>
-                    </Link>
-                    <Link className="p-3 flex flex-col items-center gap-1 text-slate-500 hover:text-blue-600 transition-colors" href="/users">
-                        <Users className="h-5 w-5" />
-                        <span className="font-medium">Users</span>
-                    </Link>
-                </div>
-            </nav>
+            {/* Context-aware Floating Action Button */}
+            <FloatingActionButton role={role} />
+
+            {/* Mobile Bottom Nav (Role-Aware) */}
+            <MobileBottomNav role={role} />
         </div>
     );
 }

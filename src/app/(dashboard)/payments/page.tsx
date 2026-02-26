@@ -70,8 +70,8 @@ export default async function PaymentsPage() {
 				))}
 			</div>
 
-			{/* Payments Table */}
-			<div className="glass-card overflow-hidden">
+			{/* Desktop Payments Table */}
+			<div className="hidden md:block glass-card overflow-hidden">
 				<div className="w-full overflow-x-auto">
 					<Table>
 						{showMaster ? <TableCaption className="pb-4">All payments across projects</TableCaption> : <TableCaption className="pb-4">Your project payments</TableCaption>}
@@ -110,6 +110,36 @@ export default async function PaymentsPage() {
 						</TableBody>
 					</Table>
 				</div>
+			</div>
+
+			{/* Mobile Payments Cards */}
+			<div className="grid gap-3 md:hidden">
+				{payments?.length ? payments.map((p) => (
+					<div key={p.id} className="glass-card p-4 flex flex-col gap-3">
+						<div className="flex items-center justify-between">
+							<div className="font-bold text-slate-900 text-base">₹{Number(p.amount).toLocaleString()}</div>
+							<span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${getPaymentStatusStyle(p.status)}`}>
+								{formatStatus(p.status)}
+							</span>
+						</div>
+						{showMaster && (
+							<div className="space-y-0.5">
+								<p className="text-sm font-medium text-slate-700 truncate">{p.project?.name}</p>
+								<p className="text-xs text-slate-500 truncate">{p.project?.client?.name}</p>
+							</div>
+						)}
+						<div className="text-[11px] text-slate-400 font-medium">
+							{p.currency}
+						</div>
+					</div>
+				)) : (
+					<div className="glass-card p-8 text-center space-y-3">
+						<div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto">
+							<CreditCard className="h-6 w-6 text-slate-400" />
+						</div>
+						<p className="text-sm text-slate-500">No payments yet.</p>
+					</div>
+				)}
 			</div>
 		</div>
 	);

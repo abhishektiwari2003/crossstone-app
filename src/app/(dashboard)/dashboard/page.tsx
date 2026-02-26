@@ -4,14 +4,25 @@ import type { Role } from "@/generated/prisma";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity } from "lucide-react";
+import EngineerHome from "@/components/EngineerHome";
 
 export default async function DashboardPage() {
 	const session = await getServerSession(authOptions);
-	const user = session?.user as { name?: string | null; role?: Role } | null;
+	const user = session?.user as { id?: string; name?: string | null; role?: Role } | null;
 	const role = user?.role;
 	const firstName = user?.name?.split(" ")[0] ?? "User";
 
-	// Fetch summary counts
+	// If site engineer, show the mobile-optimized Engineer Home instead
+	if (role === "SITE_ENGINEER" && user?.id) {
+		const assignedProjects = await prisma.project.findMany({
+			where: { members: { some: { userId: user.id } } },
+			select: { id: true, name: true, status: true },
+			take: 5
+		});
+		return <EngineerHome firstName={firstName} projects={assignedProjects} />;
+	}
+
+	// Fetch summary counts (Admin & generic view)
 	const [projectCount, activeProjectCount, paymentCount, userCount] = await Promise.all([
 		prisma.project.count(),
 		prisma.project.count({ where: { status: "IN_PROGRESS" } }),

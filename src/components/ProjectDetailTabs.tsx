@@ -62,18 +62,18 @@ function formatStatus(status: string) {
 export default function ProjectDetailTabs(props: Props) {
 	return (
 		<Tabs defaultValue="overview" className="w-full">
-			<TabsList className="bg-slate-100/80 p-1 rounded-xl h-auto gap-1 flex flex-wrap w-full sm:inline-flex sm:w-auto">
-				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Overview</TabsTrigger>
-				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Updates</TabsTrigger>
-				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
-				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Team</TabsTrigger>
-				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Inspections</TabsTrigger>
-				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Design & Documents</TabsTrigger>
+			<TabsList className="bg-slate-100/80 p-1.5 rounded-xl h-auto gap-1 flex w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto">
+				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Overview</TabsTrigger>
+				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Updates</TabsTrigger>
+				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Payments</TabsTrigger>
+				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Team</TabsTrigger>
+				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
+				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
 			<TabsContent value="overview" className="space-y-4 mt-6">
-				<div className="grid sm:grid-cols-3 gap-4">
+				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 					<div className="glass-card p-5">
 						<div className="flex items-center gap-2 mb-3">
 							<div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -130,7 +130,7 @@ export default function ProjectDetailTabs(props: Props) {
 							</div>
 							<p className="text-sm text-slate-700 leading-relaxed">{u.notes}</p>
 							{u.media?.length ? (
-								<div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+								<div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 									{u.media.map(m => (
 										<ViewMediaLink key={m.id} fileKey={m.fileKey} />
 									))}
@@ -172,7 +172,7 @@ export default function ProjectDetailTabs(props: Props) {
 							</div>
 							<p className="text-xs text-slate-400">{new Date(p.createdAt).toLocaleDateString()}</p>
 							{p.media?.length ? (
-								<div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+								<div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 									{p.media.map(m => (
 										<ViewMediaLink key={m.id} fileKey={m.fileKey} label="Receipt" />
 									))}
