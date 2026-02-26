@@ -46,6 +46,18 @@ enum PaymentStatus {
   OVERDUE
 }
 
+enum ChecklistResult {
+  PASS
+  FAIL
+  NA
+}
+
+enum InspectionStatus {
+  DRAFT
+  SUBMITTED
+  REVIEWED
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -59,14 +71,16 @@ model User {
   createdAt     DateTime @default(now())
 
   // Relations
-  managedProjects  Project[] @relation("ManagedProjects")
-  clientProjects   Project[] @relation("ClientProjects")
-  projectMembers   ProjectMember[]
-  projectUpdates   ProjectUpdate[] @relation("UpdateAuthor")
-  media            Media[]
-  paymentsCreated  Payment[]
-  notifications    Notification[]
-  projectsCreated  Project[]  @relation("ProjectCreatedBy")
+  managedProjects    Project[] @relation("ManagedProjects")
+  clientProjects     Project[] @relation("ClientProjects")
+  projectMembers     ProjectMember[]
+  projectUpdates     ProjectUpdate[] @relation("UpdateAuthor")
+  media              Media[]
+  paymentsCreated    Payment[]
+  notifications      Notification[]
+  projectsCreated    Project[]  @relation("ProjectCreatedBy")
+  inspections        Inspection[]
+  reviewedInspections Inspection[] @relation("ReviewedBy")
 }
 
 model Project {
@@ -89,6 +103,8 @@ model Project {
   updates       ProjectUpdate[]
   media         Media[]
   payments      Payment[]
+  milestones    Milestone[]
+  inspections   Inspection[]
 
   @@index([managerId])
   @@index([clientId])
@@ -141,6 +157,7 @@ model Media {
   projectUpdate ProjectUpdate? @relation(fields: [projectUpdateId], references: [id])
   payment       Payment?       @relation(fields: [paymentId], references: [id])
   createdBy     User           @relation(fields: [createdById], references: [id])
+  inspectionResponses InspectionResponse[]
 
   @@index([projectId])
   @@index([projectUpdateId])
@@ -179,4 +196,86 @@ model Notification {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  order       Int
+  isActive    Boolean  @default(true)
+
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+
+  checklistItems ChecklistItem[]
+  inspections    Inspection[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+model ChecklistItem {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  order           Int
+  isRequired      Boolean  @default(true)
+  isPhotoRequired Boolean  @default(false)
+
+  milestoneId     String
+  milestone       Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  responses       InspectionResponse[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([milestoneId])
+}
+
+model Inspection {
+  id          String           @id @default(cuid())
+  status      InspectionStatus @default(DRAFT)
+
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id])
+
+  milestoneId String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id])
+
+  engineerId  String
+  engineer    User @relation(fields: [engineerId], references: [id])
+
+  responses   InspectionResponse[]
+
+  reviewedById String?
+  reviewedBy   User? @relation("ReviewedBy", fields: [reviewedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([milestoneId, engineerId, status])
+  @@index([milestoneId])
+  @@index([projectId])
+  @@index([engineerId])
+}
+
+model InspectionResponse {
+  id              String          @id @default(cuid())
+  result          ChecklistResult
+  remark          String?
+
+  inspectionId    String
+  inspection      Inspection @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+
+  checklistItemId String
+  checklistItem   ChecklistItem @relation(fields: [checklistItemId], references: [id])
+
+  mediaId         String?
+  media           Media? @relation(fields: [mediaId], references: [id])
+
+  @@index([inspectionId])
 }
