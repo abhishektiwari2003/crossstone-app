@@ -37,6 +37,7 @@ enum ProjectMemberRole {
 enum MediaType {
   INSPECTION_IMAGE
   RECEIPT
+  DRAWING
 }
 
 enum PaymentStatus {
@@ -151,6 +152,9 @@ model Media {
   mimeType         String
   fileSize         Int
   createdById      String
+  approvedBy       String?
+  approvedAt       DateTime?
+  version          Int?
   createdAt        DateTime   @default(now())
 
   project       Project        @relation(fields: [projectId], references: [id])
@@ -162,6 +166,7 @@ model Media {
   @@index([projectId])
   @@index([projectUpdateId])
   @@index([paymentId])
+  @@index([type])
 }
 
 model Payment {
