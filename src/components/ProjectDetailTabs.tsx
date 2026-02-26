@@ -6,7 +6,8 @@ import AddPayment from "@/components/AddPayment";
 import ViewMediaLink from "@/components/ViewMediaLink";
 import ProjectEngineerList from "@/components/ProjectEngineerList";
 import ProjectEngineerSelector from "@/components/ProjectEngineerSelector";
-import { User, CreditCard, FileText, Clock, HardHat } from "lucide-react";
+import Link from "next/link";
+import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 
 type Update = {
 	id: string;
@@ -63,6 +64,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Updates</TabsTrigger>
 				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
 				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Team</TabsTrigger>
+				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Inspections</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -202,6 +204,26 @@ export default function ProjectDetailTabs(props: Props) {
 					projectId={props.projectId}
 					canManageMembers={props.canManageMembers}
 				/>
+			</TabsContent>
+
+			{/* ─── Inspections Tab ─── */}
+			<TabsContent value="inspections" className="space-y-4 mt-6">
+				<Link
+					href={`/projects/${props.projectId}/inspections`}
+					className="glass-card p-6 sm:p-8 hover-lift group flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left"
+				>
+					<div className="w-14 h-14 rounded-2xl gradient-orange flex items-center justify-center shadow-lg shadow-orange-500/20 shrink-0">
+						<ClipboardCheck className="h-7 w-7 text-white" />
+					</div>
+					<div className="flex-1">
+						<h3 className="text-base font-semibold text-slate-900">Site Inspections</h3>
+						<p className="text-sm text-slate-500 mt-0.5">Manage milestones, checklists, and inspection reports</p>
+					</div>
+					<div className="flex items-center gap-1 text-sm font-semibold text-orange-600 group-hover:text-orange-700 transition-colors shrink-0">
+						Open
+						<ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+					</div>
+				</Link>
 			</TabsContent>
 		</Tabs>
 	);
