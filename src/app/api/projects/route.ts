@@ -5,7 +5,7 @@ import { canManageProjects, type AppRole } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import type { Role } from "@/generated/prisma";
-import { getProjectsForUser } from "@/modules/projects/service";
+import { getProjectsForUser, getPaginatedProjects } from "@/modules/projects/service";
 
 const CreateProjectSchema = z.object({
 	name: z.string().min(1),
@@ -14,12 +14,24 @@ const CreateProjectSchema = z.object({
 	clientId: z.string().min(1),
 });
 
-export async function GET() {
+export async function GET(req: Request) {
 	const session = await getServerSession(authOptions);
 	if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	const role = (session.user as { role?: Role }).role as AppRole;
 	const userId = (session.user as { id: string }).id;
 
+	const { searchParams } = new URL(req.url);
+	const cursor = searchParams.get("cursor");
+	const limitParam = searchParams.get("limit");
+
+	// If pagination params → mobile-optimized response
+	if (cursor !== null || limitParam !== null) {
+		const limit = limitParam ? parseInt(limitParam, 10) || 10 : 10;
+		const result = await getPaginatedProjects(userId, role, cursor, limit);
+		return NextResponse.json(result);
+	}
+
+	// Default: full response for backward compatibility
 	const projects = await getProjectsForUser(userId, role);
 	return NextResponse.json({ projects });
 }

@@ -135,3 +135,52 @@ export async function approveDrawing(
         status: 200,
     } as const;
 }
+
+// ─── Cursor-paginated drawings for mobile ───
+export async function getPaginatedDrawings(
+    projectId: string,
+    currentUser: { id: string; role: AppRole },
+    cursor?: string | null,
+    limit: number = 10
+) {
+    const allowed = await canViewProject(currentUser.id, currentUser.role, projectId);
+    if (!allowed) {
+        return { error: "Forbidden", status: 403 } as const;
+    }
+
+    const take = Math.min(limit, 50);
+
+    const drawings = await prisma.media.findMany({
+        where: { projectId, type: "DRAWING" },
+        select: {
+            id: true,
+            fileUrl: true,
+            version: true,
+            approvedAt: true,
+            approvedBy: true,
+            createdAt: true,
+        },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        orderBy: { version: "desc" },
+    });
+
+    const hasMore = drawings.length > take;
+    const items = hasMore ? drawings.slice(0, take) : drawings;
+    const nextCursor = hasMore ? items[items.length - 1].id : null;
+
+    return {
+        items: items.map((d) => ({
+            id: d.id,
+            url: d.fileUrl,
+            version: d.version,
+            isApproved: d.approvedAt !== null,
+            approvedAt: d.approvedAt,
+            createdAt: d.createdAt,
+        })),
+        nextCursor,
+        status: 200,
+    } as const;
+}
+

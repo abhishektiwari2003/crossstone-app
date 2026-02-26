@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
 import type { AppRole } from "@/lib/authz";
-import { createDrawing, listProjectDrawings } from "@/modules/drawings/service";
+import { createDrawing, listProjectDrawings, getPaginatedDrawings } from "@/modules/drawings/service";
 import { z } from "zod";
 
 const CreateDrawingSchema = z.object({
@@ -11,13 +11,33 @@ const CreateDrawingSchema = z.object({
     version: z.number().int().min(1, "Version must be a positive integer"),
 });
 
-export async function GET(_: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const session = await getServerSession(authOptions);
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const currentUser = session.user as { id: string; role?: Role };
     const { id: projectId } = await context.params;
 
+    const { searchParams } = new URL(req.url);
+    const cursor = searchParams.get("cursor");
+    const limitParam = searchParams.get("limit");
+
+    // Paginated mobile response
+    if (cursor !== null || limitParam !== null) {
+        const limit = limitParam ? parseInt(limitParam, 10) || 10 : 10;
+        const result = await getPaginatedDrawings(
+            projectId,
+            { id: currentUser.id, role: currentUser.role as AppRole },
+            cursor,
+            limit
+        );
+        if ("error" in result) {
+            return NextResponse.json({ error: result.error }, { status: result.status });
+        }
+        return NextResponse.json({ items: result.items, nextCursor: result.nextCursor });
+    }
+
+    // Default: full response
     const result = await listProjectDrawings(projectId, {
         id: currentUser.id,
         role: currentUser.role as AppRole,

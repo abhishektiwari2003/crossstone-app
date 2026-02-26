@@ -221,3 +221,69 @@ export async function reviewInspection(
 
     return { inspection: updated, status: 200 } as const;
 }
+
+// ─── Mobile DTO mapper for inspections ───
+function mapInspectionToMobileDTO(inspection: {
+    id: string;
+    status: string;
+    createdAt: Date;
+    milestone: { name: string };
+    responses: { result: string }[];
+}) {
+    const resultSummary = { pass: 0, fail: 0, na: 0 };
+    for (const r of inspection.responses) {
+        if (r.result === "PASS") resultSummary.pass++;
+        else if (r.result === "FAIL") resultSummary.fail++;
+        else resultSummary.na++;
+    }
+
+    return {
+        id: inspection.id,
+        milestoneName: inspection.milestone.name,
+        status: inspection.status,
+        submittedAt: inspection.createdAt,
+        resultSummary,
+    };
+}
+
+// ─── Cursor-paginated inspections for mobile ───
+export async function getPaginatedProjectInspections(
+    projectId: string,
+    currentUser: { id: string; role: AppRole },
+    cursor?: string | null,
+    limit: number = 10
+) {
+    const take = Math.min(limit, 50);
+
+    let where: Record<string, unknown> = { projectId };
+    if (currentUser.role === "SITE_ENGINEER") {
+        where = { ...where, engineerId: currentUser.id };
+    } else if (currentUser.role === "CLIENT") {
+        where = { ...where, status: { in: ["SUBMITTED", "REVIEWED"] } };
+    }
+
+    const inspections = await prisma.inspection.findMany({
+        where,
+        select: {
+            id: true,
+            status: true,
+            createdAt: true,
+            milestone: { select: { name: true } },
+            responses: { select: { result: true } },
+        },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        orderBy: { createdAt: "desc" },
+    });
+
+    const hasMore = inspections.length > take;
+    const items = hasMore ? inspections.slice(0, take) : inspections;
+    const nextCursor = hasMore ? items[items.length - 1].id : null;
+
+    return {
+        items: items.map(mapInspectionToMobileDTO),
+        nextCursor,
+    };
+}
+

@@ -143,3 +143,87 @@ export async function getProjectMembers(projectId: string) {
         },
     });
 }
+
+// ─── Status → Color map for mobile badges ───
+const STATUS_COLOR_MAP: Record<string, string> = {
+    PLANNED: "purple",
+    IN_PROGRESS: "blue",
+    ON_HOLD: "amber",
+    COMPLETED: "emerald",
+};
+
+// ─── Mobile DTO mapper ───
+function mapProjectToMobileDTO(project: {
+    id: string;
+    name: string;
+    status: string;
+    createdAt: Date;
+    _count: { members: number; inspections: number; milestones: number };
+    media?: { id: string }[];
+}) {
+    return {
+        id: project.id,
+        name: project.name,
+        status: project.status,
+        statusColor: STATUS_COLOR_MAP[project.status] ?? "gray",
+        memberCount: project._count.members,
+        inspectionCount: project._count.inspections,
+        drawingCount: project.media?.length ?? 0,
+        createdAt: project.createdAt,
+    };
+}
+
+// ─── Cursor-paginated projects for mobile ───
+export async function getPaginatedProjects(
+    userId: string,
+    role: AppRole,
+    cursor?: string | null,
+    limit: number = 10
+) {
+    const take = Math.min(limit, 50);
+
+    // Build RBAC where clause
+    let where: Record<string, unknown> = {};
+    if (role === "SITE_ENGINEER") {
+        where = { members: { some: { userId, role: "SITE_ENGINEER" } } };
+    } else if (role === "PROJECT_MANAGER") {
+        where = { OR: [{ managerId: userId }, { members: { some: { userId, role: "PROJECT_MANAGER" } } }] };
+    } else if (role === "CLIENT") {
+        where = { clientId: userId };
+    }
+    // Admin → no where filter
+
+    const projects = await prisma.project.findMany({
+        where: isAdmin(role) ? undefined : where,
+        select: {
+            id: true,
+            name: true,
+            status: true,
+            createdAt: true,
+            _count: {
+                select: {
+                    members: true,
+                    inspections: true,
+                    milestones: true,
+                },
+            },
+            media: {
+                where: { type: "DRAWING" },
+                select: { id: true },
+            },
+        },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        orderBy: { createdAt: "desc" },
+    });
+
+    const hasMore = projects.length > take;
+    const items = hasMore ? projects.slice(0, take) : projects;
+    const nextCursor = hasMore ? items[items.length - 1].id : null;
+
+    return {
+        items: items.map(mapProjectToMobileDTO),
+        nextCursor,
+    };
+}
