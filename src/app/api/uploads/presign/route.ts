@@ -7,7 +7,7 @@ import { presignPutObject } from "@/lib/s3";
 import type { Role } from "@/generated/prisma";
 
 const BodySchema = z.object({
-	type: z.enum(["inspection", "receipt"]),
+	type: z.enum(["inspection", "receipt", "drawing"]),
 	projectId: z.string().min(1),
 	paymentId: z.string().optional(),
 	mimeType: z.string().min(1),
@@ -16,6 +16,7 @@ const BodySchema = z.object({
 
 const IMAGE_MIME = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const RECEIPT_MIME = [...IMAGE_MIME, "application/pdf"];
+const DRAWING_MIME = [...IMAGE_MIME, "application/pdf", "application/octet-stream"];
 
 export async function POST(req: Request) {
 	const session = await getServerSession(authOptions);
@@ -29,11 +30,12 @@ export async function POST(req: Request) {
 	}
 	const { type, projectId, paymentId, mimeType, fileSize } = parsed.data;
 
-	const maxMb = Number(process.env.MAX_UPLOAD_MB || "10");
+	const maxMb = type === "drawing" ? 50 : Number(process.env.MAX_UPLOAD_MB || "10");
 	const maxBytes = maxMb * 1024 * 1024;
-	if (fileSize > maxBytes) return NextResponse.json({ error: "File too large" }, { status: 400 });
+	if (fileSize > maxBytes) return NextResponse.json({ error: `File too large (max ${maxMb}MB)` }, { status: 400 });
 	if (type === "inspection" && !IMAGE_MIME.includes(mimeType)) return NextResponse.json({ error: "Invalid mime" }, { status: 400 });
 	if (type === "receipt" && !RECEIPT_MIME.includes(mimeType)) return NextResponse.json({ error: "Invalid mime" }, { status: 400 });
+	if (type === "drawing" && !DRAWING_MIME.includes(mimeType)) return NextResponse.json({ error: "Invalid mime type for drawing" }, { status: 400 });
 
 	const project = await prisma.project.findUnique({ where: { id: projectId } });
 	if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
@@ -52,7 +54,9 @@ export async function POST(req: Request) {
 	const key =
 		type === "inspection"
 			? `projects/${projectId}/inspections/${id}.${ext}`
-			: `projects/${projectId}/payments/${paymentId}/receipts/${id}.${ext}`;
+			: type === "drawing"
+				? `projects/${projectId}/drawings/${id}.${ext}`
+				: `projects/${projectId}/payments/${paymentId}/receipts/${id}.${ext}`;
 
 	const { url } = await presignPutObject({ key, contentType: mimeType, contentLength: fileSize });
 	return NextResponse.json({ url, key });

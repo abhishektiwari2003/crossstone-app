@@ -94,6 +94,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         canEditUpdates={canEditUpdates}
         canEditPayments={canEditPayments}
         canManageMembers={canManageMembers}
+        userRole={(userRole || "CLIENT") as import("@/types/drawings").UserRole}
         existingMemberUserIds={existingMemberUserIds}
       />
     </div>
