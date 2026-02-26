@@ -12,6 +12,8 @@ export function createS3Client() {
             accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
             secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
         },
+        requestChecksumCalculation: "WHEN_REQUIRED",
+        responseChecksumValidation: "WHEN_REQUIRED",
     });
 }
 
@@ -25,10 +27,8 @@ export async function presignPutObject(params: {
     const command = new PutObjectCommand({
         Bucket: bucket,
         Key: params.key,
-        ContentType: params.contentType,
-        ContentLength: params.contentLength,
     });
-    const url = await getSignedUrl(client, command, { expiresIn: 60 });
+    const url = await getSignedUrl(client, command, { expiresIn: 300 });
     return { url, bucket };
 }
 

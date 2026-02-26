@@ -7,6 +7,8 @@ import ViewMediaLink from "@/components/ViewMediaLink";
 import ProjectEngineerList from "@/components/ProjectEngineerList";
 import ProjectEngineerSelector from "@/components/ProjectEngineerSelector";
 import Link from "next/link";
+import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
+import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 
 type Update = {
@@ -39,6 +41,7 @@ type Props = {
 	canEditUpdates: boolean;
 	canEditPayments: boolean;
 	canManageMembers: boolean;
+	userRole: UserRole;
 	existingMemberUserIds?: string[];
 };
 
@@ -65,6 +68,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Payments</TabsTrigger>
 				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Team</TabsTrigger>
 				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Inspections</TabsTrigger>
+				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Design & Documents</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -224,6 +228,11 @@ export default function ProjectDetailTabs(props: Props) {
 						<ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
 					</div>
 				</Link>
+			</TabsContent>
+
+			{/* ─── Design & Documents Tab ─── */}
+			<TabsContent value="drawings" className="mt-6">
+				<ProjectDrawingsTab projectId={props.projectId} userRole={props.userRole} />
 			</TabsContent>
 		</Tabs>
 	);
