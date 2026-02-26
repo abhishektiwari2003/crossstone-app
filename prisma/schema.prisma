@@ -38,6 +38,7 @@ enum MediaType {
   INSPECTION_IMAGE
   RECEIPT
   DRAWING
+  QUERY_ATTACHMENT
 }
 
 enum PaymentStatus {
@@ -57,6 +58,19 @@ enum InspectionStatus {
   DRAFT
   SUBMITTED
   REVIEWED
+}
+
+enum QueryStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum QueryPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 model User {
@@ -82,6 +96,8 @@ model User {
   projectsCreated    Project[]  @relation("ProjectCreatedBy")
   inspections        Inspection[]
   reviewedInspections Inspection[] @relation("ReviewedBy")
+  queries            Query[]       @relation("QueryAuthor")
+  queryResponses     QueryResponse[] @relation("QueryResponseAuthor")
 }
 
 model Project {
@@ -106,6 +122,7 @@ model Project {
   payments      Payment[]
   milestones    Milestone[]
   inspections   Inspection[]
+  queries       Query[]
 
   @@index([managerId])
   @@index([clientId])
@@ -162,6 +179,8 @@ model Media {
   payment       Payment?       @relation(fields: [paymentId], references: [id])
   createdBy     User           @relation(fields: [createdById], references: [id])
   inspectionResponses InspectionResponse[]
+  queryId       String?
+  query         Query?         @relation(fields: [queryId], references: [id])
 
   @@index([projectId])
   @@index([projectUpdateId])
@@ -283,4 +302,46 @@ model InspectionResponse {
   media           Media? @relation(fields: [mediaId], references: [id])
 
   @@index([inspectionId])
+}
+
+model Query {
+  id          String        @id @default(cuid())
+
+  projectId   String
+  project     Project       @relation(fields: [projectId], references: [id])
+
+  authorId    String
+  author      User          @relation("QueryAuthor", fields: [authorId], references: [id])
+
+  title       String
+  description String
+
+  status      QueryStatus   @default(OPEN)
+  priority    QueryPriority @default(MEDIUM)
+
+  attachments Media[]
+  responses   QueryResponse[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([projectId])
+  @@index([authorId])
+  @@index([status])
+}
+
+model QueryResponse {
+  id        String   @id @default(cuid())
+
+  queryId   String
+  query     Query    @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  authorId  String
+  author    User     @relation("QueryResponseAuthor", fields: [authorId], references: [id])
+
+  message   String
+
+  createdAt DateTime @default(now())
+
+  @@index([queryId])
 }
