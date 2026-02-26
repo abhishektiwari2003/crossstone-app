@@ -8,8 +8,10 @@ import ProjectEngineerList from "@/components/ProjectEngineerList";
 import ProjectEngineerSelector from "@/components/ProjectEngineerSelector";
 import Link from "next/link";
 import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
+import ProjectServicesMenu from "@/components/ProjectServicesMenu";
 import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 type Update = {
 	id: string;
@@ -60,8 +62,19 @@ function formatStatus(status: string) {
 }
 
 export default function ProjectDetailTabs(props: Props) {
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const activeTab = searchParams.get("tab") || "overview";
+
+	const handleTabChange = (value: string) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("tab", value);
+		router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+	};
+
 	return (
-		<Tabs defaultValue="overview" className="w-full">
+		<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
 			<TabsList className="bg-slate-100/80 p-1.5 rounded-xl h-auto gap-1 flex w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto">
 				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Overview</TabsTrigger>
 				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Updates</TabsTrigger>
@@ -72,42 +85,47 @@ export default function ProjectDetailTabs(props: Props) {
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
-			<TabsContent value="overview" className="space-y-4 mt-6">
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-					<div className="glass-card p-5">
-						<div className="flex items-center gap-2 mb-3">
-							<div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-								<User className="h-4 w-4 text-blue-600" />
+			<TabsContent value="overview" className="mt-6">
+				<ProjectServicesMenu projectId={props.projectId} userRole={props.userRole} />
+
+				<div className="space-y-4">
+					<h2 className="text-lg font-bold text-slate-900 px-1 flex items-center gap-2">Project Details</h2>
+					<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+						<div className="glass-card p-5">
+							<div className="flex items-center gap-2 mb-3">
+								<div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+									<User className="h-4 w-4 text-blue-600" />
+								</div>
+								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Manager</span>
 							</div>
-							<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Manager</span>
+							<div className="font-semibold text-slate-900">{props.manager?.name ?? "—"}</div>
 						</div>
-						<div className="font-semibold text-slate-900">{props.manager?.name ?? "—"}</div>
-					</div>
-					<div className="glass-card p-5">
-						<div className="flex items-center gap-2 mb-3">
-							<div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-								<User className="h-4 w-4 text-purple-600" />
+						<div className="glass-card p-5">
+							<div className="flex items-center gap-2 mb-3">
+								<div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+									<User className="h-4 w-4 text-purple-600" />
+								</div>
+								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Client</span>
 							</div>
-							<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Client</span>
+							<div className="font-semibold text-slate-900">{props.client?.name ?? "—"}</div>
 						</div>
-						<div className="font-semibold text-slate-900">{props.client?.name ?? "—"}</div>
-					</div>
-					<div className="glass-card p-5">
-						<div className="flex items-center gap-2 mb-3">
-							<div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-								<Clock className="h-4 w-4 text-emerald-600" />
+						<div className="glass-card p-5">
+							<div className="flex items-center gap-2 mb-3">
+								<div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+									<Clock className="h-4 w-4 text-emerald-600" />
+								</div>
+								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</span>
 							</div>
-							<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</span>
+							<div className="font-semibold text-slate-900">{new Date(props.createdAt).toLocaleDateString()}</div>
 						</div>
-						<div className="font-semibold text-slate-900">{new Date(props.createdAt).toLocaleDateString()}</div>
 					</div>
+					{props.description && (
+						<div className="glass-card p-5">
+							<h3 className="text-sm font-semibold text-slate-900 mb-2">Description</h3>
+							<p className="text-sm text-slate-600 leading-relaxed">{props.description}</p>
+						</div>
+					)}
 				</div>
-				{props.description && (
-					<div className="glass-card p-5">
-						<h3 className="text-sm font-semibold text-slate-900 mb-2">Description</h3>
-						<p className="text-sm text-slate-600 leading-relaxed">{props.description}</p>
-					</div>
-				)}
 			</TabsContent>
 
 			{/* ─── Updates Tab ─── */}
