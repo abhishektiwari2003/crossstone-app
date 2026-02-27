@@ -16,6 +16,14 @@ async function main() {
 	// ─── Users ───
 	const superAdmin = await prisma.user.upsert({
 		where: { email: "superadmin@crossstone.local" },
+		update: { passwordHash: password },
+		create: { name: "Super Admin", email: "superadmin@crossstone.local", role: Role.SUPER_ADMIN, passwordHash: password },
+	});
+
+	const client = await prisma.user.upsert({
+		where: { email: "client@crossstone.local" },
+		update: { passwordHash: password },
+		create: { name: "Client", email: "client@crossstone.local", role: Role.CLIENT, passwordHash: password, createdById: superAdmin.id },
 		update: {},
 		create: {
 			name: "Anuj Tiwari",
@@ -43,6 +51,8 @@ async function main() {
 
 	const pm = await prisma.user.upsert({
 		where: { email: "pm@crossstone.local" },
+		update: { passwordHash: password },
+		create: { name: "Project Manager", email: "pm@crossstone.local", role: Role.PROJECT_MANAGER, passwordHash: password, createdById: superAdmin.id },
 		update: {},
 		create: {
 			name: "Priya Sharma",
@@ -57,6 +67,8 @@ async function main() {
 
 	const engineer = await prisma.user.upsert({
 		where: { email: "engineer@crossstone.local" },
+		update: { passwordHash: password },
+		create: { name: "Site Engineer", email: "engineer@crossstone.local", role: Role.SITE_ENGINEER, passwordHash: password, createdById: superAdmin.id },
 		update: {},
 		create: {
 			name: "Vikram Singh",

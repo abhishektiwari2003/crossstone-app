@@ -127,11 +127,11 @@ export async function getQueryById(
     const query = await prisma.query.findUnique({
         where: { id: queryId },
         include: {
-            author: { select: { id: true, name: true } },
+            author: { select: { id: true, name: true, role: true } },
             attachments: { select: { id: true, fileUrl: true, mimeType: true } },
             responses: {
                 include: {
-                    author: { select: { id: true, name: true } },
+                    author: { select: { id: true, name: true, role: true } },
                 },
                 orderBy: { createdAt: "asc" },
             },
@@ -157,14 +157,25 @@ export async function getQueryById(
             priority: query.priority,
             priorityColor: PRIORITY_COLOR_MAP[query.priority] ?? "gray",
             createdAt: query.createdAt,
-            author: query.author,
+            author: {
+                id: query.author.id,
+                name: query.author.name,
+                image: null,
+                role: query.author.role,
+            },
             attachments: query.attachments.map(a => ({ id: a.id, url: a.fileUrl })),
             responses: query.responses.map(r => ({
                 id: r.id,
-                message: r.message,
-                authorName: r.author.name,
+                queryId: r.queryId,
                 authorId: r.author.id,
-                createdAt: r.createdAt,
+                message: r.message,
+                createdAt: r.createdAt.toISOString(),
+                author: {
+                    id: r.author.id,
+                    name: r.author.name,
+                    image: null,
+                    role: r.author.role,
+                }
             })),
         },
         status: 200,
@@ -238,17 +249,23 @@ export async function addQueryResponse(
             message,
         },
         include: {
-            author: { select: { id: true, name: true } },
+            author: { select: { id: true, name: true, role: true } },
         },
     });
 
     return {
         response: {
             id: response.id,
+            queryId: response.queryId,
+            authorId: response.authorId,
             message: response.message,
-            authorName: response.author.name,
-            authorId: response.author.id,
-            createdAt: response.createdAt,
+            createdAt: response.createdAt.toISOString(),
+            author: {
+                id: response.author.id,
+                name: response.author.name,
+                image: null,
+                role: response.author.role,
+            }
         },
         status: 201,
     } as const;
