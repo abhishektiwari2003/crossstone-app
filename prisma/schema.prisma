@@ -130,6 +130,7 @@ model Project {
 
   @@index([managerId])
   @@index([clientId])
+  @@index([status])
 }
 
 model ProjectMember {
@@ -209,6 +210,7 @@ model Payment {
   media     Media[]
 
   @@index([projectId])
+  @@index([createdAt])
 }
 
 model Notification {
@@ -289,6 +291,7 @@ model Inspection {
   @@index([milestoneId])
   @@index([projectId])
   @@index([engineerId])
+  @@index([createdAt])
 }
 
 model InspectionResponse {
