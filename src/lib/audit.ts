@@ -22,7 +22,7 @@ export async function logAudit({
     metadata,
 }: AuditLogParams) {
     try {
-        await prisma.auditLog.create({
+        await (prisma as any).auditLog.create({
             data: {
                 userId,
                 action,

@@ -1,10 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function ListSkeleton() {
+export function ListSkeleton({ count = 5, height = "h-20" }: { count?: number, height?: string }) {
     return (
         <div className="grid gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50/80 z-10 pointer-events-none" />
-            {[1, 2, 3, 4, 5].map((i) => (
+            {Array.from({ length: count }).map((_, i) => (
                 <div key={i} className="glass-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <Skeleton className="h-12 w-12 rounded-xl shrink-0" />

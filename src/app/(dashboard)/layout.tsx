@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
-import { Home, FolderKanban, CreditCard, Users, Building2, ChevronRight } from "lucide-react";
+import { Home, FolderKanban, CreditCard, Users, Building2, ChevronRight, ShieldAlert } from "lucide-react";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
 import FloatingActionButton from "@/components/ui/FloatingActionButton";
 import { getServerSession } from "next-auth";
@@ -45,6 +45,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <SidebarLink href="/projects" icon={FolderKanban} label="Projects" />
                     <SidebarLink href="/payments" icon={CreditCard} label="Payments" />
                     <SidebarLink href="/users" icon={Users} label="Users" />
+                    {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+                        <SidebarLink href="/admin/audit-logs" icon={ShieldAlert} label="System Logs" />
+                    )}
                 </nav>
 
                 {/* Footer */}

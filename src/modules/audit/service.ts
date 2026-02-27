@@ -41,7 +41,7 @@ export async function getAuditLogs(
         };
     }
 
-    const logs = await prisma.auditLog.findMany({
+    const logs = await (prisma as any).auditLog.findMany({
         where,
         include: {
             user: { select: { name: true } },
@@ -57,7 +57,7 @@ export async function getAuditLogs(
     const nextCursor = hasMore ? items[items.length - 1].id : null;
 
     return {
-        items: items.map((log) => ({
+        items: items.map((log: any) => ({
             id: log.id,
             userName: log.user.name,
             action: log.action,
@@ -82,7 +82,7 @@ export async function getProjectTimeline(
         return { error: "Forbidden", status: 403 } as const;
     }
 
-    const logs = await prisma.auditLog.findMany({
+    const logs = await (prisma as any).auditLog.findMany({
         where: { projectId },
         include: {
             user: { select: { name: true } },
@@ -92,7 +92,7 @@ export async function getProjectTimeline(
     });
 
     return {
-        items: logs.map((log) => {
+        items: logs.map((log: any) => {
             const mapping = AUDIT_ACTION_MAP[log.action] || {
                 title: log.action,
                 desc: () => `System action: ${log.action}`,
@@ -103,7 +103,9 @@ export async function getProjectTimeline(
                 action: log.action,
                 title: mapping.title,
                 description: mapping.desc(log.entityId),
-                userName: log.user.name,
+                userName: log.user?.name || log.userId || "System User",
+                entity: log.entity,
+                metadata: log.metadata,
                 createdAt: log.createdAt,
             };
         }),
