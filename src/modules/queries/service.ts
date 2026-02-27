@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
 import type { CreateQueryInput, UpdateQueryInput } from "./validation";
 import type { QueryPriority, QueryStatus } from "@/generated/prisma";
+import { logAudit } from "@/lib/audit";
 
 // ─── Priority → Color map ───
 const PRIORITY_COLOR_MAP: Record<string, string> = {
@@ -64,6 +65,18 @@ export async function createQuery(
             author: { select: { id: true, name: true } },
             attachments: { select: { id: true, fileUrl: true } },
             _count: { select: { responses: true } },
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "CREATE_QUERY",
+        entity: "Query",
+        entityId: query.id,
+        projectId,
+        metadata: {
+            priority: data.priority,
+            hasAttachments: !!(data.attachmentIds && data.attachmentIds.length > 0),
         },
     });
 
@@ -216,6 +229,21 @@ export async function updateQuery(
             status: true,
             priority: true,
             updatedAt: true,
+            projectId: true,
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "UPDATE_QUERY",
+        entity: "Query",
+        entityId: queryId,
+        projectId: updated.projectId,
+        metadata: {
+            oldStatus: query.status,
+            newStatus: updated.status,
+            oldPriority: query.priority,
+            newPriority: updated.priority,
         },
     });
 
@@ -250,6 +278,17 @@ export async function addQueryResponse(
         },
         include: {
             author: { select: { id: true, name: true, role: true } },
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "ADD_QUERY_RESPONSE",
+        entity: "QueryResponse",
+        entityId: response.id,
+        projectId: query.projectId,
+        metadata: {
+            queryId,
         },
     });
 

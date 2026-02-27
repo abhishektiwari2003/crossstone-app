@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
+import { logAudit } from "@/lib/audit";
 
 // ─── Create a drawing (ADMIN only) ───
 export async function createDrawing(
@@ -35,6 +36,18 @@ export async function createDrawing(
             createdBy: {
                 select: { id: true, name: true },
             },
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "UPLOAD_DRAWING",
+        entity: "Media",
+        entityId: drawing.id,
+        projectId,
+        metadata: {
+            version: data.version,
+            url: data.url,
         },
     });
 
@@ -119,6 +132,17 @@ export async function approveDrawing(
             createdBy: {
                 select: { id: true, name: true },
             },
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "APPROVE_DRAWING",
+        entity: "Media",
+        entityId: drawingId,
+        projectId: media.projectId,
+        metadata: {
+            version: media.version,
         },
     });
 

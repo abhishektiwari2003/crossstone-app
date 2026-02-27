@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, type AppRole } from "@/lib/authz";
 import type { ProjectMemberRole, Role } from "@/generated/prisma";
+import { logAudit } from "@/lib/audit";
 
 // ─── Shared include for members with user details ───
 const membersInclude = {
@@ -104,6 +105,18 @@ export async function addMember(
         },
     });
 
+    await logAudit({
+        userId: currentUser.id,
+        action: "ADD_MEMBER",
+        entity: "ProjectMember",
+        entityId: member.id,
+        projectId,
+        metadata: {
+            addedUserId: userId,
+            assignedRole: role,
+        },
+    });
+
     return { member, status: 201 } as const;
 }
 
@@ -128,6 +141,18 @@ export async function removeMember(
 
     // 3. Delete the membership
     await prisma.projectMember.delete({ where: { id: memberId } });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "REMOVE_MEMBER",
+        entity: "ProjectMember",
+        entityId: memberId,
+        projectId,
+        metadata: {
+            removedUserId: member.userId,
+            removedRole: member.role,
+        },
+    });
 
     return { message: "Member removed successfully", status: 200 } as const;
 }

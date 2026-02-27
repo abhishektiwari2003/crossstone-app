@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { isAdmin, type AppRole } from "@/lib/authz";
 import type { CreateInspectionInput } from "./validation";
 import type { ChecklistResult, InspectionStatus } from "@/generated/prisma";
+import { logAudit } from "@/lib/audit";
 
 // ─── Full include for inspection detail ───
 const inspectionDetailInclude = {
@@ -107,6 +108,19 @@ export async function createInspection(
             where: { id: created.id },
             include: inspectionDetailInclude,
         });
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: targetStatus === "SUBMITTED" ? "SUBMITTED_INSPECTION" : "CREATED_INSPECTION",
+        entity: "Inspection",
+        entityId: inspection.id,
+        projectId,
+        metadata: {
+            milestoneId,
+            status: targetStatus,
+            itemsCount: responses.length,
+        },
     });
 
     return { inspection, status: 201 } as const;
@@ -217,6 +231,14 @@ export async function reviewInspection(
             reviewedById: currentUser.id,
         },
         include: inspectionDetailInclude,
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "REVIEWED_INSPECTION",
+        entity: "Inspection",
+        entityId: inspectionId,
+        projectId: inspection.projectId,
     });
 
     return { inspection: updated, status: 200 } as const;
