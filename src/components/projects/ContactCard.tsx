@@ -23,6 +23,7 @@ const ROLE_BADGE: Record<string, { label: string; bg: string; text: string }> = 
 };
 
 function getInitials(name: string) {
+    if (!name) return "U";
     return name
         .split(" ")
         .map(w => w[0])

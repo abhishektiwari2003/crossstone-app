@@ -22,75 +22,60 @@ async function main() {
 
 	const client = await prisma.user.upsert({
 		where: { email: "client@crossstone.local" },
-		update: { passwordHash: password },
-		create: { name: "Client", email: "client@crossstone.local", role: Role.CLIENT, passwordHash: password, createdById: superAdmin.id },
-		update: {},
-		create: {
-			name: "Anuj Tiwari",
-			email: "superadmin@crossstone.local",
-			role: Role.SUPER_ADMIN,
+		update: {
 			passwordHash: password,
-			phone: "+919876543210",
-			designation: "Managing Director",
+			name: "Amit Patel",
+		},
+		create: {
+			name: "Amit Patel",
+			email: "client@crossstone.local",
+			role: Role.CLIENT,
+			passwordHash: password,
+			createdById: superAdmin.id,
 		},
 	});
 
 	const admin = await prisma.user.upsert({
 		where: { email: "admin@crossstone.local" },
-		update: {},
+		update: {
+			passwordHash: password,
+			name: "Rahul Verma",
+		},
 		create: {
 			name: "Rahul Verma",
 			email: "admin@crossstone.local",
 			role: Role.ADMIN,
 			passwordHash: password,
-			phone: "+919876543211",
-			designation: "Operations Head",
 			createdById: superAdmin.id,
 		},
 	});
 
 	const pm = await prisma.user.upsert({
 		where: { email: "pm@crossstone.local" },
-		update: { passwordHash: password },
-		create: { name: "Project Manager", email: "pm@crossstone.local", role: Role.PROJECT_MANAGER, passwordHash: password, createdById: superAdmin.id },
-		update: {},
+		update: {
+			passwordHash: password,
+			name: "Priya Sharma",
+		},
 		create: {
 			name: "Priya Sharma",
 			email: "pm@crossstone.local",
 			role: Role.PROJECT_MANAGER,
 			passwordHash: password,
-			phone: "+919876543212",
-			designation: "Senior Project Manager",
 			createdById: superAdmin.id,
 		},
 	});
 
 	const engineer = await prisma.user.upsert({
 		where: { email: "engineer@crossstone.local" },
-		update: { passwordHash: password },
-		create: { name: "Site Engineer", email: "engineer@crossstone.local", role: Role.SITE_ENGINEER, passwordHash: password, createdById: superAdmin.id },
-		update: {},
+		update: {
+			passwordHash: password,
+			name: "Vikram Singh",
+		},
 		create: {
 			name: "Vikram Singh",
 			email: "engineer@crossstone.local",
 			role: Role.SITE_ENGINEER,
 			passwordHash: password,
-			phone: "+919876543213",
-			designation: "Site Engineer",
-			createdById: superAdmin.id,
-		},
-	});
-
-	const client = await prisma.user.upsert({
-		where: { email: "client@crossstone.local" },
-		update: {},
-		create: {
-			name: "Amit Patel",
-			email: "client@crossstone.local",
-			role: Role.CLIENT,
-			passwordHash: password,
-			phone: "+919876543214",
-			designation: "Property Owner",
 			createdById: superAdmin.id,
 		},
 	});
