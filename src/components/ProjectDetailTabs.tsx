@@ -11,6 +11,7 @@ import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
 import ProjectServicesMenu from "@/components/ProjectServicesMenu";
 import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
 import ProjectContactsTab from "@/components/projects/ProjectContactsTab";
+import ProjectActivityTab from "@/components/audit/ProjectActivityTab";
 import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -86,6 +87,9 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
 				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
 				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
+				{(props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
+					<TabsTrigger value="activity" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium border border-indigo-100 text-indigo-700 data-[state=active]:border-indigo-200">Activity</TabsTrigger>
+				)}
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -131,6 +135,13 @@ export default function ProjectDetailTabs(props: Props) {
 					)}
 				</div>
 			</TabsContent>
+
+			{/* ─── Activity Tab (Admin & PM only) ─── */}
+			{(props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
+				<TabsContent value="activity" className="space-y-4 mt-6">
+					<ProjectActivityTab projectId={props.projectId} />
+				</TabsContent>
+			)}
 
 			{/* ─── Updates Tab ─── */}
 			<TabsContent value="updates" className="space-y-4 mt-6">
