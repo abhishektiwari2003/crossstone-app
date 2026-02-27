@@ -1,4 +1,4 @@
-import { FileText, ClipboardCheck, MapPin, Search, HardHat, Building2 } from "lucide-react";
+import { FileText, ClipboardCheck, MapPin, Search, HardHat, Building2, FileBarChart2 } from "lucide-react";
 import ServiceCard from "./ServiceCard";
 import type { UserRole } from "@/types/drawings";
 
@@ -16,6 +16,7 @@ export default function ProjectServicesMenu({
     inspectionCount,
 }: Props) {
     // Role-based visibility rules
+    const showReport = userRole === "CLIENT" || userRole === "ADMIN" || userRole === "SUPER_ADMIN" || userRole === "PROJECT_MANAGER";
     const showDrawings = true; // Everyone can see drawings
     const showInspections = true; // Everyone can see inspections (clients read-only handled in route)
     const showQuarries = userRole === "CLIENT" || userRole === "ADMIN" || userRole === "SUPER_ADMIN" || userRole === "PROJECT_MANAGER";
@@ -29,8 +30,19 @@ export default function ProjectServicesMenu({
                 Project Services
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+                {/* 1. Project Report */}
+                {showReport && (
+                    <ServiceCard
+                        title="Project Report"
+                        description="View visual progress and financial summaries"
+                        icon={FileBarChart2}
+                        href={`/projects/${projectId}/report`}
+                        gradientClass="bg-indigo-50"
+                        iconColorClass="text-indigo-600"
+                    />
+                )}
 
-                {/* 1. Design & Documents */}
+                {/* 2. Design & Documents */}
                 {showDrawings && (
                     <ServiceCard
                         title="Design & Docs"
@@ -43,7 +55,7 @@ export default function ProjectServicesMenu({
                     />
                 )}
 
-                {/* 2. Site Inspections */}
+                {/* 3. Site Inspections */}
                 {showInspections && (
                     <ServiceCard
                         title="Site Inspections"
@@ -56,7 +68,7 @@ export default function ProjectServicesMenu({
                     />
                 )}
 
-                {/* 3. Live Track (Placeholder) */}
+                {/* 4. Live Track (Placeholder) */}
                 {showLiveTrack && (
                     <ServiceCard
                         title="Live Track"
@@ -70,7 +82,7 @@ export default function ProjectServicesMenu({
                     />
                 )}
 
-                {/* 4. Quarries */}
+                {/* 5. Quarries */}
                 {showQuarries && (
                     <ServiceCard
                         title="Quarries & Materials"
@@ -82,7 +94,7 @@ export default function ProjectServicesMenu({
                     />
                 )}
 
-                {/* 5. Site Engineer Contacts */}
+                {/* 6. Site Engineer Contacts */}
                 {showTeam && (
                     <ServiceCard
                         title="Site Team"
@@ -94,7 +106,7 @@ export default function ProjectServicesMenu({
                     />
                 )}
 
-                {/* 6. Contractor Contacts */}
+                {/* 7. Contractor Contacts */}
                 {showContractor && (
                     <ServiceCard
                         title="Contractors"
@@ -107,6 +119,6 @@ export default function ProjectServicesMenu({
                 )}
 
             </div>
-        </div>
+        </div >
     );
 }
