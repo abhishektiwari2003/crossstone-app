@@ -12,14 +12,19 @@ export async function GET(_: NextRequest, context: { params: Promise<{ id: strin
     const currentUser = session.user as { id: string; role?: Role };
     const { id: projectId } = await context.params;
 
-    const result = await getProjectContacts(projectId, {
-        id: currentUser.id,
-        role: currentUser.role as AppRole,
-    });
+    try {
+        const result = await getProjectContacts(projectId, {
+            id: currentUser.id,
+            role: currentUser.role as AppRole,
+        });
 
-    if ("error" in result) {
-        return NextResponse.json({ error: result.error }, { status: result.status });
+        if ("error" in result) {
+            return NextResponse.json({ error: result.error }, { status: result.status });
+        }
+
+        return NextResponse.json({ contacts: result.contacts });
+    } catch (error) {
+        console.error("[contacts] Error:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-
-    return NextResponse.json({ contacts: result.contacts });
 }
