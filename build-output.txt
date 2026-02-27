@@ -1,0 +1,123 @@
+﻿
+> crossstone-app@0.1.0 build
+> next build --turbopack
+
+   Γû▓ Next.js 15.5.0 (Turbopack)
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ Γ£ô Finished writing to disk in 115ms
+ Γ£ô Compiled successfully in 4.7s
+   Linting and checking validity of types ...
+node.exe : 
+At C:\Program Files\nod
+ejs\npm.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (:String) [],    
+ RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+Failed to compile.
+
+./src/app/(dashboard)/l
+ayout.tsx
+4:49  Warning: 
+'Building2' is defined 
+but never used.  @types
+cript-eslint/no-unused-
+vars
+
+./src/components/drawin
+gs/DrawingActivityLog.t
+sx
+3:32  Warning: 
+'ShieldX' is defined 
+but never used.  @types
+cript-eslint/no-unused-
+vars
+3:41  Warning: 'User' 
+is defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+3:47  Warning: 
+'Calendar' is defined 
+but never used.  @types
+cript-eslint/no-unused-
+vars
+
+./src/components/drawin
+gs/DrawingApprovalButto
+n.tsx
+5:19  Warning: 
+'CheckCircle2' is 
+defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+
+./src/components/drawin
+gs/ProjectDrawingsTab.t
+sx
+9:34  Warning: 
+'DrawingStatus' is 
+defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+
+./src/components/inspec
+tion/InspectionChecklis
+tForm.tsx
+25:11  Warning: 
+'router' is assigned a 
+value but never used.  
+@typescript-eslint/no-u
+nused-vars
+
+./src/components/ui/Flo
+atingActionButton.tsx
+4:16  Warning: 
+'ClipboardCheck' is 
+defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+4:32  Warning: 
+'MessageSquare' is 
+defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+
+./src/modules/contacts/
+service.ts
+92:9  Error: 
+'contacts' is never 
+reassigned. Use 
+'const' instead.  
+prefer-const
+
+./src/modules/projects/
+service.ts
+3:34  Warning: 'Role' 
+is defined but never 
+used.  @typescript-esli
+nt/no-unused-vars
+
+./src/types/drawings.ts
+20:11  Warning: 
+'baseName' is assigned 
+a value but never 
+used.  @typescript-esli
+nt/no-unused-vars
+
+info  - Need to 
+disable some ESLint 
+rules? Learn more 
+here: https://nextjs.or
+g/docs/app/api-referenc
+e/config/eslint#disabli
+ng-rules
