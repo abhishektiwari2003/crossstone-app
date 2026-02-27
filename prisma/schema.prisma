@@ -48,6 +48,13 @@ enum PaymentStatus {
   OVERDUE
 }
 
+enum PaymentCategory {
+  MATERIAL
+  LABOR
+  CONTRACTOR
+  OTHER
+}
+
 enum ChecklistResult {
   PASS
   FAIL
@@ -194,16 +201,19 @@ model Media {
 }
 
 model Payment {
-  id           String        @id @default(cuid())
-  projectId    String
-  createdById  String
-  amount       Decimal       @db.Decimal(12, 2)
-  currency     String        @default("INR")
-  status       PaymentStatus @default(PENDING)
-  dueDate      DateTime?
-  notes        String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id            String          @id @default(cuid())
+  projectId     String
+  createdById   String
+  amount        Decimal         @db.Decimal(12, 2)
+  currency      String          @default("INR")
+  status        PaymentStatus   @default(PENDING)
+  category      PaymentCategory?
+  invoiceNumber String?
+  paidAt        DateTime?
+  dueDate       DateTime?
+  notes         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
   project   Project @relation(fields: [projectId], references: [id])
   createdBy User    @relation(fields: [createdById], references: [id])
@@ -211,6 +221,9 @@ model Payment {
 
   @@index([projectId])
   @@index([createdAt])
+  @@index([status])
+  @@index([dueDate])
+  @@index([category])
 }
 
 model Notification {
