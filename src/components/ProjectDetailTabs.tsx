@@ -10,6 +10,7 @@ import Link from "next/link";
 import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
 import ProjectServicesMenu from "@/components/ProjectServicesMenu";
 import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
+import ProjectContactsTab from "@/components/projects/ProjectContactsTab";
 import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -84,6 +85,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
 				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
 				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
+				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
 			</TabsList>
 
 			{/* ─── Overview Tab ─── */}
@@ -258,6 +260,11 @@ export default function ProjectDetailTabs(props: Props) {
 			{/* ─── Design & Documents Tab ─── */}
 			<TabsContent value="drawings" className="mt-6">
 				<ProjectDrawingsTab projectId={props.projectId} userRole={props.userRole} />
+			</TabsContent>
+
+			{/* ─── Contacts Tab ─── */}
+			<TabsContent value="contacts" className="mt-6">
+				<ProjectContactsTab projectId={props.projectId} />
 			</TabsContent>
 		</Tabs>
 	);

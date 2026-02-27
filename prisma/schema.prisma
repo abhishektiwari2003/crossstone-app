@@ -84,6 +84,8 @@ model User {
   createdBy     User?    @relation("UserCreatedUsers", fields: [createdById], references: [id])
   createdUsers  User[]   @relation("UserCreatedUsers")
   createdAt     DateTime @default(now())
+  phone         String?
+  designation   String?
 
   // Relations
   managedProjects    Project[] @relation("ManagedProjects")

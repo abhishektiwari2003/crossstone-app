@@ -7,6 +7,8 @@ import * as z from "zod";
 import { Loader2, AlertCircle, UploadCloud, X, File as FileIcon } from "lucide-react";
 import { CreateQuerySchema, type CreateQueryInput } from "@/modules/queries/validation";
 
+type FormInput = z.input<typeof CreateQuerySchema>;
+
 type Props = {
     projectId: string;
     onSuccess: () => void;
@@ -18,7 +20,7 @@ export default function QueryCreateForm({ projectId, onSuccess, onCancel }: Prop
     const [errorMsg, setErrorMsg] = useState("");
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-    const form = useForm<CreateQueryInput>({
+    const form = useForm<FormInput>({
         resolver: zodResolver(CreateQuerySchema),
         defaultValues: {
             title: "",
@@ -41,7 +43,7 @@ export default function QueryCreateForm({ projectId, onSuccess, onCancel }: Prop
         setSelectedFiles(prev => prev.filter((_, i) => i !== index));
     };
 
-    const onSubmit = async (data: CreateQueryInput) => {
+    const onSubmit = async (data: FormInput) => {
         setIsSubmitting(true);
         setErrorMsg("");
 
@@ -68,7 +70,7 @@ export default function QueryCreateForm({ projectId, onSuccess, onCancel }: Prop
                     // Extracting the S3 keys from the absolute URLs to pass to the backend
                     uploadData.urls.forEach((url: string) => {
                         const urlObj = new URL(url);
-                        let key = urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
+                        const key = urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
                         attachmentIds.push(key);
                     });
                 }
@@ -92,8 +94,8 @@ export default function QueryCreateForm({ projectId, onSuccess, onCancel }: Prop
             }
 
             onSuccess();
-        } catch (error: any) {
-            setErrorMsg(error.message || "An unexpected error occurred.");
+        } catch (error: unknown) {
+            setErrorMsg(error instanceof Error ? error.message : "An unexpected error occurred.");
         } finally {
             setIsSubmitting(false);
         }
