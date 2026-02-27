@@ -94,20 +94,20 @@ export async function getProjectContacts(
     if (isAdmin(currentUser.role)) {
         // Admin/Super Admin sees all
         if (manager) contacts.push(toContactDTO(manager));
-        engineers.forEach(e => contacts.push(toContactDTO(e)));
+        engineers.forEach(e => { if (e) contacts.push(toContactDTO(e)); });
         if (client) contacts.push(toContactDTO(client));
     } else if (currentUser.role === "PROJECT_MANAGER") {
         // PM sees engineers + client
-        engineers.forEach(e => contacts.push(toContactDTO(e)));
+        engineers.forEach(e => { if (e) contacts.push(toContactDTO(e)); });
         if (client) contacts.push(toContactDTO(client));
     } else if (currentUser.role === "SITE_ENGINEER") {
         // Engineer sees PM + other engineers
         if (manager) contacts.push(toContactDTO(manager));
-        engineers.forEach(e => contacts.push(toContactDTO(e)));
+        engineers.forEach(e => { if (e) contacts.push(toContactDTO(e)); });
     } else if (currentUser.role === "CLIENT") {
         // Client sees PM + engineers
         if (manager) contacts.push(toContactDTO(manager));
-        engineers.forEach(e => contacts.push(toContactDTO(e)));
+        engineers.forEach(e => { if (e) contacts.push(toContactDTO(e)); });
     }
 
     return { contacts, status: 200 } as const;

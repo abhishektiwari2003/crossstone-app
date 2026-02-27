@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2, AlertCircle, UploadCloud, X, File as FileIcon } from "lucide-react";
@@ -43,7 +43,7 @@ export default function QueryCreateForm({ projectId, onSuccess, onCancel }: Prop
         setSelectedFiles(prev => prev.filter((_, i) => i !== index));
     };
 
-    const onSubmit = async (data: FormInput) => {
+    const onSubmit: SubmitHandler<FormInput> = async (data) => {
         setIsSubmitting(true);
         setErrorMsg("");
 
