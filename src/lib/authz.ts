@@ -31,6 +31,10 @@ export function canEditPayments(role?: AppRole | null) {
   return role === Role.SUPER_ADMIN || role === Role.ADMIN || role === Role.PROJECT_MANAGER;
 }
 
+export function canManageMaterials(role?: AppRole | null) {
+  return role === Role.SUPER_ADMIN || role === Role.ADMIN || role === Role.PROJECT_MANAGER;
+}
+
 export function canCreateProjectUpdate(role?: AppRole | null) {
   return role === Role.PROJECT_MANAGER || role === Role.SITE_ENGINEER || isAdmin(role);
 }

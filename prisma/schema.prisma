@@ -55,6 +55,12 @@ enum PaymentCategory {
   OTHER
 }
 
+enum MaterialStatus {
+  ORDERED
+  DELIVERED
+  USED
+}
+
 enum NotificationPriority {
   LOW
   NORMAL
@@ -116,6 +122,7 @@ model User {
   queryResponses     QueryResponse[] @relation("QueryResponseAuthor")
   auditLogs          AuditLog[]
   notificationPrefs  NotificationPreference?
+  materialsCreated   Material[]
 }
 
 model Project {
@@ -141,6 +148,7 @@ model Project {
   milestones    Milestone[]
   inspections   Inspection[]
   queries       Query[]
+  materials     Material[]
   auditLogs     AuditLog[]
 
   @@index([managerId])
@@ -417,3 +425,22 @@ model AuditLog {
   @@index([createdAt])
 }
 
+model Material {
+  id          String         @id @default(cuid())
+  projectId   String
+  project     Project        @relation(fields: [projectId], references: [id])
+  name        String
+  quantity    Float
+  unit        String
+  unitCost    Float
+  totalCost   Float
+  supplier    String?
+  status      MaterialStatus @default(ORDERED)
+  createdById String
+  createdBy   User           @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+}
