@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
-import { Home, FolderKanban, CreditCard, Users, Building2, ChevronRight, ShieldAlert, BarChart3 } from "lucide-react";
+import { Home, FolderKanban, CreditCard, Users, ChevronRight, ShieldAlert, BarChart3 } from "lucide-react";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
 import FloatingActionButton from "@/components/ui/FloatingActionButton";
 import { getServerSession } from "next-auth";

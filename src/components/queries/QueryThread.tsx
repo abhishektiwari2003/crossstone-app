@@ -165,7 +165,6 @@ export default function QueryThread({ queryId, onBack, userRole }: Props) {
                 {/* Responses */}
                 {query.responses.map((res: QueryResponse) => {
                     const isClient = res.author.role === "CLIENT";
-                    const isOwnMessage = res.authorId === (canRespond ? "me" : ""); // Ideally check active user ID but role styling works
 
                     return (
                         <div key={res.id} className={`flex items-start gap-3 w-full md:w-[85%] ${isClient ? "self-start" : "self-end flex-row-reverse"}`}>

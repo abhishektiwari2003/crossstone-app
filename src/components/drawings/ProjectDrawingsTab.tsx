@@ -6,7 +6,7 @@ import { FileText, Layers } from "lucide-react";
 import DrawingUploadForm from "@/components/drawings/DrawingUploadForm";
 import DrawingCard from "@/components/drawings/DrawingCard";
 import DrawingApprovalButton from "@/components/drawings/DrawingApprovalButton";
-import type { Drawing, UserRole, DrawingStatus } from "@/types/drawings";
+import type { Drawing, UserRole } from "@/types/drawings";
 import { getDrawingStatus, canApproveDrawing } from "@/types/drawings";
 
 type Props = {

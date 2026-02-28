@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { bulkUpdatePayments } from "@/modules/payments/service";
+import type { PaymentStatus } from "@/generated/prisma";
+import type { AppRole } from "@/lib/authz";
 
 export async function PATCH(req: Request) {
     try {
@@ -17,7 +19,7 @@ export async function PATCH(req: Request) {
             return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
         }
 
-        const result = await bulkUpdatePayments(paymentIds, status as any, session.user as any);
+        const result = await bulkUpdatePayments(paymentIds, status as PaymentStatus, session.user as { id: string; role: AppRole });
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });

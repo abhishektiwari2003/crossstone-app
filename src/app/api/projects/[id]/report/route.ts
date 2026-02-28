@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getProjectReport } from "@/modules/reports/service";
-import { User } from "@/generated/prisma";
 
 export async function GET(
     req: Request,
@@ -17,15 +16,17 @@ export async function GET(
         // Await the params
         const { id: projectId } = await params;
 
-        const report = await getProjectReport(projectId, session.user as User);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const report = await getProjectReport(projectId, session.user as any);
 
         return NextResponse.json(report);
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Unknown error";
         console.error("GET /api/projects/[id]/report error:", error);
-        if (error.message === "UNAUTHORIZED") {
+        if (message === "UNAUTHORIZED") {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
-        if (error.message === "NOT_FOUND") {
+        if (message === "NOT_FOUND") {
             return NextResponse.json({ error: "Project not found" }, { status: 404 });
         }
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

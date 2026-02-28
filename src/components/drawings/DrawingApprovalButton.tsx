@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2, Shield } from "lucide-react";
+import { Loader2, Shield } from "lucide-react";
 
 type Props = {
     drawingId: string;

@@ -64,7 +64,7 @@ export default function ProjectReportDashboard({
                 <div className="bg-red-50 text-red-600 p-6 rounded-2xl border border-red-100 text-center max-w-md">
                     <FileBarChart2 className="h-10 w-10 mx-auto mb-3 opacity-50" />
                     <h2 className="text-lg font-bold mb-1">Failed to load report</h2>
-                    <p className="text-sm">We couldn't generate the project report. Please check your connection and try again.</p>
+                    <p className="text-sm">We couldn&apos;t generate the project report. Please check your connection and try again.</p>
                     <Link href={`/projects/${projectId}`} className="inline-block mt-4 px-4 py-2 bg-white text-red-600 font-semibold rounded-lg shadow-sm hover:bg-red-50 transition-colors">
                         Back to Project
                     </Link>

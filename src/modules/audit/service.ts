@@ -30,7 +30,7 @@ export async function getAuditLogs(
 
     const take = Math.min(limit, 100);
 
-    let where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = {};
     if (filters.projectId) where.projectId = filters.projectId;
     if (filters.userId) where.userId = filters.userId;
     if (filters.action) where.action = filters.action;
@@ -41,6 +41,7 @@ export async function getAuditLogs(
         };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const logs = await (prisma as any).auditLog.findMany({
         where,
         include: {
@@ -57,6 +58,7 @@ export async function getAuditLogs(
     const nextCursor = hasMore ? items[items.length - 1].id : null;
 
     return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         items: items.map((log: any) => ({
             id: log.id,
             userName: log.user.name,
@@ -82,6 +84,7 @@ export async function getProjectTimeline(
         return { error: "Forbidden", status: 403 } as const;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const logs = await (prisma as any).auditLog.findMany({
         where: { projectId },
         include: {
@@ -92,6 +95,7 @@ export async function getProjectTimeline(
     });
 
     return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         items: logs.map((log: any) => {
             const mapping = AUDIT_ACTION_MAP[log.action] || {
                 title: log.action,

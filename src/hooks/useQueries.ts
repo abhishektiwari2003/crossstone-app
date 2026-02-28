@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import type { Query, QueryResponse, QueryMedia, QueryStatus, QueryPriority } from "@/types/queries";
+import type { Query } from "@/types/queries";
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 

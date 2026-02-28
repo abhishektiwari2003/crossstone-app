@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getProjectTimeline } from "@/modules/audit/service";
+import type { AppRole } from "@/lib/authz";
 
 export async function GET(
     req: Request,
@@ -15,7 +16,7 @@ export async function GET(
 
         const { id: projectId } = await params;
 
-        const result = await getProjectTimeline(projectId, session.user as any);
+        const result = await getProjectTimeline(projectId, session.user as { id: string; role: AppRole });
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });

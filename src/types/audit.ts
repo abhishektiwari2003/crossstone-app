@@ -33,7 +33,7 @@ export interface AuditLog {
     entity: AuditLogEntity;
     entityId: string;
     projectId?: string | null;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
     createdAt: string; // ISO DateTime
 }
 
@@ -42,7 +42,7 @@ export interface ProjectActivity {
     userName: string;
     action: AuditLogAction;
     entity: AuditLogEntity;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
     createdAt: string; // ISO DateTime
 }
 

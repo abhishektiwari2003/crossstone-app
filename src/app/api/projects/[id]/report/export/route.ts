@@ -28,6 +28,7 @@ export async function GET(
             },
             cancel() {
                 // Avoid memory leaks
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (pdfStream as any).destroy();
             },
         });
@@ -39,12 +40,13 @@ export async function GET(
                 "Content-Disposition": `attachment; filename="project-report-${projectId}.pdf"`,
             },
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Unknown error";
         console.error("GET /api/projects/[id]/report/export error:", error);
-        if (error.message === "UNAUTHORIZED") {
+        if (message === "UNAUTHORIZED") {
             return new NextResponse("Forbidden", { status: 403 });
         }
-        if (error.message === "NOT_FOUND") {
+        if (message === "NOT_FOUND") {
             return new NextResponse("Project not found", { status: 404 });
         }
         return new NextResponse("Internal Server Error", { status: 500 });

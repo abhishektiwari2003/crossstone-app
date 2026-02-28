@@ -37,7 +37,7 @@ function getActionTitle(action: AuditLogAction, entity: string, userName: string
 }
 
 export default function ActivityTimeline({ activities, isLoading, isEmpty }: Props) {
-    const [selectedMetadata, setSelectedMetadata] = useState<Record<string, any> | null>(null);
+    const [selectedMetadata, setSelectedMetadata] = useState<Record<string, unknown> | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     if (isLoading) {
@@ -64,7 +64,7 @@ export default function ActivityTimeline({ activities, isLoading, isEmpty }: Pro
             <div className="absolute left-[20px] top-4 bottom-4 w-0.5 bg-slate-200 rounded-full" />
 
             <div className="space-y-6">
-                {activities.map((activity, index) => {
+                {activities.map((activity) => {
                     const hasMetadata = activity.metadata && Object.keys(activity.metadata).length > 0;
 
                     return (

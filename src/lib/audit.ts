@@ -6,7 +6,7 @@ type AuditLogParams = {
     entity: string;
     entityId: string;
     projectId?: string;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
 };
 
 /**
@@ -22,6 +22,7 @@ export async function logAudit({
     metadata,
 }: AuditLogParams) {
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (prisma as any).auditLog.create({
             data: {
                 userId,

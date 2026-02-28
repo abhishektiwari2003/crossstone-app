@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getAnalyticsDashboard } from "@/modules/analytics/service";
+import type { AppRole } from "@/lib/authz";
 
 export async function GET(req: Request) {
     try {
         const session = await getServerSession(authOptions);
-        if (!(session?.user as any)?.role) {
+        if (!(session?.user as { role?: AppRole })?.role) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -14,7 +15,7 @@ export async function GET(req: Request) {
         const from = searchParams.get("from") || undefined;
         const to = searchParams.get("to") || undefined;
 
-        const result = await getAnalyticsDashboard((session?.user as any).role as any, from, to);
+        const result = await getAnalyticsDashboard((session?.user as { role: AppRole }).role, from, to);
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });
