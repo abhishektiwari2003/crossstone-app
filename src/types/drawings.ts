@@ -16,8 +16,7 @@ export type Drawing = {
 export function getDrawingStatus(drawing: Drawing, allDrawings: Drawing[]): DrawingStatus {
     const isApproved = !!drawing.approvedAt;
 
-    // Check if a newer version (same file base name) exists and is approved
-    const baseName = drawing.url?.split("/").pop()?.replace(/\.[^.]+$/, "") || "";
+    // Check if a newer version exists and is approved
     const newerApproved = allDrawings.some(
         d => d.id !== drawing.id &&
             (d.version || 0) > (drawing.version || 0) &&

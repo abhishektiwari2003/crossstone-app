@@ -9,7 +9,6 @@ import {
     Activity,
     Plus,
     Edit2,
-    UploadCloud,
 } from "lucide-react";
 
 export function getActionIcon(action: AuditLogAction, sizeClass = "h-5 w-5") {

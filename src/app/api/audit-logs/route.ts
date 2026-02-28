@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getAuditLogs } from "@/modules/audit/service";
+import type { AppRole } from "@/lib/authz";
 
 export async function GET(req: Request) {
     try {
         const session = await getServerSession(authOptions);
-        if (!(session?.user as any)?.role) {
+        if (!(session?.user as { role?: AppRole })?.role) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -23,7 +24,7 @@ export async function GET(req: Request) {
         const cursor = searchParams.get("cursor");
         const limit = parseInt(searchParams.get("limit") || "20", 10);
 
-        const result = await getAuditLogs((session?.user as any).role as any, filters, cursor, limit);
+        const result = await getAuditLogs((session?.user as { role: AppRole }).role, filters, cursor, limit);
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });

@@ -91,6 +91,7 @@ export async function getFilteredPayments(
         return { error: "Forbidden", status: 403 } as const;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = { projectId };
     if (filters.status) where.status = filters.status;
     if (filters.category) where.category = filters.category;

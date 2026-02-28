@@ -12,7 +12,7 @@ import { Code2 } from "lucide-react";
 type Props = {
     isOpen: boolean;
     onClose: () => void;
-    metadata: Record<string, any> | null;
+    metadata: Record<string, unknown> | null;
     actionTitle?: string;
 };
 

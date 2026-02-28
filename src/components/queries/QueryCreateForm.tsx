@@ -5,7 +5,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2, AlertCircle, UploadCloud, X, File as FileIcon } from "lucide-react";
-import { CreateQuerySchema, type CreateQueryInput } from "@/modules/queries/validation";
+import { CreateQuerySchema } from "@/modules/queries/validation";
 
 type FormInput = z.input<typeof CreateQuerySchema>;
 

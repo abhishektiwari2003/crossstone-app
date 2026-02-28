@@ -1,15 +1,28 @@
-import { cookies } from "next/headers";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import { CreditCard, TrendingUp, Clock, AlertTriangle } from "lucide-react";
 
-type PaymentListItem = { id: string; amount: string; currency: string; status: string; project?: { id: string; name: string; client?: { id: string; name: string; email: string } } };
+const includeProject = {
+	project: {
+		select: {
+			id: true,
+			name: true,
+			client: { select: { id: true, name: true, email: true } },
+		},
+	},
+} as const;
 
-async function getPayments(cookie: string): Promise<{ payments: PaymentListItem[] }> {
-	const res = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/payments`, { headers: { cookie }, cache: "no-store" });
-	return res.json();
+async function getPayments(userId: string, role: Role) {
+	if (role === "CLIENT") {
+		return prisma.payment.findMany({ where: { project: { clientId: userId } }, include: includeProject });
+	}
+	if (role === "PROJECT_MANAGER" || role === "SITE_ENGINEER") {
+		return prisma.payment.findMany({ where: { project: { OR: [{ managerId: userId }, { members: { some: { userId } } }] } }, include: includeProject });
+	}
+	return prisma.payment.findMany({ include: includeProject });
 }
 
 function getPaymentStatusStyle(status: string) {
@@ -27,11 +40,11 @@ function formatStatus(status: string) {
 }
 
 export default async function PaymentsPage() {
-	const cookieStore = await cookies();
-	const cookie = cookieStore.toString();
 	const session = await getServerSession(authOptions);
-	const role = (session?.user as { role?: Role } | null)?.role;
-	const { payments } = await getPayments(cookie);
+	if (!session?.user) return null;
+	const role = (session.user as { role?: Role }).role as Role;
+	const userId = (session.user as { id: string }).id;
+	const payments = await getPayments(userId, role);
 
 	const showMaster = role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, ClipboardCheck, MessageSquare } from "lucide-react";
+import { Plus } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { AppRole } from "@/lib/authz";
 import { isAdmin } from "@/lib/authz";

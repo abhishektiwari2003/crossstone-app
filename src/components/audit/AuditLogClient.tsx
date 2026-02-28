@@ -16,10 +16,10 @@ export default function AuditLogClient({ sessionRole }: { sessionRole: string })
     const [projectFilter, setProjectFilter] = useState("");
     const [userFilter, setUserFilter] = useState("");
 
-    const [selectedMetadata, setSelectedMetadata] = useState<Record<string, any> | null>(null);
+    const [selectedMetadata, setSelectedMetadata] = useState<Record<string, unknown> | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const { logs, total, isLoading, isError, mutate } = useAuditLogs({
+    const { logs, isLoading, isError, mutate } = useAuditLogs({
         action: actionFilter || undefined,
         projectId: projectFilter || undefined,
         userId: userFilter || undefined,

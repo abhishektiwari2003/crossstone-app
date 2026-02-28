@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, type AppRole } from "@/lib/authz";
-import type { ProjectMemberRole, Role } from "@/generated/prisma";
+import type { ProjectMemberRole } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
 
 // ─── Shared include for members with user details ───

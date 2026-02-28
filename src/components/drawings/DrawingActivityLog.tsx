@@ -1,6 +1,6 @@
 "use client";
 
-import { Upload, CheckCircle2, ShieldX, User, Calendar } from "lucide-react";
+import { Upload, CheckCircle2 } from "lucide-react";
 import type { Drawing } from "@/types/drawings";
 
 type Props = {

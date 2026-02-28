@@ -1,16 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { canManageProjects } from "@/lib/authz";
-import { cookies } from "next/headers";
+import { canManageProjects, type AppRole } from "@/lib/authz";
 import Link from "next/link";
 import { FolderKanban, Plus, ArrowRight, HardHat } from "lucide-react";
-
-type ProjectListItem = { id: string; name: string; status: string; description?: string | null; members?: { id: string; user: { id: string; name: string | null } }[] };
-
-async function getProjects(cookie: string): Promise<{ projects: ProjectListItem[] }> {
-	const res = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/projects`, { headers: { cookie }, cache: "no-store" });
-	return res.json();
-}
+import { getProjectsForUser } from "@/modules/projects/service";
 
 function getStatusStyle(status: string) {
 	switch (status) {
@@ -38,10 +31,11 @@ function formatStatus(status: string) {
 
 export default async function ProjectsPage() {
 	const session = await getServerSession(authOptions);
-	const cookieStore = await cookies();
-	const cookie = cookieStore.toString();
-	const { projects } = await getProjects(cookie);
-	const isAdmin = canManageProjects((session?.user as { role?: "SUPER_ADMIN" | "ADMIN" | "PROJECT_MANAGER" | "SITE_ENGINEER" | "CLIENT" } | null)?.role);
+	if (!session?.user) return null;
+	const role = (session.user as { role?: AppRole }).role as AppRole;
+	const userId = (session.user as { id: string }).id;
+	const projects = await getProjectsForUser(userId, role);
+	const isAdmin = canManageProjects(role);
 
 	return (
 		<div className="space-y-6">

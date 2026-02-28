@@ -7,6 +7,7 @@ import { ProjectReportPDF } from "./pdf/ProjectReportPDF";
 
 export async function getProjectReport(projectId: string, currentUser: User) {
     // 1. RBAC Verification
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const hasAccess = await canViewProject(currentUser.id, currentUser.role as any, projectId);
     if (!hasAccess) {
         throw new Error("UNAUTHORIZED");
@@ -175,6 +176,7 @@ export async function generateProjectReportPDF(projectId: string, currentUser: U
     const reportData = await getProjectReport(projectId, currentUser);
 
     // Generate PDF stream
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pdfStream = await renderToStream(React.createElement(ProjectReportPDF, { data: reportData }) as any);
     return pdfStream;
 }

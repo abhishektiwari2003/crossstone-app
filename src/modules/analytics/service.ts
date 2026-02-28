@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, type AppRole } from "@/lib/authz";
-import { subMonths, format, eachMonthOfInterval, startOfMonth, endOfMonth } from "date-fns";
+import { subMonths, format, eachMonthOfInterval } from "date-fns";
 
 // -------------- Type Definitions --------------
 type DateRange = { gte: Date; lte: Date };

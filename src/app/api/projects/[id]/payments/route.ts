@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getFilteredPayments } from "@/modules/payments/service";
 import { PaymentStatus, PaymentCategory } from "@/generated/prisma";
+import type { AppRole } from "@/lib/authz";
 
 export async function GET(
     req: Request,
@@ -27,7 +28,7 @@ export async function GET(
         const cursor = searchParams.get("cursor");
         const limit = parseInt(searchParams.get("limit") || "20", 10);
 
-        const result = await getFilteredPayments(projectId, filters, cursor, limit, session.user as any);
+        const result = await getFilteredPayments(projectId, filters, cursor, limit, session.user as { id: string; role: AppRole });
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });

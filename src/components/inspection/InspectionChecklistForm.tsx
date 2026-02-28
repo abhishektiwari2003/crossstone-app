@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ClipboardCheck, CheckCircle2, XCircle, MinusCircle, AlertCircle } from "lucide-react";
 import { useInspectionDraft } from "@/hooks/useInspectionDraft";
@@ -22,7 +21,6 @@ const resultOptions: { value: ChecklistResult; label: string; icon: typeof Check
 ];
 
 export default function InspectionChecklistForm({ projectId, milestoneId }: Props) {
-    const router = useRouter();
     const [milestone, setMilestone] = useState<Milestone | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);

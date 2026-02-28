@@ -2,16 +2,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isAdmin } from "@/lib/authz";
 import type { Role } from "@/generated/prisma";
-import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Plus, Shield, ArrowRight, Users as UsersIcon } from "lucide-react";
 
-type UserSummary = { id: string; name: string; email: string; role: Role };
-
-async function getUsers(cookie: string): Promise<{ users: UserSummary[] }> {
-	const res = await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/users`, { headers: { cookie }, cache: "no-store" });
-	return res.json();
+async function getUsers() {
+	return prisma.user.findMany({ select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true } });
 }
 
 function getRoleBadgeStyle(role: string) {
@@ -58,9 +55,7 @@ export default async function UsersPage() {
 			</div>
 		);
 	}
-	const cookieStore = await cookies();
-	const cookie = cookieStore.toString();
-	const { users } = await getUsers(cookie);
+	const users = await getUsers();
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">

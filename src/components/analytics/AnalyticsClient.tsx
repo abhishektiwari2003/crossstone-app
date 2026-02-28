@@ -43,7 +43,8 @@ export default function AnalyticsClient({ sessionRole }: { sessionRole: string }
     }
 
     // Helper to calculate pseudo trends based on historical array lengths/distribution
-    const calculateTrend = (historyArray: any[], valueKey: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const calculateTrend = (historyArray: { [key: string]: any }[], valueKey: string) => {
         if (!historyArray || historyArray.length < 2) return 0;
         const currentM = historyArray[historyArray.length - 1][valueKey] || 0;
         const prevM = historyArray[historyArray.length - 2][valueKey] || 0;
