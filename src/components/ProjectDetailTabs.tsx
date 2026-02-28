@@ -12,6 +12,7 @@ import ProjectServicesMenu from "@/components/ProjectServicesMenu";
 import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
 import ProjectContactsTab from "@/components/projects/ProjectContactsTab";
 import ProjectActivityTab from "@/components/audit/ProjectActivityTab";
+import ProjectPaymentsTab from "@/components/payments/ProjectPaymentsTab";
 import type { UserRole } from "@/types/drawings";
 import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -182,45 +183,8 @@ export default function ProjectDetailTabs(props: Props) {
 			</TabsContent>
 
 			{/* ─── Payments Tab ─── */}
-			<TabsContent value="payments" className="space-y-4 mt-6">
-				<div className="flex items-center justify-between">
-					<h2 className="text-lg font-semibold text-slate-900">Payment History</h2>
-					{props.canEditPayments ? <AddPayment projectId={props.projectId} /> : null}
-				</div>
-				<div className="space-y-3">
-					{props.payments.length ? props.payments.map(p => (
-						<div key={p.id} className="glass-card p-5 hover-lift">
-							<div className="flex items-center justify-between mb-2">
-								<div className="flex items-center gap-3">
-									<div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
-										<CreditCard className="h-4 w-4 text-emerald-600" />
-									</div>
-									<div>
-										<div className="font-bold text-slate-900 text-lg">{p.currency} {Number(p.amount).toLocaleString()}</div>
-									</div>
-								</div>
-								<span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getPaymentStatusStyle(p.status)}`}>
-									{formatStatus(p.status)}
-								</span>
-							</div>
-							<p className="text-xs text-slate-400">{new Date(p.createdAt).toLocaleDateString()}</p>
-							{p.media?.length ? (
-								<div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-									{p.media.map(m => (
-										<ViewMediaLink key={m.id} fileKey={m.fileKey} label="Receipt" />
-									))}
-								</div>
-							) : null}
-						</div>
-					)) : (
-						<div className="glass-card p-8 text-center">
-							<div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
-								<CreditCard className="h-6 w-6 text-slate-400" />
-							</div>
-							<p className="text-sm text-slate-500">No payments yet.</p>
-						</div>
-					)}
-				</div>
+			<TabsContent value="payments" className="mt-6">
+				<ProjectPaymentsTab projectId={props.projectId} userRole={props.userRole} />
 			</TabsContent>
 
 			{/* ─── Team Tab ─── */}
