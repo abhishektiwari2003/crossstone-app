@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { isAdmin, type AppRole } from "@/lib/authz";
 import type { ProjectMemberRole, Role } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
+import { createNotification } from "@/lib/notifications";
 
 // ─── Shared include for members with user details ───
 const membersInclude = {
@@ -115,6 +116,16 @@ export async function addMember(
             addedUserId: userId,
             assignedRole: role,
         },
+    });
+
+    // Fire Notification to the assigned user
+    await createNotification({
+        userId,
+        title: "New Project Assignment",
+        message: `You have been added to ${project.name} as a ${role.replace("_", " ")}.`,
+        type: "NEW_ASSIGNMENT",
+        priority: "HIGH",
+        actionUrl: `/projects/${projectId}`,
     });
 
     return { member, status: 201 } as const;

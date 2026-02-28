@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
+import { type AppRole, canViewProject, isAdmin } from "@/lib/authz";
 import { logAudit } from "@/lib/audit";
+import { createNotification } from "@/lib/notifications";
 
 // ─── Create a drawing (ADMIN only) ───
 export async function createDrawing(
@@ -145,6 +146,22 @@ export async function approveDrawing(
             version: media.version,
         },
     });
+
+    const clientMembership = await prisma.project.findUnique({
+        where: { id: media.projectId },
+        select: { clientId: true, name: true }
+    });
+
+    if (clientMembership && clientMembership.clientId) {
+        await createNotification({
+            userId: clientMembership.clientId,
+            title: "Drawing Approved",
+            message: `A drawing (v${media.version}) has been approved for ${clientMembership.name}.`,
+            type: "DRAWING_APPROVED",
+            priority: "NORMAL",
+            actionUrl: `/projects/${media.projectId}/drawings`,
+        });
+    }
 
     return {
         drawing: {

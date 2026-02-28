@@ -3,6 +3,7 @@ import { isAdmin, type AppRole } from "@/lib/authz";
 import type { CreateInspectionInput } from "./validation";
 import type { ChecklistResult, InspectionStatus } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
+import { createNotification } from "@/lib/notifications";
 
 // ─── Full include for inspection detail ───
 const inspectionDetailInclude = {
@@ -122,6 +123,23 @@ export async function createInspection(
             itemsCount: responses.length,
         },
     });
+
+    if (targetStatus === "SUBMITTED") {
+        const pmMembership = await prisma.projectMember.findFirst({
+            where: { projectId, role: "PROJECT_MANAGER" }
+        });
+
+        if (pmMembership) {
+            await createNotification({
+                userId: pmMembership.userId,
+                title: "Inspection Submitted",
+                message: `An inspection for milestone "${milestone.name}" has been submitted for review.`,
+                type: "INSPECTION_SUBMITTED",
+                priority: "HIGH",
+                actionUrl: `/projects/${projectId}/inspections/${inspection.id}`,
+            });
+        }
+    }
 
     return { inspection, status: 201 } as const;
 }

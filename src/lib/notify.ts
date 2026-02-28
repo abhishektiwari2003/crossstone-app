@@ -4,7 +4,7 @@ import type { Prisma } from "@/generated/prisma";
 export async function createNotification(params: {
 	userId: string;
 	title: string;
-	body: string;
+	message: string;
 	type?: string;
 	data?: Record<string, unknown>;
 }) {
@@ -12,9 +12,8 @@ export async function createNotification(params: {
 		data: {
 			userId: params.userId,
 			title: params.title,
-			body: params.body,
+			message: params.message,
 			type: params.type || "GENERIC",
-			data: (params.data as unknown as Prisma.InputJsonValue) ?? undefined,
 		},
 	});
 }

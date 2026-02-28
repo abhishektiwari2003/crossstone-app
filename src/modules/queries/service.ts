@@ -3,6 +3,7 @@ import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
 import type { CreateQueryInput, UpdateQueryInput } from "./validation";
 import type { QueryPriority, QueryStatus } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
+import { createNotification } from "@/lib/notifications";
 
 // ─── Priority → Color map ───
 const PRIORITY_COLOR_MAP: Record<string, string> = {
@@ -79,6 +80,21 @@ export async function createQuery(
             hasAttachments: !!(data.attachmentIds && data.attachmentIds.length > 0),
         },
     });
+
+    const pmMembership = await prisma.projectMember.findFirst({
+        where: { projectId, role: "PROJECT_MANAGER" }
+    });
+
+    if (pmMembership) {
+        await createNotification({
+            userId: pmMembership.userId,
+            title: "New Query Created",
+            message: `A new query "${query.title}" has been raised.`,
+            type: "QUERY_CREATED",
+            priority: query.priority === "URGENT" ? "HIGH" : "NORMAL",
+            actionUrl: `/projects/${projectId}/queries/${query.id}`,
+        });
+    }
 
     return { query, status: 201 } as const;
 }
