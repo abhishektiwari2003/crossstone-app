@@ -4,6 +4,7 @@ import SignOutButton from "@/components/SignOutButton";
 import { Home, FolderKanban, CreditCard, Users, ChevronRight, ShieldAlert, BarChart3 } from "lucide-react";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
 import FloatingActionButton from "@/components/ui/FloatingActionButton";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
@@ -73,6 +74,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <header className="sticky top-0 z-40 h-16 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl hidden md:flex items-center px-8">
                     <div className="flex-1" />
                     <div className="flex items-center gap-4">
+                        <NotificationBell />
                         <SignOutButton />
                         <div className="h-8 w-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xs font-bold text-white">
                             U
@@ -85,7 +87,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <div className="flex items-center h-8 w-28 relative">
                         <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain object-left" />
                     </div>
-                    <SignOutButton />
+                    <div className="flex items-center gap-2">
+                        <NotificationBell />
+                        <SignOutButton />
+                    </div>
                 </header>
 
                 {/* Page content */}
