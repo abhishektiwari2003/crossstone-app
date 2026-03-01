@@ -28,14 +28,7 @@ export default function PaymentSummaryCards({ projectId }: Props) {
         );
     }
 
-    // Currency formatter
-    const formatMoney = (amount: number) => {
-        return new Intl.NumberFormat("en-IN", {
-            style: "currency",
-            currency: "INR",
-            maximumFractionDigits: 0,
-        }).format(amount);
-    };
+    // Using shared formatCurrency from utils
 
     const calcPercentage = (amount: number) => {
         if (summary.totalAmount === 0) return 0;
@@ -54,7 +47,7 @@ export default function PaymentSummaryCards({ projectId }: Props) {
                 </div>
                 <div>
                     <h3 className="text-lg md:text-2xl font-bold text-slate-900 tracking-tight truncate">
-                        {formatMoney(summary.totalAmount)}
+                        {formatCurrency(summary.totalAmount)}
                     </h3>
                 </div>
             </div>
@@ -70,7 +63,7 @@ export default function PaymentSummaryCards({ projectId }: Props) {
                 <div>
                     <div className="flex items-end justify-between mb-1.5">
                         <h3 className="text-lg md:text-2xl font-bold text-emerald-700 tracking-tight truncate">
-                            {formatMoney(summary.paidAmount)}
+                            {formatCurrency(summary.paidAmount)}
                         </h3>
                         <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
                             {calcPercentage(summary.paidAmount)}%
@@ -93,7 +86,7 @@ export default function PaymentSummaryCards({ projectId }: Props) {
                 <div>
                     <div className="flex items-end justify-between mb-1.5">
                         <h3 className="text-lg md:text-2xl font-bold text-blue-700 tracking-tight truncate">
-                            {formatMoney(summary.pendingAmount)}
+                            {formatCurrency(summary.pendingAmount)}
                         </h3>
                         <span className="text-xs font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md">
                             {calcPercentage(summary.pendingAmount)}%
@@ -116,7 +109,7 @@ export default function PaymentSummaryCards({ projectId }: Props) {
                 <div>
                     <div className="flex items-end justify-between mb-1.5">
                         <h3 className="text-lg md:text-2xl font-bold text-red-700 tracking-tight truncate">
-                            {formatMoney(summary.overdueAmount)}
+                            {formatCurrency(summary.overdueAmount)}
                         </h3>
                         <span className="text-xs font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-md">
                             {calcPercentage(summary.overdueAmount)}%

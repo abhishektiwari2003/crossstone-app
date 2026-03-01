@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { type AppRole, canViewProject, canManageMaterials } from "@/lib/authz";
 import { logAudit } from "@/lib/audit";
-import type { MaterialStatus } from "@/generated/prisma";
+import type { MaterialStatus } from "@/types/materials";
 import { CreateMaterialSchema, UpdateMaterialSchema } from "./validation";
 
 // -------------------------------------------------------------
@@ -264,7 +264,7 @@ export async function getMaterialSummary(
 
     // Merge count and cost by status
     const statusBreakdown = countAgg.map((countItem) => {
-        const costItem = costByStatusAgg.find((c) => c.status === countItem.status);
+        const costItem = costByStatusAgg.find((c: any) => c.status === countItem.status);
         return {
             status: countItem.status,
             count: countItem._count,
