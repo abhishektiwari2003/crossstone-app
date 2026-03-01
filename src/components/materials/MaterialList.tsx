@@ -16,6 +16,11 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { AppCard } from "@/components/common/AppCard";
+import { AppBadge } from "@/components/common/AppBadge";
+import { ListSkeleton } from "@/components/ui/AppSkeletons";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 type Props = {
     projectId: string;
@@ -41,37 +46,21 @@ export default function MaterialList({ projectId, searchTerm, statusFilter, canM
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
     if (isLoading) {
-        return (
-            <div className="space-y-3">
-                {[...Array(5)].map((_, i) => (
-                    <div key={i} className="glass-card p-4 h-20 shimmer rounded-xl border border-slate-200" />
-                ))}
-            </div>
-        );
+        return <ListSkeleton count={5} />;
     }
 
     if (error) {
-        return (
-            <div className="glass-card p-12 text-center bg-red-50/50 border-red-100 rounded-2xl">
-                <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-3" />
-                <p className="text-sm font-medium text-red-600">Failed to load materials</p>
-            </div>
-        );
+        return <ErrorState message="Failed to load materials" />;
     }
 
     if (!materials || materials.length === 0) {
         return (
-            <div className="glass-card p-16 text-center border border-slate-200 rounded-2xl shadow-sm bg-white/50">
-                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                    <PackageOpen className="h-8 w-8 text-slate-400" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-1">No materials tracked</h3>
-                <p className="text-sm text-slate-500 max-w-sm mx-auto">
-                    {canManage
-                        ? "Start tracking materials, deliveries, and costs by adding your first item."
-                        : "There are no materials recorded for this project yet."}
-                </p>
-            </div>
+            <EmptyState
+                title="No materials tracked"
+                description={canManage
+                    ? "Start tracking materials, deliveries, and costs by adding your first item."
+                    : "There are no materials recorded for this project yet."}
+            />
         );
     }
 
@@ -103,12 +92,12 @@ export default function MaterialList({ projectId, searchTerm, statusFilter, canM
         }
     };
 
-    const getStatusStyle = (status: string) => {
+    const getStatusTheme = (status: string) => {
         switch (status) {
-            case "ORDERED": return "bg-blue-50 text-blue-700 border-blue-200";
-            case "DELIVERED": return "bg-amber-50 text-amber-700 border-amber-200";
-            case "USED": return "bg-emerald-50 text-emerald-700 border-emerald-200";
-            default: return "bg-slate-50 text-slate-700 border-slate-200";
+            case "ORDERED": return "primary";
+            case "DELIVERED": return "warning";
+            case "USED": return "success";
+            default: return "neutral";
         }
     };
 
@@ -145,9 +134,7 @@ export default function MaterialList({ projectId, searchTerm, statusFilter, canM
                                     <td className="px-6 py-4 font-bold text-slate-900">{formatCurrency(m.totalCost)}</td>
                                     <td className="px-6 py-4 text-slate-600">{m.supplier || "—"}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${getStatusStyle(m.status)}`}>
-                                            {m.status}
-                                        </span>
+                                        <AppBadge theme={getStatusTheme(m.status)}>{m.status}</AppBadge>
                                     </td>
                                     <td className="px-6 py-4 text-slate-500">
                                         <div className="flex items-center gap-1.5">
@@ -177,12 +164,12 @@ export default function MaterialList({ projectId, searchTerm, statusFilter, canM
 
             <div className="md:hidden space-y-3">
                 {filteredMaterials.map((m) => (
-                    <div key={m.id} className="glass-card p-5 border border-slate-200 rounded-xl relative group">
+                    <AppCard key={m.id} className="p-5 relative group">
                         <div className="flex justify-between items-start mb-2">
                             <h4 className="font-bold text-slate-900 text-base pr-8">{m.name}</h4>
-                            <span className={`absolute top-4 right-4 inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${getStatusStyle(m.status)}`}>
-                                {m.status}
-                            </span>
+                            <div className="absolute top-4 right-4">
+                                <AppBadge theme={getStatusTheme(m.status)}>{m.status}</AppBadge>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 mb-4 mt-3">
@@ -211,7 +198,7 @@ export default function MaterialList({ projectId, searchTerm, statusFilter, canM
                                 </button>
                             </div>
                         )}
-                    </div>
+                    </AppCard>
                 ))}
             </div>
 

@@ -46,7 +46,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   return (
     <div className="space-y-6">
       {/* Back button */}
-      <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors">
+      <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
         Back to Projects
       </Link>
@@ -63,14 +63,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <div className="min-w-0 flex-1">
                 <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight break-words hyphens-auto">{project.name}</h1>
                 {project.description && (
-                  <p className="text-slate-400 mt-1 max-w-lg">{project.description}</p>
+                  <p className="text-slate-200 mt-1 max-w-lg">{project.description}</p>
                 )}
               </div>
               <span className={`inline-flex items-center self-start px-3.5 py-1.5 rounded-full text-xs font-bold ${getStatusStyle(project.status)}`}>
                 {formatStatus(project.status)}
               </span>
             </div>
-            <div className="flex items-center gap-4 mt-5 text-sm text-slate-400">
+            <div className="flex items-center gap-4 mt-5 text-sm text-slate-300">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-3.5 w-3.5" />
                 Created {project.createdAt.toLocaleDateString()}

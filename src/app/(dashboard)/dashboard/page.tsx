@@ -66,10 +66,10 @@ export default async function DashboardPage() {
 			{/* Welcome Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+					<h1 className="text-3xl font-bold text-foreground tracking-tight">
 						Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"}, {firstName} 👋
 					</h1>
-					<p className="text-slate-500 mt-1">Here&apos;s what&apos;s happening with your projects today.</p>
+					<p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your projects today.</p>
 				</div>
 			</div>
 
@@ -94,19 +94,19 @@ export default async function DashboardPage() {
 
 			{/* Quick Actions */}
 			<div>
-				<h2 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
+				<h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
 				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 					<Link
 						href="/projects"
 						className="glass-card p-5 hover-lift group flex items-center justify-between"
 					>
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-								<FolderKanban className="h-5 w-5 text-blue-600" />
+							<div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center ring-1 ring-blue-500/20">
+								<FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
 							</div>
 							<div>
-								<div className="font-semibold text-slate-900">View Projects</div>
-								<div className="text-xs text-slate-500">Manage all projects</div>
+								<div className="font-semibold text-foreground">View Projects</div>
+								<div className="text-xs text-muted-foreground">Manage all projects</div>
 							</div>
 						</div>
 						<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
@@ -116,12 +116,12 @@ export default async function DashboardPage() {
 						className="glass-card p-5 hover-lift group flex items-center justify-between"
 					>
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-								<CreditCard className="h-5 w-5 text-purple-600" />
+							<div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-1 ring-purple-500/20">
+								<CreditCard className="h-5 w-5 text-purple-600 dark:text-purple-400" />
 							</div>
 							<div>
-								<div className="font-semibold text-slate-900">Payments</div>
-								<div className="text-xs text-slate-500">Track finances</div>
+								<div className="font-semibold text-foreground">Payments</div>
+								<div className="text-xs text-muted-foreground">Track finances</div>
 							</div>
 						</div>
 						<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
@@ -132,12 +132,12 @@ export default async function DashboardPage() {
 							className="glass-card p-5 hover-lift group flex items-center justify-between"
 						>
 							<div className="flex items-center gap-3">
-								<div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
-									<Users className="h-5 w-5 text-orange-600" />
+								<div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-1 ring-orange-500/20">
+									<Users className="h-5 w-5 text-orange-600 dark:text-orange-400" />
 								</div>
 								<div>
-									<div className="font-semibold text-slate-900">Team</div>
-									<div className="text-xs text-slate-500">Manage users</div>
+									<div className="font-semibold text-foreground">Team</div>
+									<div className="text-xs text-muted-foreground">Manage users</div>
 								</div>
 							</div>
 							<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all" />
@@ -148,12 +148,12 @@ export default async function DashboardPage() {
 
 			{/* Role Info */}
 			<div className="glass-card p-5 flex items-center gap-4">
-				<div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+				<div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center shadow-inner">
 					<span className="text-lg">🛡️</span>
 				</div>
 				<div>
-					<div className="text-sm font-medium text-slate-900">Your Role</div>
-					<div className="text-sm text-slate-500">{role?.replace(/_/g, " ")}</div>
+					<div className="text-sm font-semibold text-foreground">Your Role</div>
+					<div className="text-sm text-muted-foreground font-medium">{role?.replace(/_/g, " ")}</div>
 				</div>
 			</div>
 		</div>
