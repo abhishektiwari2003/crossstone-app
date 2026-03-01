@@ -36,7 +36,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         }
 
         const response = NextResponse.json({ drawings: result.drawings });
-        response.headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=120");
+        // Removed cache headers to enable instant UI updates on deletion.
+        response.headers.set("Cache-Control", "no-store, max-age=0");
         return response;
     } catch (error) {
         if (error instanceof AuthError) {
@@ -71,10 +72,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
         return NextResponse.json({ drawing: result.drawing }, { status: 201 });
     } catch (error) {
+        console.error("[DRAWING_UPLOAD_ERROR]", error);
         if (error instanceof AuthError) {
             return NextResponse.json({ error: error.message }, { status: error.status });
         }
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error", detail: error instanceof Error ? error.message : String(error) }, { status: 500 });
     }
 }
 

@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import type { AppRole } from "@/lib/authz";
 
 export type SessionUser = {
@@ -25,6 +26,15 @@ export async function getCurrentUser(): Promise<SessionUser> {
 
     if (!user.id || !user.role) {
         throw new AuthError("Invalid session", 401);
+    }
+
+    const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { id: true, isActive: true }
+    });
+
+    if (!dbUser || !dbUser.isActive) {
+        throw new AuthError("Session expired. Please sign out and sign back in.", 401);
     }
 
     return {

@@ -209,7 +209,11 @@ model Media {
   projectUpdate ProjectUpdate? @relation(fields: [projectUpdateId], references: [id])
   payment       Payment?       @relation(fields: [paymentId], references: [id])
   createdBy     User           @relation(fields: [createdById], references: [id])
-  inspectionResponses InspectionResponse[]
+  
+  inspectionResponses InspectionResponse[] @relation("LegacyInspectionMedia")
+  inspectionResponseId String?
+  inspectionResponse  InspectionResponse? @relation("MultiPhotoInspection", fields: [inspectionResponseId], references: [id])
+  
   queryId       String?
   query         Query?         @relation(fields: [queryId], references: [id])
 
@@ -362,8 +366,12 @@ model InspectionResponse {
   checklistItemId String
   checklistItem   ChecklistItem @relation(fields: [checklistItemId], references: [id])
 
+  // Legacy single-media
   mediaId         String?
-  media           Media? @relation(fields: [mediaId], references: [id])
+  media           Media? @relation("LegacyInspectionMedia", fields: [mediaId], references: [id])
+  
+  // New multi-media support
+  mediaFiles      Media[] @relation("MultiPhotoInspection")
 
   @@index([inspectionId])
   @@index([checklistItemId])

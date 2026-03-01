@@ -50,9 +50,9 @@ export default function DeleteDrawingButton({ drawing, userRole, onSuccess }: Pr
             setConfirming(false);
             onSuccess();
         } catch (err: unknown) {
-            toast.error((err as Error).message);
+            toast.error(err instanceof Error ? err.message : "Failed to delete");
         } finally {
-            setLoading(false);
+            if (confirming) setLoading(false);
         }
     }
 

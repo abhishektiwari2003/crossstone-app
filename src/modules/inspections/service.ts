@@ -16,7 +16,7 @@ const inspectionDetailInclude = {
             checklistItem: {
                 select: { id: true, title: true, description: true, order: true, isRequired: true, isPhotoRequired: true },
             },
-            media: {
+            mediaFiles: {
                 select: { id: true, fileKey: true, fileUrl: true, mimeType: true },
             },
         },
@@ -69,8 +69,8 @@ export async function createInspection(
         }
     }
 
-    // 5. Validate media types if any mediaId provided
-    const mediaIds = responses.filter(r => r.mediaId).map(r => r.mediaId!);
+    // 5. Validate media types if any mediaIds provided
+    const mediaIds = responses.flatMap(r => r.mediaIds || []);
     if (mediaIds.length > 0) {
         const mediaRecords = await prisma.media.findMany({
             where: { id: { in: mediaIds } },
@@ -96,15 +96,22 @@ export async function createInspection(
             },
         });
 
-        await tx.inspectionResponse.createMany({
-            data: responses.map((r) => ({
-                inspectionId: created.id,
-                checklistItemId: r.checklistItemId,
-                result: r.result as ChecklistResult,
-                remark: r.remark ? sanitizeInput(r.remark) : null,
-                mediaId: r.mediaId ?? null,
-            })),
-        });
+        await Promise.all(responses.map(async (r) => {
+            const ir = await tx.inspectionResponse.create({
+                data: {
+                    inspectionId: created.id,
+                    checklistItemId: r.checklistItemId,
+                    result: r.result as ChecklistResult,
+                    remark: r.remark ? sanitizeInput(r.remark) : null,
+                },
+            });
+            if (r.mediaIds && r.mediaIds.length > 0) {
+                await tx.media.updateMany({
+                    where: { id: { in: r.mediaIds } },
+                    data: { inspectionResponseId: ir.id },
+                });
+            }
+        }));
 
         return tx.inspection.findUniqueOrThrow({
             where: { id: created.id },
@@ -148,7 +155,7 @@ export async function createInspection(
 // ─── Validate that all required checklist items are answered ───
 function validateSubmission(
     checklistItems: { id: string; isRequired: boolean; isPhotoRequired: boolean }[],
-    responses: { checklistItemId: string; mediaId?: string }[]
+    responses: { checklistItemId: string; mediaIds?: string[] }[]
 ): string | null {
     const responseMap = new Map(responses.map(r => [r.checklistItemId, r]));
 
@@ -161,7 +168,7 @@ function validateSubmission(
         }
         if (item.isPhotoRequired) {
             const response = responseMap.get(item.id);
-            if (!response?.mediaId) {
+            if (!response?.mediaIds || response.mediaIds.length === 0) {
                 return `Photo required for checklist item ${item.id}`;
             }
         }

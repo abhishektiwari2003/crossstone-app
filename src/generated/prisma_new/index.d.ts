@@ -2840,6 +2840,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type InspectionResponseCountOutputType
+   */
+
+  export type InspectionResponseCountOutputType = {
+    mediaFiles: number
+  }
+
+  export type InspectionResponseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mediaFiles?: boolean | InspectionResponseCountOutputTypeCountMediaFilesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * InspectionResponseCountOutputType without action
+   */
+  export type InspectionResponseCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InspectionResponseCountOutputType
+     */
+    select?: InspectionResponseCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * InspectionResponseCountOutputType without action
+   */
+  export type InspectionResponseCountOutputTypeCountMediaFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaWhereInput
+  }
+
+
+  /**
    * Count Type QueryCountOutputType
    */
 
@@ -8122,6 +8153,7 @@ export namespace Prisma {
     approvedAt: Date | null
     version: number | null
     createdAt: Date | null
+    inspectionResponseId: string | null
     queryId: string | null
   }
 
@@ -8140,6 +8172,7 @@ export namespace Prisma {
     approvedAt: Date | null
     version: number | null
     createdAt: Date | null
+    inspectionResponseId: string | null
     queryId: string | null
   }
 
@@ -8158,6 +8191,7 @@ export namespace Prisma {
     approvedAt: number
     version: number
     createdAt: number
+    inspectionResponseId: number
     queryId: number
     _all: number
   }
@@ -8188,6 +8222,7 @@ export namespace Prisma {
     approvedAt?: true
     version?: true
     createdAt?: true
+    inspectionResponseId?: true
     queryId?: true
   }
 
@@ -8206,6 +8241,7 @@ export namespace Prisma {
     approvedAt?: true
     version?: true
     createdAt?: true
+    inspectionResponseId?: true
     queryId?: true
   }
 
@@ -8224,6 +8260,7 @@ export namespace Prisma {
     approvedAt?: true
     version?: true
     createdAt?: true
+    inspectionResponseId?: true
     queryId?: true
     _all?: true
   }
@@ -8329,6 +8366,7 @@ export namespace Prisma {
     approvedAt: Date | null
     version: number | null
     createdAt: Date
+    inspectionResponseId: string | null
     queryId: string | null
     _count: MediaCountAggregateOutputType | null
     _avg: MediaAvgAggregateOutputType | null
@@ -8366,12 +8404,14 @@ export namespace Prisma {
     approvedAt?: boolean
     version?: boolean
     createdAt?: boolean
+    inspectionResponseId?: boolean
     queryId?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     inspectionResponses?: boolean | Media$inspectionResponsesArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
     _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
@@ -8391,11 +8431,13 @@ export namespace Prisma {
     approvedAt?: boolean
     version?: boolean
     createdAt?: boolean
+    inspectionResponseId?: boolean
     queryId?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
@@ -8414,11 +8456,13 @@ export namespace Prisma {
     approvedAt?: boolean
     version?: boolean
     createdAt?: boolean
+    inspectionResponseId?: boolean
     queryId?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
@@ -8437,16 +8481,18 @@ export namespace Prisma {
     approvedAt?: boolean
     version?: boolean
     createdAt?: boolean
+    inspectionResponseId?: boolean
     queryId?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "projectUpdateId" | "paymentId" | "type" | "fileKey" | "fileUrl" | "mimeType" | "fileSize" | "createdById" | "approvedBy" | "approvedAt" | "version" | "createdAt" | "queryId", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "projectUpdateId" | "paymentId" | "type" | "fileKey" | "fileUrl" | "mimeType" | "fileSize" | "createdById" | "approvedBy" | "approvedAt" | "version" | "createdAt" | "inspectionResponseId" | "queryId", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     inspectionResponses?: boolean | Media$inspectionResponsesArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
     _count?: boolean | MediaCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8455,6 +8501,7 @@ export namespace Prisma {
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
   }
   export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8462,6 +8509,7 @@ export namespace Prisma {
     projectUpdate?: boolean | Media$projectUpdateArgs<ExtArgs>
     payment?: boolean | Media$paymentArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    inspectionResponse?: boolean | Media$inspectionResponseArgs<ExtArgs>
     query?: boolean | Media$queryArgs<ExtArgs>
   }
 
@@ -8473,6 +8521,7 @@ export namespace Prisma {
       payment: Prisma.$PaymentPayload<ExtArgs> | null
       createdBy: Prisma.$UserPayload<ExtArgs>
       inspectionResponses: Prisma.$InspectionResponsePayload<ExtArgs>[]
+      inspectionResponse: Prisma.$InspectionResponsePayload<ExtArgs> | null
       query: Prisma.$QueryPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8490,6 +8539,7 @@ export namespace Prisma {
       approvedAt: Date | null
       version: number | null
       createdAt: Date
+      inspectionResponseId: string | null
       queryId: string | null
     }, ExtArgs["result"]["media"]>
     composites: {}
@@ -8890,6 +8940,7 @@ export namespace Prisma {
     payment<T extends Media$paymentArgs<ExtArgs> = {}>(args?: Subset<T, Media$paymentArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     inspectionResponses<T extends Media$inspectionResponsesArgs<ExtArgs> = {}>(args?: Subset<T, Media$inspectionResponsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InspectionResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inspectionResponse<T extends Media$inspectionResponseArgs<ExtArgs> = {}>(args?: Subset<T, Media$inspectionResponseArgs<ExtArgs>>): Prisma__InspectionResponseClient<$Result.GetResult<Prisma.$InspectionResponsePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     query<T extends Media$queryArgs<ExtArgs> = {}>(args?: Subset<T, Media$queryArgs<ExtArgs>>): Prisma__QueryClient<$Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8934,6 +8985,7 @@ export namespace Prisma {
     readonly approvedAt: FieldRef<"Media", 'DateTime'>
     readonly version: FieldRef<"Media", 'Int'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
+    readonly inspectionResponseId: FieldRef<"Media", 'String'>
     readonly queryId: FieldRef<"Media", 'String'>
   }
     
@@ -9390,6 +9442,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InspectionResponseScalarFieldEnum | InspectionResponseScalarFieldEnum[]
+  }
+
+  /**
+   * Media.inspectionResponse
+   */
+  export type Media$inspectionResponseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InspectionResponse
+     */
+    select?: InspectionResponseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InspectionResponse
+     */
+    omit?: InspectionResponseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InspectionResponseInclude<ExtArgs> | null
+    where?: InspectionResponseWhereInput
   }
 
   /**
@@ -16605,6 +16676,8 @@ export namespace Prisma {
     inspection?: boolean | InspectionDefaultArgs<ExtArgs>
     checklistItem?: boolean | ChecklistItemDefaultArgs<ExtArgs>
     media?: boolean | InspectionResponse$mediaArgs<ExtArgs>
+    mediaFiles?: boolean | InspectionResponse$mediaFilesArgs<ExtArgs>
+    _count?: boolean | InspectionResponseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inspectionResponse"]>
 
   export type InspectionResponseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16645,6 +16718,8 @@ export namespace Prisma {
     inspection?: boolean | InspectionDefaultArgs<ExtArgs>
     checklistItem?: boolean | ChecklistItemDefaultArgs<ExtArgs>
     media?: boolean | InspectionResponse$mediaArgs<ExtArgs>
+    mediaFiles?: boolean | InspectionResponse$mediaFilesArgs<ExtArgs>
+    _count?: boolean | InspectionResponseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InspectionResponseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inspection?: boolean | InspectionDefaultArgs<ExtArgs>
@@ -16663,6 +16738,7 @@ export namespace Prisma {
       inspection: Prisma.$InspectionPayload<ExtArgs>
       checklistItem: Prisma.$ChecklistItemPayload<ExtArgs>
       media: Prisma.$MediaPayload<ExtArgs> | null
+      mediaFiles: Prisma.$MediaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17068,6 +17144,7 @@ export namespace Prisma {
     inspection<T extends InspectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InspectionDefaultArgs<ExtArgs>>): Prisma__InspectionClient<$Result.GetResult<Prisma.$InspectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     checklistItem<T extends ChecklistItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChecklistItemDefaultArgs<ExtArgs>>): Prisma__ChecklistItemClient<$Result.GetResult<Prisma.$ChecklistItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     media<T extends InspectionResponse$mediaArgs<ExtArgs> = {}>(args?: Subset<T, InspectionResponse$mediaArgs<ExtArgs>>): Prisma__MediaClient<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    mediaFiles<T extends InspectionResponse$mediaFilesArgs<ExtArgs> = {}>(args?: Subset<T, InspectionResponse$mediaFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17515,6 +17592,30 @@ export namespace Prisma {
      */
     include?: MediaInclude<ExtArgs> | null
     where?: MediaWhereInput
+  }
+
+  /**
+   * InspectionResponse.mediaFiles
+   */
+  export type InspectionResponse$mediaFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Media
+     */
+    select?: MediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Media
+     */
+    omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    where?: MediaWhereInput
+    orderBy?: MediaOrderByWithRelationInput | MediaOrderByWithRelationInput[]
+    cursor?: MediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MediaScalarFieldEnum | MediaScalarFieldEnum[]
   }
 
   /**
@@ -22182,6 +22283,7 @@ export namespace Prisma {
     approvedAt: 'approvedAt',
     version: 'version',
     createdAt: 'createdAt',
+    inspectionResponseId: 'inspectionResponseId',
     queryId: 'queryId'
   };
 
@@ -23050,12 +23152,14 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"Media"> | Date | string | null
     version?: IntNullableFilter<"Media"> | number | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    inspectionResponseId?: StringNullableFilter<"Media"> | string | null
     queryId?: StringNullableFilter<"Media"> | string | null
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     projectUpdate?: XOR<ProjectUpdateNullableScalarRelationFilter, ProjectUpdateWhereInput> | null
     payment?: XOR<PaymentNullableScalarRelationFilter, PaymentWhereInput> | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     inspectionResponses?: InspectionResponseListRelationFilter
+    inspectionResponse?: XOR<InspectionResponseNullableScalarRelationFilter, InspectionResponseWhereInput> | null
     query?: XOR<QueryNullableScalarRelationFilter, QueryWhereInput> | null
   }
 
@@ -23074,12 +23178,14 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     version?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    inspectionResponseId?: SortOrderInput | SortOrder
     queryId?: SortOrderInput | SortOrder
     project?: ProjectOrderByWithRelationInput
     projectUpdate?: ProjectUpdateOrderByWithRelationInput
     payment?: PaymentOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
     inspectionResponses?: InspectionResponseOrderByRelationAggregateInput
+    inspectionResponse?: InspectionResponseOrderByWithRelationInput
     query?: QueryOrderByWithRelationInput
   }
 
@@ -23101,12 +23207,14 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"Media"> | Date | string | null
     version?: IntNullableFilter<"Media"> | number | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    inspectionResponseId?: StringNullableFilter<"Media"> | string | null
     queryId?: StringNullableFilter<"Media"> | string | null
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     projectUpdate?: XOR<ProjectUpdateNullableScalarRelationFilter, ProjectUpdateWhereInput> | null
     payment?: XOR<PaymentNullableScalarRelationFilter, PaymentWhereInput> | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     inspectionResponses?: InspectionResponseListRelationFilter
+    inspectionResponse?: XOR<InspectionResponseNullableScalarRelationFilter, InspectionResponseWhereInput> | null
     query?: XOR<QueryNullableScalarRelationFilter, QueryWhereInput> | null
   }, "id">
 
@@ -23125,6 +23233,7 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     version?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    inspectionResponseId?: SortOrderInput | SortOrder
     queryId?: SortOrderInput | SortOrder
     _count?: MediaCountOrderByAggregateInput
     _avg?: MediaAvgOrderByAggregateInput
@@ -23151,6 +23260,7 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableWithAggregatesFilter<"Media"> | Date | string | null
     version?: IntNullableWithAggregatesFilter<"Media"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
+    inspectionResponseId?: StringNullableWithAggregatesFilter<"Media"> | string | null
     queryId?: StringNullableWithAggregatesFilter<"Media"> | string | null
   }
 
@@ -23666,6 +23776,7 @@ export namespace Prisma {
     inspection?: XOR<InspectionScalarRelationFilter, InspectionWhereInput>
     checklistItem?: XOR<ChecklistItemScalarRelationFilter, ChecklistItemWhereInput>
     media?: XOR<MediaNullableScalarRelationFilter, MediaWhereInput> | null
+    mediaFiles?: MediaListRelationFilter
   }
 
   export type InspectionResponseOrderByWithRelationInput = {
@@ -23678,6 +23789,7 @@ export namespace Prisma {
     inspection?: InspectionOrderByWithRelationInput
     checklistItem?: ChecklistItemOrderByWithRelationInput
     media?: MediaOrderByWithRelationInput
+    mediaFiles?: MediaOrderByRelationAggregateInput
   }
 
   export type InspectionResponseWhereUniqueInput = Prisma.AtLeast<{
@@ -23693,6 +23805,7 @@ export namespace Prisma {
     inspection?: XOR<InspectionScalarRelationFilter, InspectionWhereInput>
     checklistItem?: XOR<ChecklistItemScalarRelationFilter, ChecklistItemWhereInput>
     media?: XOR<MediaNullableScalarRelationFilter, MediaWhereInput> | null
+    mediaFiles?: MediaListRelationFilter
   }, "id">
 
   export type InspectionResponseOrderByWithAggregationInput = {
@@ -24449,6 +24562,7 @@ export namespace Prisma {
     payment?: PaymentCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -24467,6 +24581,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
@@ -24487,6 +24602,7 @@ export namespace Prisma {
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -24505,6 +24621,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
@@ -24524,6 +24641,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
@@ -24555,6 +24673,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -25100,6 +25219,7 @@ export namespace Prisma {
     inspection: InspectionCreateNestedOneWithoutResponsesInput
     checklistItem: ChecklistItemCreateNestedOneWithoutResponsesInput
     media?: MediaCreateNestedOneWithoutInspectionResponsesInput
+    mediaFiles?: MediaCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseUncheckedCreateInput = {
@@ -25109,6 +25229,7 @@ export namespace Prisma {
     inspectionId: string
     checklistItemId: string
     mediaId?: string | null
+    mediaFiles?: MediaUncheckedCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseUpdateInput = {
@@ -25118,6 +25239,7 @@ export namespace Prisma {
     inspection?: InspectionUpdateOneRequiredWithoutResponsesNestedInput
     checklistItem?: ChecklistItemUpdateOneRequiredWithoutResponsesNestedInput
     media?: MediaUpdateOneWithoutInspectionResponsesNestedInput
+    mediaFiles?: MediaUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateInput = {
@@ -25127,6 +25249,7 @@ export namespace Prisma {
     inspectionId?: StringFieldUpdateOperationsInput | string
     checklistItemId?: StringFieldUpdateOperationsInput | string
     mediaId?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaFiles?: MediaUncheckedUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseCreateManyInput = {
@@ -26013,6 +26136,11 @@ export namespace Prisma {
     none?: InspectionResponseWhereInput
   }
 
+  export type InspectionResponseNullableScalarRelationFilter = {
+    is?: InspectionResponseWhereInput | null
+    isNot?: InspectionResponseWhereInput | null
+  }
+
   export type QueryNullableScalarRelationFilter = {
     is?: QueryWhereInput | null
     isNot?: QueryWhereInput | null
@@ -26037,6 +26165,7 @@ export namespace Prisma {
     approvedAt?: SortOrder
     version?: SortOrder
     createdAt?: SortOrder
+    inspectionResponseId?: SortOrder
     queryId?: SortOrder
   }
 
@@ -26060,6 +26189,7 @@ export namespace Prisma {
     approvedAt?: SortOrder
     version?: SortOrder
     createdAt?: SortOrder
+    inspectionResponseId?: SortOrder
     queryId?: SortOrder
   }
 
@@ -26078,6 +26208,7 @@ export namespace Prisma {
     approvedAt?: SortOrder
     version?: SortOrder
     createdAt?: SortOrder
+    inspectionResponseId?: SortOrder
     queryId?: SortOrder
   }
 
@@ -28114,6 +28245,12 @@ export namespace Prisma {
     connect?: InspectionResponseWhereUniqueInput | InspectionResponseWhereUniqueInput[]
   }
 
+  export type InspectionResponseCreateNestedOneWithoutMediaFilesInput = {
+    create?: XOR<InspectionResponseCreateWithoutMediaFilesInput, InspectionResponseUncheckedCreateWithoutMediaFilesInput>
+    connectOrCreate?: InspectionResponseCreateOrConnectWithoutMediaFilesInput
+    connect?: InspectionResponseWhereUniqueInput
+  }
+
   export type QueryCreateNestedOneWithoutAttachmentsInput = {
     create?: XOR<QueryCreateWithoutAttachmentsInput, QueryUncheckedCreateWithoutAttachmentsInput>
     connectOrCreate?: QueryCreateOrConnectWithoutAttachmentsInput
@@ -28199,6 +28336,16 @@ export namespace Prisma {
     update?: InspectionResponseUpdateWithWhereUniqueWithoutMediaInput | InspectionResponseUpdateWithWhereUniqueWithoutMediaInput[]
     updateMany?: InspectionResponseUpdateManyWithWhereWithoutMediaInput | InspectionResponseUpdateManyWithWhereWithoutMediaInput[]
     deleteMany?: InspectionResponseScalarWhereInput | InspectionResponseScalarWhereInput[]
+  }
+
+  export type InspectionResponseUpdateOneWithoutMediaFilesNestedInput = {
+    create?: XOR<InspectionResponseCreateWithoutMediaFilesInput, InspectionResponseUncheckedCreateWithoutMediaFilesInput>
+    connectOrCreate?: InspectionResponseCreateOrConnectWithoutMediaFilesInput
+    upsert?: InspectionResponseUpsertWithoutMediaFilesInput
+    disconnect?: InspectionResponseWhereInput | boolean
+    delete?: InspectionResponseWhereInput | boolean
+    connect?: InspectionResponseWhereUniqueInput
+    update?: XOR<XOR<InspectionResponseUpdateToOneWithWhereWithoutMediaFilesInput, InspectionResponseUpdateWithoutMediaFilesInput>, InspectionResponseUncheckedUpdateWithoutMediaFilesInput>
   }
 
   export type QueryUpdateOneWithoutAttachmentsNestedInput = {
@@ -28619,6 +28766,20 @@ export namespace Prisma {
     connect?: MediaWhereUniqueInput
   }
 
+  export type MediaCreateNestedManyWithoutInspectionResponseInput = {
+    create?: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput> | MediaCreateWithoutInspectionResponseInput[] | MediaUncheckedCreateWithoutInspectionResponseInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutInspectionResponseInput | MediaCreateOrConnectWithoutInspectionResponseInput[]
+    createMany?: MediaCreateManyInspectionResponseInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type MediaUncheckedCreateNestedManyWithoutInspectionResponseInput = {
+    create?: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput> | MediaCreateWithoutInspectionResponseInput[] | MediaUncheckedCreateWithoutInspectionResponseInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutInspectionResponseInput | MediaCreateOrConnectWithoutInspectionResponseInput[]
+    createMany?: MediaCreateManyInspectionResponseInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
   export type EnumChecklistResultFieldUpdateOperationsInput = {
     set?: $Enums.ChecklistResult
   }
@@ -28647,6 +28808,34 @@ export namespace Prisma {
     delete?: MediaWhereInput | boolean
     connect?: MediaWhereUniqueInput
     update?: XOR<XOR<MediaUpdateToOneWithWhereWithoutInspectionResponsesInput, MediaUpdateWithoutInspectionResponsesInput>, MediaUncheckedUpdateWithoutInspectionResponsesInput>
+  }
+
+  export type MediaUpdateManyWithoutInspectionResponseNestedInput = {
+    create?: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput> | MediaCreateWithoutInspectionResponseInput[] | MediaUncheckedCreateWithoutInspectionResponseInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutInspectionResponseInput | MediaCreateOrConnectWithoutInspectionResponseInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutInspectionResponseInput | MediaUpsertWithWhereUniqueWithoutInspectionResponseInput[]
+    createMany?: MediaCreateManyInspectionResponseInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutInspectionResponseInput | MediaUpdateWithWhereUniqueWithoutInspectionResponseInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutInspectionResponseInput | MediaUpdateManyWithWhereWithoutInspectionResponseInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type MediaUncheckedUpdateManyWithoutInspectionResponseNestedInput = {
+    create?: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput> | MediaCreateWithoutInspectionResponseInput[] | MediaUncheckedCreateWithoutInspectionResponseInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutInspectionResponseInput | MediaCreateOrConnectWithoutInspectionResponseInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutInspectionResponseInput | MediaUpsertWithWhereUniqueWithoutInspectionResponseInput[]
+    createMany?: MediaCreateManyInspectionResponseInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutInspectionResponseInput | MediaUpdateWithWhereUniqueWithoutInspectionResponseInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutInspectionResponseInput | MediaUpdateManyWithWhereWithoutInspectionResponseInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
   }
 
   export type ProjectCreateNestedOneWithoutQueriesInput = {
@@ -29656,6 +29845,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateCreateNestedOneWithoutMediaInput
     payment?: PaymentCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -29673,6 +29863,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
@@ -30273,6 +30464,7 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"Media"> | Date | string | null
     version?: IntNullableFilter<"Media"> | number | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    inspectionResponseId?: StringNullableFilter<"Media"> | string | null
     queryId?: StringNullableFilter<"Media"> | string | null
   }
 
@@ -30811,6 +31003,7 @@ export namespace Prisma {
     payment?: PaymentCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -30828,6 +31021,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
@@ -31770,6 +31964,7 @@ export namespace Prisma {
     payment?: PaymentCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -31787,6 +31982,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
@@ -32115,6 +32311,7 @@ export namespace Prisma {
     remark?: string | null
     inspection: InspectionCreateNestedOneWithoutResponsesInput
     checklistItem: ChecklistItemCreateNestedOneWithoutResponsesInput
+    mediaFiles?: MediaCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseUncheckedCreateWithoutMediaInput = {
@@ -32123,6 +32320,7 @@ export namespace Prisma {
     remark?: string | null
     inspectionId: string
     checklistItemId: string
+    mediaFiles?: MediaUncheckedCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseCreateOrConnectWithoutMediaInput = {
@@ -32133,6 +32331,29 @@ export namespace Prisma {
   export type InspectionResponseCreateManyMediaInputEnvelope = {
     data: InspectionResponseCreateManyMediaInput | InspectionResponseCreateManyMediaInput[]
     skipDuplicates?: boolean
+  }
+
+  export type InspectionResponseCreateWithoutMediaFilesInput = {
+    id?: string
+    result: $Enums.ChecklistResult
+    remark?: string | null
+    inspection: InspectionCreateNestedOneWithoutResponsesInput
+    checklistItem: ChecklistItemCreateNestedOneWithoutResponsesInput
+    media?: MediaCreateNestedOneWithoutInspectionResponsesInput
+  }
+
+  export type InspectionResponseUncheckedCreateWithoutMediaFilesInput = {
+    id?: string
+    result: $Enums.ChecklistResult
+    remark?: string | null
+    inspectionId: string
+    checklistItemId: string
+    mediaId?: string | null
+  }
+
+  export type InspectionResponseCreateOrConnectWithoutMediaFilesInput = {
+    where: InspectionResponseWhereUniqueInput
+    create: XOR<InspectionResponseCreateWithoutMediaFilesInput, InspectionResponseUncheckedCreateWithoutMediaFilesInput>
   }
 
   export type QueryCreateWithoutAttachmentsInput = {
@@ -32388,6 +32609,35 @@ export namespace Prisma {
     mediaId?: StringNullableFilter<"InspectionResponse"> | string | null
   }
 
+  export type InspectionResponseUpsertWithoutMediaFilesInput = {
+    update: XOR<InspectionResponseUpdateWithoutMediaFilesInput, InspectionResponseUncheckedUpdateWithoutMediaFilesInput>
+    create: XOR<InspectionResponseCreateWithoutMediaFilesInput, InspectionResponseUncheckedCreateWithoutMediaFilesInput>
+    where?: InspectionResponseWhereInput
+  }
+
+  export type InspectionResponseUpdateToOneWithWhereWithoutMediaFilesInput = {
+    where?: InspectionResponseWhereInput
+    data: XOR<InspectionResponseUpdateWithoutMediaFilesInput, InspectionResponseUncheckedUpdateWithoutMediaFilesInput>
+  }
+
+  export type InspectionResponseUpdateWithoutMediaFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    result?: EnumChecklistResultFieldUpdateOperationsInput | $Enums.ChecklistResult
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    inspection?: InspectionUpdateOneRequiredWithoutResponsesNestedInput
+    checklistItem?: ChecklistItemUpdateOneRequiredWithoutResponsesNestedInput
+    media?: MediaUpdateOneWithoutInspectionResponsesNestedInput
+  }
+
+  export type InspectionResponseUncheckedUpdateWithoutMediaFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    result?: EnumChecklistResultFieldUpdateOperationsInput | $Enums.ChecklistResult
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    inspectionId?: StringFieldUpdateOperationsInput | string
+    checklistItemId?: StringFieldUpdateOperationsInput | string
+    mediaId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type QueryUpsertWithoutAttachmentsInput = {
     update: XOR<QueryUpdateWithoutAttachmentsInput, QueryUncheckedUpdateWithoutAttachmentsInput>
     create: XOR<QueryCreateWithoutAttachmentsInput, QueryUncheckedCreateWithoutAttachmentsInput>
@@ -32550,6 +32800,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -32567,6 +32818,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
@@ -33227,6 +33479,7 @@ export namespace Prisma {
     remark?: string | null
     inspection: InspectionCreateNestedOneWithoutResponsesInput
     media?: MediaCreateNestedOneWithoutInspectionResponsesInput
+    mediaFiles?: MediaCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseUncheckedCreateWithoutChecklistItemInput = {
@@ -33235,6 +33488,7 @@ export namespace Prisma {
     remark?: string | null
     inspectionId: string
     mediaId?: string | null
+    mediaFiles?: MediaUncheckedCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseCreateOrConnectWithoutChecklistItemInput = {
@@ -33443,6 +33697,7 @@ export namespace Prisma {
     remark?: string | null
     checklistItem: ChecklistItemCreateNestedOneWithoutResponsesInput
     media?: MediaCreateNestedOneWithoutInspectionResponsesInput
+    mediaFiles?: MediaCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseUncheckedCreateWithoutInspectionInput = {
@@ -33451,6 +33706,7 @@ export namespace Prisma {
     remark?: string | null
     checklistItemId: string
     mediaId?: string | null
+    mediaFiles?: MediaUncheckedCreateNestedManyWithoutInspectionResponseInput
   }
 
   export type InspectionResponseCreateOrConnectWithoutInspectionInput = {
@@ -33835,6 +34091,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateCreateNestedOneWithoutMediaInput
     payment?: PaymentCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
     query?: QueryCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -33853,12 +34110,61 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
   export type MediaCreateOrConnectWithoutInspectionResponsesInput = {
     where: MediaWhereUniqueInput
     create: XOR<MediaCreateWithoutInspectionResponsesInput, MediaUncheckedCreateWithoutInspectionResponsesInput>
+  }
+
+  export type MediaCreateWithoutInspectionResponseInput = {
+    id?: string
+    type: $Enums.MediaType
+    fileKey: string
+    fileUrl: string
+    mimeType: string
+    fileSize: number
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    version?: number | null
+    createdAt?: Date | string
+    project: ProjectCreateNestedOneWithoutMediaInput
+    projectUpdate?: ProjectUpdateCreateNestedOneWithoutMediaInput
+    payment?: PaymentCreateNestedOneWithoutMediaInput
+    createdBy: UserCreateNestedOneWithoutMediaInput
+    inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    query?: QueryCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type MediaUncheckedCreateWithoutInspectionResponseInput = {
+    id?: string
+    projectId: string
+    projectUpdateId?: string | null
+    paymentId?: string | null
+    type: $Enums.MediaType
+    fileKey: string
+    fileUrl: string
+    mimeType: string
+    fileSize: number
+    createdById: string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    version?: number | null
+    createdAt?: Date | string
+    queryId?: string | null
+    inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
+  }
+
+  export type MediaCreateOrConnectWithoutInspectionResponseInput = {
+    where: MediaWhereUniqueInput
+    create: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput>
+  }
+
+  export type MediaCreateManyInspectionResponseInputEnvelope = {
+    data: MediaCreateManyInspectionResponseInput | MediaCreateManyInspectionResponseInput[]
+    skipDuplicates?: boolean
   }
 
   export type InspectionUpsertWithoutResponsesInput = {
@@ -33955,6 +34261,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateUpdateOneWithoutMediaNestedInput
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -33973,7 +34280,24 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MediaUpsertWithWhereUniqueWithoutInspectionResponseInput = {
+    where: MediaWhereUniqueInput
+    update: XOR<MediaUpdateWithoutInspectionResponseInput, MediaUncheckedUpdateWithoutInspectionResponseInput>
+    create: XOR<MediaCreateWithoutInspectionResponseInput, MediaUncheckedCreateWithoutInspectionResponseInput>
+  }
+
+  export type MediaUpdateWithWhereUniqueWithoutInspectionResponseInput = {
+    where: MediaWhereUniqueInput
+    data: XOR<MediaUpdateWithoutInspectionResponseInput, MediaUncheckedUpdateWithoutInspectionResponseInput>
+  }
+
+  export type MediaUpdateManyWithWhereWithoutInspectionResponseInput = {
+    where: MediaScalarWhereInput
+    data: XOR<MediaUpdateManyMutationInput, MediaUncheckedUpdateManyWithoutInspectionResponseInput>
   }
 
   export type ProjectCreateWithoutQueriesInput = {
@@ -34102,6 +34426,7 @@ export namespace Prisma {
     payment?: PaymentCreateNestedOneWithoutMediaInput
     createdBy: UserCreateNestedOneWithoutMediaInput
     inspectionResponses?: InspectionResponseCreateNestedManyWithoutMediaInput
+    inspectionResponse?: InspectionResponseCreateNestedOneWithoutMediaFilesInput
   }
 
   export type MediaUncheckedCreateWithoutQueryInput = {
@@ -34119,6 +34444,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     inspectionResponses?: InspectionResponseUncheckedCreateNestedManyWithoutMediaInput
   }
 
@@ -35037,6 +35363,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
@@ -35385,6 +35712,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateUpdateOneWithoutMediaNestedInput
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -35402,6 +35730,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
@@ -35420,6 +35749,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -35783,6 +36113,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
@@ -35918,6 +36249,7 @@ export namespace Prisma {
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -35935,6 +36267,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
@@ -35953,6 +36286,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -36192,6 +36526,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
@@ -36210,6 +36545,7 @@ export namespace Prisma {
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -36227,6 +36563,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
@@ -36245,6 +36582,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -36262,6 +36600,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     inspection?: InspectionUpdateOneRequiredWithoutResponsesNestedInput
     checklistItem?: ChecklistItemUpdateOneRequiredWithoutResponsesNestedInput
+    mediaFiles?: MediaUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateWithoutMediaInput = {
@@ -36270,6 +36609,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionId?: StringFieldUpdateOperationsInput | string
     checklistItemId?: StringFieldUpdateOperationsInput | string
+    mediaFiles?: MediaUncheckedUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateManyWithoutMediaInput = {
@@ -36294,6 +36634,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
     queryId?: string | null
   }
 
@@ -36312,6 +36653,7 @@ export namespace Prisma {
     projectUpdate?: ProjectUpdateUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
     query?: QueryUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -36329,6 +36671,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
@@ -36347,6 +36690,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -36452,6 +36796,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     inspection?: InspectionUpdateOneRequiredWithoutResponsesNestedInput
     media?: MediaUpdateOneWithoutInspectionResponsesNestedInput
+    mediaFiles?: MediaUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateWithoutChecklistItemInput = {
@@ -36460,6 +36805,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionId?: StringFieldUpdateOperationsInput | string
     mediaId?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaFiles?: MediaUncheckedUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateManyWithoutChecklistItemInput = {
@@ -36484,6 +36830,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     checklistItem?: ChecklistItemUpdateOneRequiredWithoutResponsesNestedInput
     media?: MediaUpdateOneWithoutInspectionResponsesNestedInput
+    mediaFiles?: MediaUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateWithoutInspectionInput = {
@@ -36492,6 +36839,7 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     checklistItemId?: StringFieldUpdateOperationsInput | string
     mediaId?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaFiles?: MediaUncheckedUpdateManyWithoutInspectionResponseNestedInput
   }
 
   export type InspectionResponseUncheckedUpdateManyWithoutInspectionInput = {
@@ -36500,6 +36848,80 @@ export namespace Prisma {
     remark?: NullableStringFieldUpdateOperationsInput | string | null
     checklistItemId?: StringFieldUpdateOperationsInput | string
     mediaId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MediaCreateManyInspectionResponseInput = {
+    id?: string
+    projectId: string
+    projectUpdateId?: string | null
+    paymentId?: string | null
+    type: $Enums.MediaType
+    fileKey: string
+    fileUrl: string
+    mimeType: string
+    fileSize: number
+    createdById: string
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    version?: number | null
+    createdAt?: Date | string
+    queryId?: string | null
+  }
+
+  export type MediaUpdateWithoutInspectionResponseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    version?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutMediaNestedInput
+    projectUpdate?: ProjectUpdateUpdateOneWithoutMediaNestedInput
+    payment?: PaymentUpdateOneWithoutMediaNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
+    inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    query?: QueryUpdateOneWithoutAttachmentsNestedInput
+  }
+
+  export type MediaUncheckedUpdateWithoutInspectionResponseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    projectUpdateId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    version?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryId?: NullableStringFieldUpdateOperationsInput | string | null
+    inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
+  }
+
+  export type MediaUncheckedUpdateManyWithoutInspectionResponseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    projectUpdateId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    fileKey?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    createdById?: StringFieldUpdateOperationsInput | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    version?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    queryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MediaCreateManyQueryInput = {
@@ -36517,6 +36939,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     version?: number | null
     createdAt?: Date | string
+    inspectionResponseId?: string | null
   }
 
   export type QueryResponseCreateManyQueryInput = {
@@ -36542,6 +36965,7 @@ export namespace Prisma {
     payment?: PaymentUpdateOneWithoutMediaNestedInput
     createdBy?: UserUpdateOneRequiredWithoutMediaNestedInput
     inspectionResponses?: InspectionResponseUpdateManyWithoutMediaNestedInput
+    inspectionResponse?: InspectionResponseUpdateOneWithoutMediaFilesNestedInput
   }
 
   export type MediaUncheckedUpdateWithoutQueryInput = {
@@ -36559,6 +36983,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
     inspectionResponses?: InspectionResponseUncheckedUpdateManyWithoutMediaNestedInput
   }
 
@@ -36577,6 +37002,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     version?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inspectionResponseId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QueryResponseUpdateWithoutQueryInput = {

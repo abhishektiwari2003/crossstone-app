@@ -68,7 +68,7 @@ export default function DrawingUploadForm({ projectId, onSuccess }: Props) {
 
             if (!drawingRes.ok) {
                 const err = await drawingRes.json().catch(() => ({ error: "Failed" }));
-                throw new Error(err.error || "Failed to save drawing");
+                throw new Error(err.detail || err.error || "Failed to save drawing");
             }
 
             setProgress(100);

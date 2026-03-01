@@ -2,16 +2,16 @@
 
 import { useState, useRef } from "react";
 import { toast } from "sonner";
-import { Camera, X, Loader2, ImageIcon } from "lucide-react";
+import { Camera, X, Loader2, ImageIcon, Plus } from "lucide-react";
 
 type Props = {
     projectId: string;
-    mediaId: string | null;
-    onChange: (mediaId: string | null) => void;
+    mediaIds: string[];
+    onChange: (mediaIds: string[]) => void;
     disabled?: boolean;
 };
 
-export default function InspectionPhotoUpload({ projectId, mediaId, onChange, disabled }: Props) {
+export default function InspectionPhotoUpload({ projectId, mediaIds, onChange, disabled }: Props) {
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,8 +47,8 @@ export default function InspectionPhotoUpload({ projectId, mediaId, onChange, di
             });
             if (!uploadRes.ok) throw new Error("Upload to storage failed");
 
-            // 3. Set media key (backend will create Media record from this)
-            onChange(key);
+            // 3. Append media key to array
+            onChange([...mediaIds, key]);
             toast.success("Photo uploaded");
         } catch (err: unknown) {
             toast.error((err as Error).message);
@@ -58,51 +58,56 @@ export default function InspectionPhotoUpload({ projectId, mediaId, onChange, di
         }
     }
 
-    function handleRemove() {
-        onChange(null);
+    function handleRemove(keyToRemove: string) {
+        onChange(mediaIds.filter(key => key !== keyToRemove));
     }
 
     return (
-        <div className="space-y-2">
-            {/* Thumbnail */}
-            {mediaId && (
-                <div className="relative group w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
-                    <ImageIcon className="h-6 w-6 text-slate-400" />
-                    <div className="absolute bottom-0 left-0 right-0 bg-emerald-500 text-white text-[9px] font-bold text-center py-0.5">
-                        Uploaded
+        <div className="space-y-3">
+            <div className="flex flex-wrap gap-3">
+                {/* Thumbnails */}
+                {mediaIds.map((key) => (
+                    <div key={key} className="relative group w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shadow-sm">
+                        <ImageIcon className="h-6 w-6 text-slate-400" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-emerald-500 text-white text-[10px] font-bold text-center py-0.5 pointer-events-none">
+                            Uploaded
+                        </div>
+                        {!disabled && (
+                            <button
+                                type="button"
+                                onClick={() => handleRemove(key)}
+                                className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500/90 hover:bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:top-1 group-hover:right-1 transition-all shadow-md"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        )}
                     </div>
-                    {!disabled && (
-                        <button
-                            onClick={handleRemove}
-                            className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                        >
-                            <X className="h-3 w-3" />
-                        </button>
-                    )}
-                </div>
-            )}
+                ))}
 
-            {/* Upload button */}
-            {!disabled && !mediaId && (
-                <button
-                    type="button"
-                    onClick={() => inputRef.current?.click()}
-                    disabled={uploading}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-slate-300 text-sm font-medium text-slate-600 hover:border-orange-400 hover:text-orange-600 hover:bg-orange-50/50 transition-all disabled:opacity-50 w-full sm:w-auto justify-center"
-                >
-                    {uploading ? (
-                        <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            Uploading...
-                        </>
-                    ) : (
-                        <>
-                            <Camera className="h-4 w-4" />
-                            Add Photo
-                        </>
-                    )}
-                </button>
-            )}
+                {/* Upload button */}
+                {!disabled && (
+                    <button
+                        type="button"
+                        onClick={() => inputRef.current?.click()}
+                        disabled={uploading}
+                        className="flex flex-col items-center justify-center gap-1 w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-500 hover:border-orange-400 hover:text-orange-600 hover:bg-orange-50/50 transition-all disabled:opacity-50"
+                    >
+                        {uploading ? (
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : mediaIds.length > 0 ? (
+                            <>
+                                <Plus className="h-5 w-5" />
+                                <span className="text-[10px] font-semibold tracking-wider uppercase">Add</span>
+                            </>
+                        ) : (
+                            <>
+                                <Camera className="h-5 w-5" />
+                                <span className="text-[10px] font-semibold tracking-wider uppercase">Photo</span>
+                            </>
+                        )}
+                    </button>
+                )}
+            </div>
 
             <input
                 ref={inputRef}

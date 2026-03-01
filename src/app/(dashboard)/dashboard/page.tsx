@@ -4,7 +4,8 @@ import type { Role } from "@/generated/prisma";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity, MessageSquare, FileText } from "lucide-react";
-import EngineerHome from "@/components/EngineerHome";
+import RoleDashboard from "@/components/dashboard/RoleDashboard";
+import type { ActivityItem } from "@/components/dashboard/RecentActivityTimeline";
 
 export default async function DashboardPage() {
 	const session = await getServerSession(authOptions);
@@ -12,256 +13,136 @@ export default async function DashboardPage() {
 	const role = user?.role;
 	const firstName = user?.name?.split(" ")[0] ?? "User";
 
-	// ── SITE ENGINEER: Mobile-optimized home ──
-	if (role === "SITE_ENGINEER" && user?.id) {
-		const assignedProjects = await prisma.project.findMany({
-			where: { members: { some: { userId: user.id } } },
-			select: { id: true, name: true, status: true },
-			take: 5
-		});
-		return <EngineerHome firstName={firstName} projects={assignedProjects} />;
-	}
+	if (!user?.id || !role) return null;
 
-	// ── CLIENT: Client-focused home ──
-	if (role === "CLIENT" && user?.id) {
-		const [myProjects, openQueries] = await Promise.all([
-			prisma.project.findMany({
-				where: { clientId: user.id },
-				select: { id: true, name: true, status: true, totalValue: true },
-				take: 10,
-			}),
-			prisma.query.count({
-				where: { authorId: user.id, status: { not: "RESOLVED" } },
-			}),
-		]);
-
-		return (
-			<div className="space-y-8">
-				<div>
-					<h1 className="text-3xl font-bold text-foreground tracking-tight">
-						Welcome, {firstName} 👋
-					</h1>
-					<p className="text-muted-foreground mt-1">Here&apos;s an overview of your projects.</p>
-				</div>
-
-				{/* Client KPI Cards */}
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-					<div className="gradient-blue rounded-2xl p-5 shadow-lg shadow-blue-500/20 hover-lift">
-						<div className="flex items-center justify-between mb-4">
-							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-								<FolderKanban className="h-5 w-5 text-white" />
-							</div>
-							<TrendingUp className="h-4 w-4 text-white/60" />
-						</div>
-						<div className="text-3xl font-bold text-white">{myProjects.length}</div>
-						<div className="text-sm text-white/70 mt-1 font-medium">My Projects</div>
-					</div>
-					<div className="gradient-emerald rounded-2xl p-5 shadow-lg shadow-emerald-500/20 hover-lift">
-						<div className="flex items-center justify-between mb-4">
-							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-								<Activity className="h-5 w-5 text-white" />
-							</div>
-						</div>
-						<div className="text-3xl font-bold text-white">{myProjects.filter(p => p.status === "IN_PROGRESS").length}</div>
-						<div className="text-sm text-white/70 mt-1 font-medium">Active</div>
-					</div>
-					<div className="gradient-orange rounded-2xl p-5 shadow-lg shadow-orange-500/20 hover-lift">
-						<div className="flex items-center justify-between mb-4">
-							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-								<MessageSquare className="h-5 w-5 text-white" />
-							</div>
-						</div>
-						<div className="text-3xl font-bold text-white">{openQueries}</div>
-						<div className="text-sm text-white/70 mt-1 font-medium">Open Queries</div>
-					</div>
-				</div>
-
-				{/* My Projects List */}
-				<div>
-					<h2 className="text-lg font-semibold text-foreground mb-4">My Projects</h2>
-					<div className="space-y-3">
-						{myProjects.map((project) => (
-							<Link
-								key={project.id}
-								href={`/projects/${project.id}`}
-								className="glass-card p-5 hover-lift group flex items-center justify-between"
-							>
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center ring-1 ring-blue-500/20">
-										<FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-									</div>
-									<div>
-										<div className="font-semibold text-foreground">{project.name}</div>
-										<div className="text-xs text-muted-foreground">{project.status?.replace(/_/g, " ")}</div>
-									</div>
-								</div>
-								<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-							</Link>
-						))}
-						{myProjects.length === 0 && (
-							<div className="glass-card p-8 text-center">
-								<p className="text-muted-foreground">No projects assigned to you yet.</p>
-							</div>
-						)}
-					</div>
-				</div>
-
-				{/* Role Info */}
-				<div className="glass-card p-5 flex items-center gap-4">
-					<div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center shadow-inner">
-						<span className="text-lg">🛡️</span>
-					</div>
-					<div>
-						<div className="text-sm font-semibold text-foreground">Your Role</div>
-						<div className="text-sm text-muted-foreground font-medium">{role?.replace(/_/g, " ")}</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
-	// ── ADMIN / PM: Full dashboard ──
 	const isAdminRole = role === "SUPER_ADMIN" || role === "ADMIN";
+	const isClient = role === "CLIENT";
+	const isEngineer = role === "SITE_ENGINEER";
 
-	const [projectCount, activeProjectCount, paymentCount, userCount] = await Promise.all([
-		prisma.project.count(),
-		prisma.project.count({ where: { status: "IN_PROGRESS" } }),
-		isAdminRole ? prisma.payment.count() : prisma.payment.count({
-			where: { project: { OR: [{ managerId: user?.id }, { members: { some: { userId: user?.id ?? "" } } }] } }
-		}),
-		isAdminRole ? prisma.user.count() : Promise.resolve(0),
+	// 1. Fetch Projects for Progress Overview
+	const projectWhereObj = isClient
+		? { clientId: user.id }
+		: isEngineer
+			? { members: { some: { userId: user.id } } }
+			: {};
+
+	const projectsData = await prisma.project.findMany({
+		where: projectWhereObj,
+		select: {
+			id: true,
+			name: true,
+			status: true,
+			client: { select: { id: true, name: true } },
+			manager: { select: { id: true, name: true } },
+			milestones: { select: { id: true, checklistItems: { select: { responses: { select: { result: true } } } } } }
+		},
+		orderBy: { updatedAt: "desc" },
+		take: 6,
+	});
+
+	const projects = projectsData.map(p => {
+		// Calculate simple milestone progress (assuming each milestone counts as 1 for simplicity if it has any pass response)
+		const totalMilestones = p.milestones.length;
+		const completedMilestones = p.milestones.filter(m => m.checklistItems.some(item => item.responses.some(r => r.result === "PASS"))).length;
+		const progress = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0;
+
+		return {
+			id: p.id,
+			name: p.name,
+			clientId: p.client?.id,
+			clientName: p.client?.name,
+			managerName: p.manager?.name,
+			status: p.status,
+			progress,
+			totalMilestones,
+			completedMilestones,
+		};
+	});
+
+	// 2. Fetch Payments for Overview Pie Chart & KPI
+	const paymentWhereObj = isClient
+		? { project: { clientId: user.id } }
+		: isEngineer || role === "PROJECT_MANAGER"
+			? { project: { OR: [{ managerId: user.id }, { members: { some: { userId: user.id } } }] } }
+			: {};
+
+	const paymentsList = await prisma.payment.findMany({
+		where: paymentWhereObj,
+		select: { amount: true, status: true },
+	});
+
+	let totalPaid = 0, totalPending = 0, totalOverdue = 0;
+	paymentsList.forEach(p => {
+		const amt = Number(p.amount);
+		if (p.status === "PAID") totalPaid += amt;
+		else if (p.status === "OVERDUE") totalOverdue += amt;
+		else if (p.status === "PENDING" || p.status === "PARTIAL") totalPending += amt;
+	});
+
+	// 3. Fetch Recent Activity (Audit Logs)
+	const auditWhereObj = isAdminRole ? {} : { projectId: { in: projects.map(p => p.id) } };
+	const logs = await prisma.auditLog.findMany({
+		where: auditWhereObj,
+		include: { user: { select: { name: true } } },
+		orderBy: { createdAt: "desc" },
+		take: 5,
+	});
+
+	const activities: ActivityItem[] = logs.map(log => {
+		const isPayment = log.entity === "Payment";
+		const isQuery = log.entity === "Query";
+		const isDoc = log.entity === "Media" || log.entity === "Drawing";
+		const isUser = log.entity === "User" || log.entity === "ProjectMember";
+
+		const type = isPayment ? "PAYMENT" : isQuery ? "QUERY" : isDoc ? "DOCUMENT" : isUser ? "USER" : "SYSTEM";
+
+		return {
+			id: log.id,
+			type,
+			title: log.action || "System Event",
+			description: `${log.user?.name || "System"} modified ${log.entity}`,
+			time: new Date(log.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+			status: log.action.toLowerCase().includes("delete") || log.action.toLowerCase().includes("fail") ? "warning" : "success"
+		};
+	});
+
+	// 4. Fetch additional KPI counts (queries, team)
+	const [allProjectsCount, activeProjectsCount, openQueriesCount, teamCount] = await Promise.all([
+		prisma.project.count({ where: projectWhereObj }),
+		prisma.project.count({ where: { ...projectWhereObj, status: "IN_PROGRESS" } }),
+		isClient ? prisma.query.count({ where: { authorId: user.id, status: { not: "RESOLVED" } } }) : 0,
+		isAdminRole ? prisma.user.count({ where: { isActive: true } }) : 0
 	]);
 
-	// Build KPI cards based on role
-	const kpiCards = [
-		{
-			label: "Total Projects",
-			value: projectCount,
-			icon: FolderKanban,
-			gradient: "gradient-blue",
-			shadow: "shadow-blue-500/20",
-		},
-		{
-			label: "Active Projects",
-			value: activeProjectCount,
-			icon: Activity,
-			gradient: "gradient-emerald",
-			shadow: "shadow-emerald-500/20",
-		},
-		{
-			label: "Payments",
-			value: paymentCount,
-			icon: CreditCard,
-			gradient: "gradient-purple",
-			shadow: "shadow-purple-500/20",
-		},
-		...(isAdminRole ? [{
-			label: "Team Members",
-			value: userCount,
-			icon: Users,
-			gradient: "gradient-orange",
-			shadow: "shadow-orange-500/20",
-		}] : []),
-	];
+	// Construct KPI Array based on Role
+	const kpis = [];
+
+	if (isClient) {
+		kpis.push({ label: "My Projects", value: allProjectsCount, trend: 0, icon: "FolderKanban", gradient: "gradient-blue", chartData: [] });
+		kpis.push({ label: "Active", value: activeProjectsCount, trend: 5, icon: "Activity", gradient: "gradient-emerald", chartData: [] });
+		kpis.push({ label: "Open Queries", value: openQueriesCount, trend: -2, icon: "MessageSquare", gradient: "gradient-orange", chartData: [] });
+	} else if (isEngineer) {
+		kpis.push({ label: "Assigned Projects", value: allProjectsCount, trend: 0, icon: "FolderKanban", gradient: "gradient-blue", chartData: [] });
+		kpis.push({ label: "Active", value: activeProjectsCount, trend: 0, icon: "Activity", gradient: "gradient-emerald", chartData: [] });
+	} else {
+		// Admin / PM
+		kpis.push({ label: "Total Projects", value: allProjectsCount, trend: 12, icon: "FolderKanban", gradient: "gradient-blue", chartData: [] });
+		kpis.push({ label: "Active", value: activeProjectsCount, trend: 8, icon: "Activity", gradient: "gradient-emerald", chartData: [] });
+		kpis.push({ label: "Total Payments", value: paymentsList.length, trend: 15, icon: "CreditCard", gradient: "gradient-purple", chartData: [] });
+		if (isAdminRole) {
+			kpis.push({ label: "Team Members", value: teamCount, trend: 0, icon: "Users", gradient: "gradient-orange", chartData: [] });
+		}
+	}
 
 	return (
-		<div className="space-y-8">
-			{/* Welcome Header */}
-			<div className="flex items-center justify-between">
-				<div>
-					<h1 className="text-3xl font-bold text-foreground tracking-tight">
-						Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"}, {firstName} 👋
-					</h1>
-					<p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your projects today.</p>
-				</div>
-			</div>
-
-			{/* KPI Cards */}
-			<div className={`grid grid-cols-1 sm:grid-cols-2 ${isAdminRole ? "lg:grid-cols-4" : "lg:grid-cols-3"} gap-5`}>
-				{kpiCards.map((card) => (
-					<div
-						key={card.label}
-						className={`${card.gradient} rounded-2xl p-5 shadow-lg ${card.shadow} hover-lift`}
-					>
-						<div className="flex items-center justify-between mb-4">
-							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-								<card.icon className="h-5 w-5 text-white" />
-							</div>
-							<TrendingUp className="h-4 w-4 text-white/60" />
-						</div>
-						<div className="text-3xl font-bold text-white">{card.value}</div>
-						<div className="text-sm text-white/70 mt-1 font-medium">{card.label}</div>
-					</div>
-				))}
-			</div>
-
-			{/* Quick Actions */}
-			<div>
-				<h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-					<Link
-						href="/projects"
-						className="glass-card p-5 hover-lift group flex items-center justify-between"
-					>
-						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center ring-1 ring-blue-500/20">
-								<FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-							</div>
-							<div>
-								<div className="font-semibold text-foreground">View Projects</div>
-								<div className="text-xs text-muted-foreground">Manage all projects</div>
-							</div>
-						</div>
-						<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-					</Link>
-					{(role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER") && (
-						<Link
-							href="/payments"
-							className="glass-card p-5 hover-lift group flex items-center justify-between"
-						>
-							<div className="flex items-center gap-3">
-								<div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-1 ring-purple-500/20">
-									<CreditCard className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-								</div>
-								<div>
-									<div className="font-semibold text-foreground">Payments</div>
-									<div className="text-xs text-muted-foreground">Track finances</div>
-								</div>
-							</div>
-							<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
-						</Link>
-					)}
-					{isAdminRole && (
-						<Link
-							href="/users"
-							className="glass-card p-5 hover-lift group flex items-center justify-between"
-						>
-							<div className="flex items-center gap-3">
-								<div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center ring-1 ring-orange-500/20">
-									<Users className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-								</div>
-								<div>
-									<div className="font-semibold text-foreground">Team</div>
-									<div className="text-xs text-muted-foreground">Manage users</div>
-								</div>
-							</div>
-							<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all" />
-						</Link>
-					)}
-				</div>
-			</div>
-
-			{/* Role Info */}
-			<div className="glass-card p-5 flex items-center gap-4">
-				<div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center shadow-inner">
-					<span className="text-lg">🛡️</span>
-				</div>
-				<div>
-					<div className="text-sm font-semibold text-foreground">Your Role</div>
-					<div className="text-sm text-muted-foreground font-medium">{role?.replace(/_/g, " ")}</div>
-				</div>
-			</div>
-		</div>
+		<RoleDashboard
+			role={role}
+			userName={firstName}
+			kpis={kpis}
+			projects={projects}
+			payments={{ totalPaid, totalPending, totalOverdue }}
+			activities={activities}
+		/>
 	);
 }
 

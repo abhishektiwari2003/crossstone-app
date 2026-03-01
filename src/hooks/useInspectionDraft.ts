@@ -39,11 +39,11 @@ export function useInspectionDraft(projectId: string, milestoneId: string) {
 
     const updateResponse = useCallback((
         checklistItemId: string,
-        field: "result" | "remark" | "mediaId",
-        value: ChecklistResult | null | string
+        field: "result" | "remark" | "mediaIds",
+        value: ChecklistResult | null | string | string[]
     ) => {
         setDraft(prev => {
-            const existing = prev.responses[checklistItemId] || { result: null, remark: "", mediaId: null };
+            const existing = prev.responses[checklistItemId] || { result: null, remark: "", mediaIds: [] };
             const updated: InspectionDraft = {
                 responses: {
                     ...prev.responses,
