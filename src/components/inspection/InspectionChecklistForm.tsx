@@ -55,7 +55,7 @@ export default function InspectionChecklistForm({ projectId, milestoneId }: Prop
             if (!item.isRequired) return true;
             const resp = draft.responses[item.id];
             if (!resp?.result) return false;
-            if (item.isPhotoRequired && !resp.mediaId) return false;
+            if (item.isPhotoRequired && (!resp.mediaIds || resp.mediaIds.length === 0)) return false;
             return true;
         });
     }
@@ -63,12 +63,12 @@ export default function InspectionChecklistForm({ projectId, milestoneId }: Prop
     function buildResponses(): InspectionResponse[] {
         if (!milestone) return [];
         return milestone.checklistItems.map(item => {
-            const resp = draft.responses[item.id] || { result: null, remark: "", mediaId: null };
+            const resp = draft.responses[item.id] || { result: null, remark: "", mediaIds: [] };
             return {
                 checklistItemId: item.id,
                 result: resp.result || "NA",
                 remark: resp.remark || undefined,
-                mediaId: resp.mediaId || undefined,
+                mediaIds: resp.mediaIds || [],
             };
         });
     }
@@ -145,7 +145,7 @@ export default function InspectionChecklistForm({ projectId, milestoneId }: Prop
                                 item={item}
                                 index={index}
                                 projectId={projectId}
-                                response={draft.responses[item.id] || { result: null, remark: "", mediaId: null }}
+                                response={draft.responses[item.id] || { result: null, remark: "", mediaIds: [] }}
                                 onUpdate={(field, value) => updateResponse(item.id, field, value)}
                             />
                         ))}
@@ -183,8 +183,8 @@ function ChecklistItemCard({
     item: ChecklistItem;
     index: number;
     projectId: string;
-    response: { result: ChecklistResult | null; remark: string; mediaId: string | null };
-    onUpdate: (field: "result" | "remark" | "mediaId", value: ChecklistResult | null | string) => void;
+    response: { result: ChecklistResult | null; remark: string; mediaIds: string[] };
+    onUpdate: (field: "result" | "remark" | "mediaIds", value: ChecklistResult | null | string | string[]) => void;
 }) {
     return (
         <div className="glass-card p-4 sm:p-5 space-y-4">
@@ -235,8 +235,8 @@ function ChecklistItemCard({
 
             <InspectionPhotoUpload
                 projectId={projectId}
-                mediaId={response.mediaId}
-                onChange={id => onUpdate("mediaId", id)}
+                mediaIds={response.mediaIds || []}
+                onChange={ids => onUpdate("mediaIds", ids)}
             />
         </div>
     );

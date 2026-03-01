@@ -26,7 +26,7 @@ export type InspectionResponse = {
     checklistItemId: string;
     result: ChecklistResult;
     remark?: string | null;
-    mediaId?: string | null;
+    mediaIds?: string[];
 };
 
 export type InspectionStatus = "DRAFT" | "SUBMITTED" | "REVIEWED";
@@ -44,9 +44,9 @@ export type Inspection = {
         checklistItemId: string;
         result: ChecklistResult;
         remark?: string | null;
-        mediaId?: string | null;
+        mediaIds?: string[];
         checklistItem: ChecklistItem;
-        media?: { id: string; fileKey: string; fileUrl: string; mimeType: string } | null;
+        mediaFiles?: { id: string; fileKey: string; fileUrl: string; mimeType: string }[];
     }[];
     reviewedBy?: { id: string; name: string; email: string } | null;
     createdAt: string;
@@ -58,7 +58,7 @@ export type InspectionDraft = {
     responses: Record<string, {
         result: ChecklistResult | null;
         remark: string;
-        mediaId: string | null;
+        mediaIds: string[];
     }>;
     updatedAt: number;
 };

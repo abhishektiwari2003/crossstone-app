@@ -179,6 +179,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   approvedAt: 'approvedAt',
   version: 'version',
   createdAt: 'createdAt',
+  inspectionResponseId: 'inspectionResponseId',
   queryId: 'queryId'
 };
 

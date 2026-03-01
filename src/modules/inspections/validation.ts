@@ -4,7 +4,7 @@ const ResponseSchema = z.object({
     checklistItemId: z.string().min(1),
     result: z.enum(["PASS", "FAIL", "NA"]),
     remark: z.string().optional(),
-    mediaId: z.string().optional(),
+    mediaIds: z.array(z.string()).optional(),
 });
 
 export const CreateInspectionSchema = z.object({
