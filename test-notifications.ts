@@ -24,7 +24,7 @@ async function verifyNotifications() {
             console.log("Created test notification successfully!");
 
             const count = await prisma.notification.count({
-                where: { userId: adminUser.id, readAt: null }
+                where: { userId: adminUser.id, isRead: false }
             });
             console.log(`Total unread for this user: ${count}`);
         } else {

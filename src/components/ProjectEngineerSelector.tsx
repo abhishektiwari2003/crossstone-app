@@ -30,7 +30,7 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
             .then(r => r.json())
             .then(d => {
                 const allUsers: User[] = d.users || [];
-                setEngineers(allUsers.filter(u => u.role === "SITE_ENGINEER"));
+                setEngineers(allUsers.filter(u => u.role === "SITE_ENGINEER" || u.role === "PROJECT_MANAGER"));
             })
             .catch(() => toast.error("Failed to load engineers"))
             .finally(() => setLoading(false));
@@ -45,7 +45,7 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
             const res = await fetch(`/api/projects/${projectId}/members`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: user.id, role: "SITE_ENGINEER" }),
+                body: JSON.stringify({ userId: user.id, role: user.role }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to assign engineer");
@@ -67,12 +67,12 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
                     className="rounded-xl gradient-orange border-0 text-white font-semibold gap-1.5 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:brightness-110 transition-all"
                 >
                     <Plus className="h-3.5 w-3.5" />
-                    Add Engineer
+                    Add Member
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0 w-72 rounded-xl border-slate-200 shadow-2xl" align="end">
                 <Command className="rounded-xl">
-                    <CommandInput placeholder="Search engineers..." className="border-0" />
+                    <CommandInput placeholder="Search engineers or managers..." className="border-0" />
                     <CommandList>
                         <CommandEmpty className="py-6 text-center">
                             {loading ? (
@@ -83,12 +83,12 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
                             ) : available.length === 0 && engineers.length > 0 ? (
                                 <div className="text-sm text-slate-500">
                                     <HardHat className="h-5 w-5 mx-auto mb-2 text-slate-400" />
-                                    All engineers are already assigned
+                                    All eligible users are already assigned
                                 </div>
                             ) : (
                                 <div className="text-sm text-slate-500">
                                     <HardHat className="h-5 w-5 mx-auto mb-2 text-slate-400" />
-                                    No site engineers found
+                                    No eligible users found
                                 </div>
                             )}
                         </CommandEmpty>
@@ -106,7 +106,12 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="text-sm font-medium text-slate-900 truncate">{user.name}</div>
-                                        <div className="text-xs text-slate-500 truncate">{user.email}</div>
+                                        <div className="text-xs text-slate-500 truncate flex items-center gap-2">
+                                            <span>{user.email}</span>
+                                            <span className="text-[10px] uppercase tracking-wider font-semibold opacity-70">
+                                                • {user.role.replace(/_/g, " ")}
+                                            </span>
+                                        </div>
                                     </div>
                                     {addingId === user.id ? (
                                         <Loader2 className="h-4 w-4 animate-spin text-orange-500 shrink-0" />
