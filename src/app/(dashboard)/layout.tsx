@@ -1,10 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
-import { Home, FolderKanban, CreditCard, Users, ChevronRight, ShieldAlert, BarChart3 } from "lucide-react";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
+import MobileSidebar from "@/components/ui/MobileSidebar";
 import FloatingActionButton from "@/components/ui/FloatingActionButton";
+import { Home, FolderKanban, CreditCard, Users, ChevronRight, ShieldAlert, BarChart3 } from "lucide-react";
+import type { AppRole } from "@/lib/authz";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
@@ -69,11 +72,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 md:ml-64 w-full overflow-x-hidden">
+            <div className="flex-1 md:ml-64 w-full flex flex-col overflow-x-hidden">
                 {/* Top bar (desktop) */}
-                <header className="sticky top-0 z-40 h-16 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl hidden md:flex items-center px-8">
+                <header className="sticky top-0 z-40 h-16 border-b border-border bg-background/80 backdrop-blur-xl hidden md:flex items-center px-8">
                     <div className="flex-1" />
                     <div className="flex items-center gap-4">
+                        <ThemeToggle />
                         <NotificationBell />
                         <SignOutButton />
                         <div className="h-8 w-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xs font-bold text-white">
@@ -83,18 +87,22 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 </header>
 
                 {/* Mobile Header */}
-                <header className="sticky top-0 z-40 h-14 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl flex items-center justify-between px-4 md:hidden">
-                    <div className="flex items-center h-8 w-28 relative">
-                        <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain object-left" />
+                <header className="sticky top-0 z-40 h-14 border-b border-border bg-background/80 backdrop-blur-xl flex items-center justify-between px-4 md:hidden">
+                    <div className="flex items-center gap-2">
+                        <MobileSidebar role={role as AppRole | undefined} />
+                        <div className="flex items-center h-8 w-24 relative ml-1">
+                            <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain object-left" />
+                        </div>
                     </div>
                     <div className="flex items-center gap-2">
+                        <ThemeToggle />
                         <NotificationBell />
                         <SignOutButton />
                     </div>
                 </header>
 
                 {/* Page content */}
-                <main className="min-h-0 page-bg pb-24 md:pb-8">
+                <main className="flex-1 min-h-0 page-bg pb-24 md:pb-8">
                     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
                         {children}
                     </div>

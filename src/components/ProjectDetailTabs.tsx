@@ -80,21 +80,21 @@ export default function ProjectDetailTabs(props: Props) {
 
 	return (
 		<Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-			<TabsList className="bg-slate-100/80 p-1.5 rounded-xl h-auto gap-1 flex justify-start w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto sm:justify-center">
-				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Overview</TabsTrigger>
-				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Updates</TabsTrigger>
-				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Payments</TabsTrigger>
-				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Team</TabsTrigger>
-				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
-				<TabsTrigger value="materials" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium flex gap-1.5 items-center">
+			<TabsList className="bg-muted/60 p-1.5 rounded-xl h-auto gap-1 flex justify-start w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:inline-flex sm:w-auto sm:justify-center">
+				<TabsTrigger value="overview" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Overview</TabsTrigger>
+				<TabsTrigger value="updates" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Updates</TabsTrigger>
+				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Payments</TabsTrigger>
+				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Team</TabsTrigger>
+				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
+				<TabsTrigger value="materials" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium flex gap-1.5 items-center">
 					<PackageOpen className="h-4 w-4" />
 					Materials
 				</TabsTrigger>
-				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
-				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
-				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
+				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
+				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
+				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
 				{(props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
-					<TabsTrigger value="activity" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium border border-indigo-100 text-indigo-700 data-[state=active]:border-indigo-200">Activity</TabsTrigger>
+					<TabsTrigger value="activity" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium border border-indigo-100 text-indigo-700 data-[state=active]:border-indigo-200">Activity</TabsTrigger>
 				)}
 			</TabsList>
 
@@ -103,40 +103,40 @@ export default function ProjectDetailTabs(props: Props) {
 				<ProjectServicesMenu projectId={props.projectId} userRole={props.userRole} />
 
 				<div className="space-y-4">
-					<h2 className="text-lg font-bold text-slate-900 px-1 flex items-center gap-2">Project Details</h2>
+					<h2 className="text-lg font-bold text-foreground px-1 flex items-center gap-2">Project Details</h2>
 					<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 						<div className="glass-card p-5">
 							<div className="flex items-center gap-2 mb-3">
-								<div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-									<User className="h-4 w-4 text-blue-600" />
+								<div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
+									<User className="h-4 w-4 text-blue-600 dark:text-blue-400" />
 								</div>
-								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Manager</span>
+								<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Manager</span>
 							</div>
-							<div className="font-semibold text-slate-900">{props.manager?.name ?? "—"}</div>
+							<div className="font-semibold text-foreground">{props.manager?.name ?? "—"}</div>
 						</div>
 						<div className="glass-card p-5">
 							<div className="flex items-center gap-2 mb-3">
-								<div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-									<User className="h-4 w-4 text-purple-600" />
+								<div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center">
+									<User className="h-4 w-4 text-purple-600 dark:text-purple-400" />
 								</div>
-								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Client</span>
+								<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Client</span>
 							</div>
-							<div className="font-semibold text-slate-900">{props.client?.name ?? "—"}</div>
+							<div className="font-semibold text-foreground">{props.client?.name ?? "—"}</div>
 						</div>
 						<div className="glass-card p-5">
 							<div className="flex items-center gap-2 mb-3">
-								<div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-									<Clock className="h-4 w-4 text-emerald-600" />
+								<div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+									<Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 								</div>
-								<span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</span>
+								<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Created</span>
 							</div>
-							<div className="font-semibold text-slate-900">{new Date(props.createdAt).toLocaleDateString()}</div>
+							<div className="font-semibold text-foreground">{new Date(props.createdAt).toLocaleDateString()}</div>
 						</div>
 					</div>
 					{props.description && (
 						<div className="glass-card p-5">
-							<h3 className="text-sm font-semibold text-slate-900 mb-2">Description</h3>
-							<p className="text-sm text-slate-600 leading-relaxed">{props.description}</p>
+							<h3 className="text-sm font-semibold text-foreground mb-2">Description</h3>
+							<p className="text-sm text-muted-foreground leading-relaxed">{props.description}</p>
 						</div>
 					)}
 				</div>
@@ -152,7 +152,7 @@ export default function ProjectDetailTabs(props: Props) {
 			{/* ─── Updates Tab ─── */}
 			<TabsContent value="updates" className="space-y-4 mt-6">
 				<div className="flex items-center justify-between">
-					<h2 className="text-lg font-semibold text-slate-900">Site Updates</h2>
+					<h2 className="text-lg font-semibold text-foreground">Site Updates</h2>
 					{props.canEditUpdates ? <AddProjectUpdate projectId={props.projectId} /> : null}
 				</div>
 				<div className="space-y-3">
@@ -163,11 +163,11 @@ export default function ProjectDetailTabs(props: Props) {
 									{u.author?.name?.charAt(0) ?? "U"}
 								</div>
 								<div>
-									<span className="text-sm font-semibold text-slate-900">{u.author?.name ?? "Unknown"}</span>
-									<span className="text-xs text-slate-400 ml-2">{new Date(u.createdAt).toLocaleDateString()}</span>
+									<span className="text-sm font-semibold text-foreground">{u.author?.name ?? "Unknown"}</span>
+									<span className="text-xs text-muted-foreground ml-2">{new Date(u.createdAt).toLocaleDateString()}</span>
 								</div>
 							</div>
-							<p className="text-sm text-slate-700 leading-relaxed">{u.notes}</p>
+							<p className="text-sm text-muted-foreground leading-relaxed">{u.notes}</p>
 							{u.media?.length ? (
 								<div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
 									{u.media.map(m => (
@@ -178,10 +178,10 @@ export default function ProjectDetailTabs(props: Props) {
 						</div>
 					)) : (
 						<div className="glass-card p-8 text-center">
-							<div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
-								<FileText className="h-6 w-6 text-slate-400" />
+							<div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mx-auto mb-3 shadow-inner">
+								<FileText className="h-6 w-6 text-muted-foreground" />
 							</div>
-							<p className="text-sm text-slate-500">No updates yet.</p>
+							<p className="text-sm text-muted-foreground">No updates yet.</p>
 						</div>
 					)}
 				</div>
@@ -197,7 +197,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
 						<HardHat className="h-5 w-5 text-amber-600" />
-						<h2 className="text-lg font-semibold text-slate-900">Assigned Engineers</h2>
+						<h2 className="text-lg font-semibold text-foreground">Assigned Engineers</h2>
 					</div>
 					{props.canManageMembers && (
 						<ProjectEngineerSelector
@@ -222,8 +222,8 @@ export default function ProjectDetailTabs(props: Props) {
 						<ClipboardCheck className="h-7 w-7 text-white" />
 					</div>
 					<div className="flex-1">
-						<h3 className="text-base font-semibold text-slate-900">Site Inspections</h3>
-						<p className="text-sm text-slate-500 mt-0.5">Manage milestones, checklists, and inspection reports</p>
+						<h3 className="text-base font-semibold text-foreground">Site Inspections</h3>
+						<p className="text-sm text-muted-foreground mt-0.5">Manage milestones, checklists, and inspection reports</p>
 					</div>
 					<div className="flex items-center gap-1 text-sm font-semibold text-orange-600 group-hover:text-orange-700 transition-colors shrink-0">
 						Open

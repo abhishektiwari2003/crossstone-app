@@ -44,8 +44,8 @@ export default function ServiceCard({
 
             {/* Text Content */}
             <div className="mt-4">
-                <h3 className="font-bold text-slate-900 text-sm leading-tight tracking-tight mb-1">{title}</h3>
-                <p className="text-[11px] text-slate-500 leading-snug line-clamp-2">{description}</p>
+                <h3 className="font-bold text-foreground text-sm leading-tight tracking-tight mb-1">{title}</h3>
+                <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2">{description}</p>
             </div>
         </div>
     );
