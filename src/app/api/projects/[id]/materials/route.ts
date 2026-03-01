@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getProjectMaterials, createMaterial } from "@/modules/materials/service";
-import type { MaterialStatus } from "@/generated/prisma";
+import type { MaterialStatus } from "@/types/materials";
 import type { AppRole } from "@/lib/authz";
 
 export async function GET(

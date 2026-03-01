@@ -1,0 +1,446 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma_new"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  PROJECT_MANAGER
+  SITE_ENGINEER
+  CLIENT
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+}
+
+enum ProjectMemberRole {
+  PROJECT_MANAGER
+  SITE_ENGINEER
+}
+
+enum MediaType {
+  INSPECTION_IMAGE
+  RECEIPT
+  DRAWING
+  QUERY_ATTACHMENT
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+enum PaymentCategory {
+  MATERIAL
+  LABOR
+  CONTRACTOR
+  OTHER
+}
+
+enum MaterialStatus {
+  ORDERED
+  DELIVERED
+  USED
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum ChecklistResult {
+  PASS
+  FAIL
+  NA
+}
+
+enum InspectionStatus {
+  DRAFT
+  SUBMITTED
+  REVIEWED
+}
+
+enum QueryStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum QueryPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  isActive     Boolean  @default(true)
+  createdById  String?
+  createdBy    User?    @relation("UserCreatedUsers", fields: [createdById], references: [id])
+  createdUsers User[]   @relation("UserCreatedUsers")
+  createdAt    DateTime @default(now())
+  phone        String?
+  designation  String?
+
+  // Relations
+  managedProjects     Project[]               @relation("ManagedProjects")
+  clientProjects      Project[]               @relation("ClientProjects")
+  projectMembers      ProjectMember[]
+  projectUpdates      ProjectUpdate[]         @relation("UpdateAuthor")
+  media               Media[]
+  paymentsCreated     Payment[]
+  notifications       Notification[]
+  projectsCreated     Project[]               @relation("ProjectCreatedBy")
+  inspections         Inspection[]
+  reviewedInspections Inspection[]            @relation("ReviewedBy")
+  queries             Query[]                 @relation("QueryAuthor")
+  queryResponses      QueryResponse[]         @relation("QueryResponseAuthor")
+  auditLogs           AuditLog[]
+  notificationPrefs   NotificationPreference?
+  materialsCreated    Material[]
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  status      ProjectStatus @default(PLANNED)
+  isArchived  Boolean       @default(false)
+  createdById String
+  managerId   String
+  clientId    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  createdBy User @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  manager   User @relation("ManagedProjects", fields: [managerId], references: [id])
+  client    User @relation("ClientProjects", fields: [clientId], references: [id])
+
+  members     ProjectMember[]
+  updates     ProjectUpdate[]
+  media       Media[]
+  payments    Payment[]
+  milestones  Milestone[]
+  inspections Inspection[]
+  queries     Query[]
+  materials   Material[]
+  auditLogs   AuditLog[]
+
+  @@index([managerId])
+  @@index([clientId])
+  @@index([status])
+}
+
+model ProjectMember {
+  id        String            @id @default(cuid())
+  projectId String
+  userId    String
+  role      ProjectMemberRole
+  createdAt DateTime          @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+  @@index([userId])
+}
+
+model ProjectUpdate {
+  id             String   @id @default(cuid())
+  projectId      String
+  authorId       String
+  notes          String
+  statusSnapshot String?
+  createdAt      DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+  author  User    @relation("UpdateAuthor", fields: [authorId], references: [id])
+  media   Media[]
+
+  @@index([projectId])
+  @@index([authorId])
+}
+
+model Media {
+  id              String    @id @default(cuid())
+  projectId       String
+  projectUpdateId String?
+  paymentId       String?
+  type            MediaType
+  fileKey         String
+  fileUrl         String
+  mimeType        String
+  fileSize        Int
+  createdById     String
+  approvedBy      String?
+  approvedAt      DateTime?
+  version         Int?
+  createdAt       DateTime  @default(now())
+
+  project             Project              @relation(fields: [projectId], references: [id])
+  projectUpdate       ProjectUpdate?       @relation(fields: [projectUpdateId], references: [id])
+  payment             Payment?             @relation(fields: [paymentId], references: [id])
+  createdBy           User                 @relation(fields: [createdById], references: [id])
+  inspectionResponses InspectionResponse[]
+  queryId             String?
+  query               Query?               @relation(fields: [queryId], references: [id])
+
+  @@index([projectId])
+  @@index([projectUpdateId])
+  @@index([paymentId])
+  @@index([type])
+}
+
+model Payment {
+  id            String           @id @default(cuid())
+  projectId     String
+  createdById   String
+  amount        Decimal          @db.Decimal(12, 2)
+  currency      String           @default("INR")
+  status        PaymentStatus    @default(PENDING)
+  category      PaymentCategory?
+  invoiceNumber String?
+  paidAt        DateTime?
+  dueDate       DateTime?
+  notes         String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  project   Project @relation(fields: [projectId], references: [id])
+  createdBy User    @relation(fields: [createdById], references: [id])
+  media     Media[]
+
+  @@index([projectId])
+  @@index([createdAt])
+  @@index([status])
+  @@index([dueDate])
+  @@index([category])
+}
+
+model Notification {
+  id        String               @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String
+  priority  NotificationPriority @default(NORMAL)
+  actionUrl String?
+  isRead    Boolean              @default(false)
+  createdAt DateTime             @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model NotificationPreference {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  inspectionSubmitted Boolean @default(true)
+  paymentOverdue      Boolean @default(true)
+  newAssignment       Boolean @default(true)
+  queryCreated        Boolean @default(true)
+  drawingApproved     Boolean @default(true)
+
+  emailEnabled Boolean @default(false)
+  inAppEnabled Boolean @default(true)
+
+  updatedAt DateTime @updatedAt
+}
+
+model Milestone {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  order       Int
+  isActive    Boolean @default(true)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
+  checklistItems ChecklistItem[]
+  inspections    Inspection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+model ChecklistItem {
+  id              String  @id @default(cuid())
+  title           String
+  description     String?
+  order           Int
+  isRequired      Boolean @default(true)
+  isPhotoRequired Boolean @default(false)
+
+  milestoneId String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  responses InspectionResponse[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([milestoneId])
+}
+
+model Inspection {
+  id     String           @id @default(cuid())
+  status InspectionStatus @default(DRAFT)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
+  milestoneId String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id])
+
+  engineerId String
+  engineer   User   @relation(fields: [engineerId], references: [id])
+
+  responses InspectionResponse[]
+
+  reviewedById String?
+  reviewedBy   User?   @relation("ReviewedBy", fields: [reviewedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([milestoneId, engineerId, status])
+  @@index([milestoneId])
+  @@index([projectId])
+  @@index([engineerId])
+  @@index([createdAt])
+}
+
+model InspectionResponse {
+  id     String          @id @default(cuid())
+  result ChecklistResult
+  remark String?
+
+  inspectionId String
+  inspection   Inspection @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+
+  checklistItemId String
+  checklistItem   ChecklistItem @relation(fields: [checklistItemId], references: [id])
+
+  mediaId String?
+  media   Media?  @relation(fields: [mediaId], references: [id])
+
+  @@index([inspectionId])
+}
+
+model Query {
+  id String @id @default(cuid())
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
+  authorId String
+  author   User   @relation("QueryAuthor", fields: [authorId], references: [id])
+
+  title       String
+  description String
+
+  status   QueryStatus   @default(OPEN)
+  priority QueryPriority @default(MEDIUM)
+
+  attachments Media[]
+  responses   QueryResponse[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([authorId])
+  @@index([status])
+}
+
+model QueryResponse {
+  id String @id @default(cuid())
+
+  queryId String
+  query   Query  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation("QueryResponseAuthor", fields: [authorId], references: [id])
+
+  message String
+
+  createdAt DateTime @default(now())
+
+  @@index([queryId])
+}
+
+model AuditLog {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  action   String
+  entity   String
+  entityId String
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model Material {
+  id          String         @id @default(cuid())
+  projectId   String
+  project     Project        @relation(fields: [projectId], references: [id])
+  name        String
+  quantity    Float
+  unit        String
+  unitCost    Float
+  totalCost   Float
+  supplier    String?
+  status      MaterialStatus @default(ORDERED)
+  createdById String
+  createdBy   User           @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+}

@@ -13,8 +13,9 @@ import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
 import ProjectContactsTab from "@/components/projects/ProjectContactsTab";
 import ProjectActivityTab from "@/components/audit/ProjectActivityTab";
 import ProjectPaymentsTab from "@/components/payments/ProjectPaymentsTab";
+import ProjectMaterialsTab from "@/components/materials/ProjectMaterialsTab";
 import type { UserRole } from "@/types/drawings";
-import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight } from "lucide-react";
+import { User, CreditCard, FileText, Clock, HardHat, ClipboardCheck, ArrowRight, PackageOpen } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 type Update = {
@@ -85,6 +86,10 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="payments" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Payments</TabsTrigger>
 				<TabsTrigger value="team" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Team</TabsTrigger>
 				<TabsTrigger value="inspections" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Inspections</TabsTrigger>
+				<TabsTrigger value="materials" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium flex gap-1.5 items-center">
+					<PackageOpen className="h-4 w-4" />
+					Materials
+				</TabsTrigger>
 				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
 				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
 				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
@@ -230,6 +235,11 @@ export default function ProjectDetailTabs(props: Props) {
 			{/* ─── Quarries & Issues Tab ─── */}
 			<TabsContent value="quarries" className="mt-6">
 				<ProjectQuarriesTab projectId={props.projectId} userRole={props.userRole} />
+			</TabsContent>
+
+			{/* ─── Materials Tab ─── */}
+			<TabsContent value="materials" className="mt-6">
+				<ProjectMaterialsTab projectId={props.projectId} userRole={props.userRole} />
 			</TabsContent>
 
 			{/* ─── Design & Documents Tab ─── */}
