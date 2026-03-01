@@ -4,6 +4,7 @@ import type { CreateInspectionInput } from "./validation";
 import type { ChecklistResult, InspectionStatus } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
+import { sanitizeInput } from "@/lib/sanitize";
 
 // ─── Full include for inspection detail ───
 const inspectionDetailInclude = {
@@ -100,7 +101,7 @@ export async function createInspection(
                 inspectionId: created.id,
                 checklistItemId: r.checklistItemId,
                 result: r.result as ChecklistResult,
-                remark: r.remark ?? null,
+                remark: r.remark ? sanitizeInput(r.remark) : null,
                 mediaId: r.mediaId ?? null,
             })),
         });

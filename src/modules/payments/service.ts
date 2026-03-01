@@ -181,13 +181,15 @@ export async function bulkUpdatePayments(
     // 3. Determine time mutation
     const paidAtDate = status === "PAID" ? new Date() : null;
 
-    // 4. Update
-    const result = await prisma.payment.updateMany({
-        where: { id: { in: paymentIds } },
-        data: {
-            status,
-            paidAt: paidAtDate, // syncs the physical paid date timestamp
-        },
+    // 4. Atomic transaction for bulk update
+    const result = await prisma.$transaction(async (tx) => {
+        return tx.payment.updateMany({
+            where: { id: { in: paymentIds } },
+            data: {
+                status,
+                paidAt: paidAtDate,
+            },
+        });
     });
 
     // 5. Fire Audit Call safely

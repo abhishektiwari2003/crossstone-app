@@ -47,8 +47,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <p className="px-3 mb-2 text-[10px] font-semibold tracking-widest uppercase text-slate-600">Menu</p>
                     <SidebarLink href="/dashboard" icon={Home} label="Dashboard" />
                     <SidebarLink href="/projects" icon={FolderKanban} label="Projects" />
-                    <SidebarLink href="/payments" icon={CreditCard} label="Payments" />
-                    <SidebarLink href="/users" icon={Users} label="Users" />
+                    {(role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER") && (
+                        <SidebarLink href="/payments" icon={CreditCard} label="Payments" />
+                    )}
+                    {(role === "SUPER_ADMIN" || role === "ADMIN") && (
+                        <SidebarLink href="/users" icon={Users} label="Users" />
+                    )}
                     {(role === "ADMIN" || role === "SUPER_ADMIN") && (
                         <>
                             <SidebarLink href="/admin/audit-logs" icon={ShieldAlert} label="System Logs" />

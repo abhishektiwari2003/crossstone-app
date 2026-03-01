@@ -193,6 +193,7 @@ function mapProjectToMobileDTO(project: {
     id: string;
     name: string;
     status: string;
+    totalValue: number | null;
     createdAt: Date;
     _count: { members: number; inspections: number; milestones: number };
     media?: { id: string }[];
@@ -202,6 +203,7 @@ function mapProjectToMobileDTO(project: {
         name: project.name,
         status: project.status,
         statusColor: STATUS_COLOR_MAP[project.status] ?? "gray",
+        totalValue: project.totalValue,
         memberCount: project._count.members,
         inspectionCount: project._count.inspections,
         drawingCount: project.media?.length ?? 0,
@@ -235,6 +237,7 @@ export async function getPaginatedProjects(
             id: true,
             name: true,
             status: true,
+            totalValue: true,
             createdAt: true,
             _count: {
                 select: {

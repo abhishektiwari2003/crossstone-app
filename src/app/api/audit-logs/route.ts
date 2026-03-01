@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 import { getAuditLogs } from "@/modules/audit/service";
-import type { AppRole } from "@/lib/authz";
+import { getCurrentUser, AuthError } from "@/lib/session";
+import { isAdmin } from "@/lib/authz";
 
 export async function GET(req: Request) {
     try {
-        const session = await getServerSession(authOptions);
-        if (!(session?.user as { role?: AppRole })?.role) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        const currentUser = await getCurrentUser();
+
+        // Audit logs are ADMIN-only (write-only for non-admins)
+        if (!isAdmin(currentUser.role)) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
         const { searchParams } = new URL(req.url);
@@ -24,7 +25,7 @@ export async function GET(req: Request) {
         const cursor = searchParams.get("cursor");
         const limit = parseInt(searchParams.get("limit") || "20", 10);
 
-        const result = await getAuditLogs((session?.user as { role: AppRole }).role, filters, cursor, limit);
+        const result = await getAuditLogs(currentUser.role, filters, cursor, limit);
 
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });
@@ -32,7 +33,11 @@ export async function GET(req: Request) {
 
         return NextResponse.json(result);
     } catch (error) {
+        if (error instanceof AuthError) {
+            return NextResponse.json({ error: error.message }, { status: error.status });
+        }
         console.error("GET /api/audit-logs error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
+

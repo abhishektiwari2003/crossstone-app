@@ -56,13 +56,15 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    // Prevent redirect loops back to /login and sanitize external URLs
+    // Sanitize redirects — prevent recursive loops and external URLs
     async redirect({ url, baseUrl }) {
       try {
         const urlObj = new URL(url, baseUrl);
-        // If NextAuth tries to redirect to /login again, send to dashboard instead
-        if (urlObj.pathname === "/login") return "/dashboard";
-        // Only allow same-origin redirects
+        // Block recursive /login?callbackUrl=/login loops only
+        if (urlObj.pathname === "/login" && urlObj.searchParams.get("callbackUrl")?.includes("/login")) {
+          return `${baseUrl}/dashboard`;
+        }
+        // Allow same-origin redirects (including /login for sign-out)
         if (urlObj.origin === baseUrl) return urlObj.toString();
         return baseUrl;
       } catch {

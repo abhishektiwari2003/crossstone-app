@@ -84,3 +84,36 @@ export async function canViewProject(
   return false;
 }
 
+/**
+ * Authorization error thrown by validateProjectAccess.
+ * Caught by route handlers to return proper HTTP responses.
+ */
+export class AuthorizationError extends Error {
+  public status: number;
+
+  constructor(message: string = "Forbidden", status: number = 403) {
+    super(message);
+    this.name = "AuthorizationError";
+    this.status = status;
+  }
+}
+
+/**
+ * Validate that a user has access to a project.
+ * Throws AuthorizationError if not allowed — eliminates boilerplate in routes.
+ * 
+ * Usage:
+ *   await validateProjectAccess(userId, role, projectId);
+ *   // If we reach here, access is granted
+ */
+export async function validateProjectAccess(
+  userId: string,
+  role: AppRole,
+  projectId: string
+): Promise<void> {
+  const allowed = await canViewProject(userId, role, projectId);
+  if (!allowed) {
+    throw new AuthorizationError("You do not have access to this project");
+  }
+}
+

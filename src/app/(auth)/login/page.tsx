@@ -4,7 +4,8 @@ import { signIn } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Building2, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 
 function LoginInner() {
     const searchParams = useSearchParams();
@@ -56,12 +57,8 @@ function LoginInner() {
             <div className="w-full max-w-[420px]">
                 {/* Logo */}
                 <div className="flex items-center justify-center gap-3 mb-10">
-                    <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30">
-                        <Building2 className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-white font-bold text-xl tracking-tight">CrossStone</h1>
-                        <p className="text-blue-400/50 text-[10px] font-semibold tracking-[0.2em] uppercase">Construction ERM</p>
+                    <div className="flex items-center h-12 w-36 relative">
+                        <Image src="/logo.svg" alt="CrossStone Logo" fill className="object-contain" />
                     </div>
                 </div>
 

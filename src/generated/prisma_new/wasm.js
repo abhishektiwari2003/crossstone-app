@@ -139,6 +139,7 @@ exports.Prisma.ProjectScalarFieldEnum = {
   description: 'description',
   status: 'status',
   isArchived: 'isArchived',
+  totalValue: 'totalValue',
   createdById: 'createdById',
   managerId: 'managerId',
   clientId: 'clientId',

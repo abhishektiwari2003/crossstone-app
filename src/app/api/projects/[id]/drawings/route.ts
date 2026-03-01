@@ -1,10 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
-import type { AppRole } from "@/lib/authz";
 import { createDrawing, listProjectDrawings, getPaginatedDrawings } from "@/modules/drawings/service";
 import { z } from "zod";
+import { getCurrentUser, AuthError } from "@/lib/session";
+import { mutationLimiter, getClientIdentifier } from "@/lib/rateLimit";
 
 const CreateDrawingSchema = z.object({
     url: z.string().min(1, "URL is required"),
@@ -12,65 +10,71 @@ const CreateDrawingSchema = z.object({
 });
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    try {
+        const currentUser = await getCurrentUser();
+        const { id: projectId } = await context.params;
 
-    const currentUser = session.user as { id: string; role?: Role };
-    const { id: projectId } = await context.params;
+        const { searchParams } = new URL(req.url);
+        const cursor = searchParams.get("cursor");
+        const limitParam = searchParams.get("limit");
 
-    const { searchParams } = new URL(req.url);
-    const cursor = searchParams.get("cursor");
-    const limitParam = searchParams.get("limit");
+        // Paginated mobile response
+        if (cursor !== null || limitParam !== null) {
+            const limit = limitParam ? parseInt(limitParam, 10) || 10 : 10;
+            const result = await getPaginatedDrawings(projectId, currentUser, cursor, limit);
+            if ("error" in result) {
+                return NextResponse.json({ error: result.error }, { status: result.status });
+            }
+            return NextResponse.json({ items: result.items, nextCursor: result.nextCursor });
+        }
 
-    // Paginated mobile response
-    if (cursor !== null || limitParam !== null) {
-        const limit = limitParam ? parseInt(limitParam, 10) || 10 : 10;
-        const result = await getPaginatedDrawings(
-            projectId,
-            { id: currentUser.id, role: currentUser.role as AppRole },
-            cursor,
-            limit
-        );
+        // Default: full response
+        const result = await listProjectDrawings(projectId, currentUser);
+
         if ("error" in result) {
             return NextResponse.json({ error: result.error }, { status: result.status });
         }
-        return NextResponse.json({ items: result.items, nextCursor: result.nextCursor });
+
+        const response = NextResponse.json({ drawings: result.drawings });
+        response.headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=120");
+        return response;
+    } catch (error) {
+        if (error instanceof AuthError) {
+            return NextResponse.json({ error: error.message }, { status: error.status });
+        }
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
-
-    // Default: full response
-    const result = await listProjectDrawings(projectId, {
-        id: currentUser.id,
-        role: currentUser.role as AppRole,
-    });
-
-    if ("error" in result) {
-        return NextResponse.json({ error: result.error }, { status: result.status });
-    }
-
-    return NextResponse.json({ drawings: result.drawings });
 }
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    try {
+        const currentUser = await getCurrentUser();
+        const { id: projectId } = await context.params;
 
-    const currentUser = session.user as { id: string; role?: Role };
-    const { id: projectId } = await context.params;
+        // Rate limiting
+        const rl = mutationLimiter(getClientIdentifier(req, currentUser.id));
+        if (!rl.allowed) {
+            return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+        }
 
-    const body = await req.json().catch(() => null);
-    const parsed = CreateDrawingSchema.safeParse(body);
-    if (!parsed.success) {
-        return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+        const body = await req.json().catch(() => null);
+        const parsed = CreateDrawingSchema.safeParse(body);
+        if (!parsed.success) {
+            return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+        }
+
+        const result = await createDrawing(projectId, parsed.data, currentUser);
+
+        if ("error" in result) {
+            return NextResponse.json({ error: result.error }, { status: result.status });
+        }
+
+        return NextResponse.json({ drawing: result.drawing }, { status: 201 });
+    } catch (error) {
+        if (error instanceof AuthError) {
+            return NextResponse.json({ error: error.message }, { status: error.status });
+        }
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
-
-    const result = await createDrawing(projectId, parsed.data, {
-        id: currentUser.id,
-        role: currentUser.role as AppRole,
-    });
-
-    if ("error" in result) {
-        return NextResponse.json({ error: result.error }, { status: result.status });
-    }
-
-    return NextResponse.json({ drawing: result.drawing }, { status: 201 });
 }
+

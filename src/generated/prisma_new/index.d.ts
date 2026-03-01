@@ -4476,8 +4476,18 @@ export namespace Prisma {
 
   export type AggregateProject = {
     _count: ProjectCountAggregateOutputType | null
+    _avg: ProjectAvgAggregateOutputType | null
+    _sum: ProjectSumAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
+  }
+
+  export type ProjectAvgAggregateOutputType = {
+    totalValue: number | null
+  }
+
+  export type ProjectSumAggregateOutputType = {
+    totalValue: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -4486,6 +4496,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus | null
     isArchived: boolean | null
+    totalValue: number | null
     createdById: string | null
     managerId: string | null
     clientId: string | null
@@ -4499,6 +4510,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus | null
     isArchived: boolean | null
+    totalValue: number | null
     createdById: string | null
     managerId: string | null
     clientId: string | null
@@ -4512,6 +4524,7 @@ export namespace Prisma {
     description: number
     status: number
     isArchived: number
+    totalValue: number
     createdById: number
     managerId: number
     clientId: number
@@ -4521,12 +4534,21 @@ export namespace Prisma {
   }
 
 
+  export type ProjectAvgAggregateInputType = {
+    totalValue?: true
+  }
+
+  export type ProjectSumAggregateInputType = {
+    totalValue?: true
+  }
+
   export type ProjectMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
     status?: true
     isArchived?: true
+    totalValue?: true
     createdById?: true
     managerId?: true
     clientId?: true
@@ -4540,6 +4562,7 @@ export namespace Prisma {
     description?: true
     status?: true
     isArchived?: true
+    totalValue?: true
     createdById?: true
     managerId?: true
     clientId?: true
@@ -4553,6 +4576,7 @@ export namespace Prisma {
     description?: true
     status?: true
     isArchived?: true
+    totalValue?: true
     createdById?: true
     managerId?: true
     clientId?: true
@@ -4599,6 +4623,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProjectAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjectSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProjectMinAggregateInputType
@@ -4629,6 +4665,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProjectCountAggregateInputType | true
+    _avg?: ProjectAvgAggregateInputType
+    _sum?: ProjectSumAggregateInputType
     _min?: ProjectMinAggregateInputType
     _max?: ProjectMaxAggregateInputType
   }
@@ -4639,12 +4677,15 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus
     isArchived: boolean
+    totalValue: number | null
     createdById: string
     managerId: string
     clientId: string
     createdAt: Date
     updatedAt: Date
     _count: ProjectCountAggregateOutputType | null
+    _avg: ProjectAvgAggregateOutputType | null
+    _sum: ProjectSumAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
   }
@@ -4669,6 +4710,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     isArchived?: boolean
+    totalValue?: boolean
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
@@ -4695,6 +4737,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     isArchived?: boolean
+    totalValue?: boolean
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
@@ -4711,6 +4754,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     isArchived?: boolean
+    totalValue?: boolean
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
@@ -4727,6 +4771,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     isArchived?: boolean
+    totalValue?: boolean
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
@@ -4734,7 +4779,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "isArchived" | "createdById" | "managerId" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "isArchived" | "totalValue" | "createdById" | "managerId" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     manager?: boolean | UserDefaultArgs<ExtArgs>
@@ -4783,6 +4828,7 @@ export namespace Prisma {
       description: string | null
       status: $Enums.ProjectStatus
       isArchived: boolean
+      totalValue: number | null
       createdById: string
       managerId: string
       clientId: string
@@ -5228,6 +5274,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Project", 'String'>
     readonly status: FieldRef<"Project", 'ProjectStatus'>
     readonly isArchived: FieldRef<"Project", 'Boolean'>
+    readonly totalValue: FieldRef<"Project", 'Float'>
     readonly createdById: FieldRef<"Project", 'String'>
     readonly managerId: FieldRef<"Project", 'String'>
     readonly clientId: FieldRef<"Project", 'String'>
@@ -22086,6 +22133,7 @@ export namespace Prisma {
     description: 'description',
     status: 'status',
     isArchived: 'isArchived',
+    totalValue: 'totalValue',
     createdById: 'createdById',
     managerId: 'managerId',
     clientId: 'clientId',
@@ -22413,6 +22461,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ProjectMemberRole'
    */
   export type EnumProjectMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectMemberRole'>
@@ -22581,20 +22643,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
    * Reference to a field of type 'MaterialStatus'
    */
   export type EnumMaterialStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialStatus'>
@@ -22748,6 +22796,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     isArchived?: BoolFilter<"Project"> | boolean
+    totalValue?: FloatNullableFilter<"Project"> | number | null
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
@@ -22773,6 +22822,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     isArchived?: SortOrder
+    totalValue?: SortOrderInput | SortOrder
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
@@ -22801,6 +22851,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     isArchived?: BoolFilter<"Project"> | boolean
+    totalValue?: FloatNullableFilter<"Project"> | number | null
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
@@ -22826,14 +22877,17 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     isArchived?: SortOrder
+    totalValue?: SortOrderInput | SortOrder
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
+    _avg?: ProjectAvgOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
     _min?: ProjectMinOrderByAggregateInput
+    _sum?: ProjectSumOrderByAggregateInput
   }
 
   export type ProjectScalarWhereWithAggregatesInput = {
@@ -22845,6 +22899,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Project"> | string | null
     status?: EnumProjectStatusWithAggregatesFilter<"Project"> | $Enums.ProjectStatus
     isArchived?: BoolWithAggregatesFilter<"Project"> | boolean
+    totalValue?: FloatNullableWithAggregatesFilter<"Project"> | number | null
     createdById?: StringWithAggregatesFilter<"Project"> | string
     managerId?: StringWithAggregatesFilter<"Project"> | string
     clientId?: StringWithAggregatesFilter<"Project"> | string
@@ -24134,6 +24189,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -24156,6 +24212,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -24178,6 +24235,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -24200,6 +24258,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -24222,6 +24281,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -24235,6 +24295,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24245,6 +24306,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -25715,6 +25777,17 @@ export namespace Prisma {
     not?: NestedEnumProjectStatusFilter<$PrismaModel> | $Enums.ProjectStatus
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -25736,11 +25809,16 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     isArchived?: SortOrder
+    totalValue?: SortOrder
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProjectAvgOrderByAggregateInput = {
+    totalValue?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -25749,6 +25827,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     isArchived?: SortOrder
+    totalValue?: SortOrder
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
@@ -25762,11 +25841,16 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     isArchived?: SortOrder
+    totalValue?: SortOrder
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProjectSumOrderByAggregateInput = {
+    totalValue?: SortOrder
   }
 
   export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -25777,6 +25861,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProjectStatusFilter<$PrismaModel>
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type EnumProjectMemberRoleFilter<$PrismaModel = never> = {
@@ -27597,6 +27697,14 @@ export namespace Prisma {
     set?: $Enums.ProjectStatus
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutProjectsCreatedNestedInput = {
     create?: XOR<UserCreateWithoutProjectsCreatedInput, UserUncheckedCreateWithoutProjectsCreatedInput>
     connectOrCreate?: UserCreateOrConnectWithoutProjectsCreatedInput
@@ -28905,6 +29013,17 @@ export namespace Prisma {
     not?: NestedEnumProjectStatusFilter<$PrismaModel> | $Enums.ProjectStatus
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
@@ -28913,6 +29032,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProjectStatusFilter<$PrismaModel>
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumProjectMemberRoleFilter<$PrismaModel = never> = {
@@ -29015,17 +29150,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -29363,6 +29487,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -29384,6 +29509,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     clientId: string
     createdAt?: Date | string
@@ -29415,6 +29541,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -29436,6 +29563,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     createdAt?: Date | string
@@ -29639,6 +29767,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     manager: UserCreateNestedOneWithoutManagedProjectsInput
@@ -29660,6 +29789,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     managerId: string
     clientId: string
     createdAt?: Date | string
@@ -30030,6 +30160,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     isArchived?: BoolFilter<"Project"> | boolean
+    totalValue?: FloatNullableFilter<"Project"> | number | null
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
@@ -31288,6 +31419,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -31309,6 +31441,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -31407,6 +31540,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -31428,6 +31562,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -31516,6 +31651,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -31537,6 +31673,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -31681,6 +31818,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -31702,6 +31840,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -31806,6 +31945,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -31827,6 +31967,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -32042,6 +32183,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32063,6 +32205,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -32288,6 +32431,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -32309,6 +32453,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -32453,6 +32598,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32474,6 +32620,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -32834,6 +32981,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -32855,6 +33003,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -32958,6 +33107,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32979,6 +33129,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -33153,6 +33304,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -33174,6 +33326,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -33388,6 +33541,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -33409,6 +33563,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -33827,6 +33982,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -33848,6 +34004,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -34016,6 +34173,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -34037,6 +34195,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -34414,6 +34573,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -34435,6 +34595,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -34539,6 +34700,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -34560,6 +34722,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -34581,6 +34744,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -34602,6 +34766,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     clientId: string
@@ -34700,6 +34865,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -34721,6 +34887,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
@@ -34821,6 +34988,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     clientId: string
     createdAt?: Date | string
@@ -34833,6 +35001,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     createdById: string
     managerId: string
     createdAt?: Date | string
@@ -34903,6 +35072,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     isArchived?: boolean
+    totalValue?: number | null
     managerId: string
     clientId: string
     createdAt?: Date | string
@@ -35045,6 +35215,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35066,6 +35237,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35087,6 +35259,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35099,6 +35272,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35120,6 +35294,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35141,6 +35316,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35333,6 +35509,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagedProjectsNestedInput
@@ -35354,6 +35531,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35375,6 +35553,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
+    totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

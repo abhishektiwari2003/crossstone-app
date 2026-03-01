@@ -3,6 +3,7 @@ import { type AppRole, canViewProject, canManageMaterials } from "@/lib/authz";
 import { logAudit } from "@/lib/audit";
 import type { MaterialStatus } from "@/types/materials";
 import { CreateMaterialSchema, UpdateMaterialSchema } from "./validation";
+import { sanitizeInput } from "@/lib/sanitize";
 
 // -------------------------------------------------------------
 // CREATE MATERIAL
@@ -37,12 +38,12 @@ export async function createMaterial(
     const material = await prisma.material.create({
         data: {
             projectId,
-            name,
+            name: sanitizeInput(name),
             quantity,
             unit,
             unitCost,
             totalCost,
-            supplier,
+            supplier: supplier ? sanitizeInput(supplier) : null,
             status,
             createdById: currentUser.id,
         },

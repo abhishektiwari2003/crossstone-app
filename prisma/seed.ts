@@ -5,7 +5,7 @@ import {
 	ProjectMemberRole,
 	QueryPriority,
 	QueryStatus,
-} from "../src/generated/prisma";
+} from "../src/generated/prisma_new";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();

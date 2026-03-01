@@ -4,6 +4,7 @@ import type { CreateQueryInput, UpdateQueryInput } from "./validation";
 import type { QueryPriority, QueryStatus } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
+import { sanitizeInput } from "@/lib/sanitize";
 
 // ─── Priority → Color map ───
 const PRIORITY_COLOR_MAP: Record<string, string> = {
@@ -55,8 +56,8 @@ export async function createQuery(
         data: {
             projectId,
             authorId: currentUser.id,
-            title: data.title,
-            description: data.description,
+            title: sanitizeInput(data.title),
+            description: sanitizeInput(data.description),
             priority: data.priority as QueryPriority,
             ...(data.attachmentIds && data.attachmentIds.length > 0
                 ? { attachments: { connect: data.attachmentIds.map(id => ({ id })) } }
@@ -290,7 +291,7 @@ export async function addQueryResponse(
         data: {
             queryId,
             authorId: currentUser.id,
-            message,
+            message: sanitizeInput(message),
         },
         include: {
             author: { select: { id: true, name: true, role: true } },

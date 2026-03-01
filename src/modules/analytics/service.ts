@@ -42,7 +42,8 @@ export async function getAnalyticsDashboard(
         projectStatusRaw,
         inspectionsRaw,
         paymentsRaw,
-        engineersRaw
+        engineersRaw,
+        portfolioValueResult
     ] = await Promise.all([
         prisma.project.count({ where: { createdAt: dateRange } }),
         prisma.project.count({ where: { status: "IN_PROGRESS" } }),
@@ -71,9 +72,14 @@ export async function getAnalyticsDashboard(
                 responses: { select: { result: true } },
             },
         }),
+        // Total portfolio value across all projects
+        prisma.project.aggregate({
+            _sum: { totalValue: true },
+        }),
     ]);
 
     const totalRevenue = revenueResult._sum.amount?.toNumber() || 0;
+    const totalPortfolioValue = portfolioValueResult._sum.totalValue || 0;
 
     // 3. Transform Project Status Distribution
     const projectStatusDistribution = projectStatusRaw.map((p) => ({
@@ -165,6 +171,7 @@ export async function getAnalyticsDashboard(
                 activeProjects,
                 totalInspections,
                 totalRevenue,
+                totalPortfolioValue,
             },
             projectStatusDistribution,
             monthlyInspections,

@@ -131,6 +131,7 @@ model Project {
   description String?
   status      ProjectStatus @default(PLANNED)
   isArchived  Boolean       @default(false)
+  totalValue  Float?
   createdById String
   managerId   String
   clientId    String
@@ -154,6 +155,8 @@ model Project {
   @@index([managerId])
   @@index([clientId])
   @@index([status])
+  @@index([status, createdAt])
+  @@index([totalValue])
 }
 
 model ProjectMember {
@@ -214,6 +217,7 @@ model Media {
   @@index([projectUpdateId])
   @@index([paymentId])
   @@index([type])
+  @@index([projectId, type, createdAt])
 }
 
 model Payment {
@@ -240,6 +244,7 @@ model Payment {
   @@index([status])
   @@index([dueDate])
   @@index([category])
+  @@index([projectId, status, dueDate])
 }
 
 model Notification {
@@ -258,6 +263,7 @@ model Notification {
   @@index([userId])
   @@index([isRead])
   @@index([createdAt])
+  @@index([userId, isRead, createdAt])
 }
 
 model NotificationPreference {
@@ -341,6 +347,8 @@ model Inspection {
   @@index([projectId])
   @@index([engineerId])
   @@index([createdAt])
+  @@index([status])
+  @@index([projectId, status, createdAt])
 }
 
 model InspectionResponse {
@@ -358,6 +366,7 @@ model InspectionResponse {
   media   Media?  @relation(fields: [mediaId], references: [id])
 
   @@index([inspectionId])
+  @@index([checklistItemId])
 }
 
 model Query {
@@ -384,6 +393,7 @@ model Query {
   @@index([projectId])
   @@index([authorId])
   @@index([status])
+  @@index([projectId, status, createdAt])
 }
 
 model QueryResponse {
@@ -400,6 +410,7 @@ model QueryResponse {
   createdAt DateTime @default(now())
 
   @@index([queryId])
+  @@index([queryId, createdAt])
 }
 
 model AuditLog {
@@ -423,6 +434,7 @@ model AuditLog {
   @@index([userId])
   @@index([action])
   @@index([createdAt])
+  @@index([projectId, action, createdAt])
 }
 
 model Material {
@@ -443,4 +455,5 @@ model Material {
 
   @@index([projectId])
   @@index([status])
+  @@index([projectId, status, createdAt])
 }

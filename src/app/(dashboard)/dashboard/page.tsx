@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import type { Role } from "@/generated/prisma";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity } from "lucide-react";
+import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity, MessageSquare, FileText } from "lucide-react";
 import EngineerHome from "@/components/EngineerHome";
 
 export default async function DashboardPage() {
@@ -12,7 +12,7 @@ export default async function DashboardPage() {
 	const role = user?.role;
 	const firstName = user?.name?.split(" ")[0] ?? "User";
 
-	// If site engineer, show the mobile-optimized Engineer Home instead
+	// ── SITE ENGINEER: Mobile-optimized home ──
 	if (role === "SITE_ENGINEER" && user?.id) {
 		const assignedProjects = await prisma.project.findMany({
 			where: { members: { some: { userId: user.id } } },
@@ -22,14 +22,117 @@ export default async function DashboardPage() {
 		return <EngineerHome firstName={firstName} projects={assignedProjects} />;
 	}
 
-	// Fetch summary counts (Admin & generic view)
+	// ── CLIENT: Client-focused home ──
+	if (role === "CLIENT" && user?.id) {
+		const [myProjects, openQueries] = await Promise.all([
+			prisma.project.findMany({
+				where: { clientId: user.id },
+				select: { id: true, name: true, status: true, totalValue: true },
+				take: 10,
+			}),
+			prisma.query.count({
+				where: { authorId: user.id, status: { not: "RESOLVED" } },
+			}),
+		]);
+
+		return (
+			<div className="space-y-8">
+				<div>
+					<h1 className="text-3xl font-bold text-foreground tracking-tight">
+						Welcome, {firstName} 👋
+					</h1>
+					<p className="text-muted-foreground mt-1">Here&apos;s an overview of your projects.</p>
+				</div>
+
+				{/* Client KPI Cards */}
+				<div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+					<div className="gradient-blue rounded-2xl p-5 shadow-lg shadow-blue-500/20 hover-lift">
+						<div className="flex items-center justify-between mb-4">
+							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+								<FolderKanban className="h-5 w-5 text-white" />
+							</div>
+							<TrendingUp className="h-4 w-4 text-white/60" />
+						</div>
+						<div className="text-3xl font-bold text-white">{myProjects.length}</div>
+						<div className="text-sm text-white/70 mt-1 font-medium">My Projects</div>
+					</div>
+					<div className="gradient-emerald rounded-2xl p-5 shadow-lg shadow-emerald-500/20 hover-lift">
+						<div className="flex items-center justify-between mb-4">
+							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+								<Activity className="h-5 w-5 text-white" />
+							</div>
+						</div>
+						<div className="text-3xl font-bold text-white">{myProjects.filter(p => p.status === "IN_PROGRESS").length}</div>
+						<div className="text-sm text-white/70 mt-1 font-medium">Active</div>
+					</div>
+					<div className="gradient-orange rounded-2xl p-5 shadow-lg shadow-orange-500/20 hover-lift">
+						<div className="flex items-center justify-between mb-4">
+							<div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+								<MessageSquare className="h-5 w-5 text-white" />
+							</div>
+						</div>
+						<div className="text-3xl font-bold text-white">{openQueries}</div>
+						<div className="text-sm text-white/70 mt-1 font-medium">Open Queries</div>
+					</div>
+				</div>
+
+				{/* My Projects List */}
+				<div>
+					<h2 className="text-lg font-semibold text-foreground mb-4">My Projects</h2>
+					<div className="space-y-3">
+						{myProjects.map((project) => (
+							<Link
+								key={project.id}
+								href={`/projects/${project.id}`}
+								className="glass-card p-5 hover-lift group flex items-center justify-between"
+							>
+								<div className="flex items-center gap-3">
+									<div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center ring-1 ring-blue-500/20">
+										<FolderKanban className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+									</div>
+									<div>
+										<div className="font-semibold text-foreground">{project.name}</div>
+										<div className="text-xs text-muted-foreground">{project.status?.replace(/_/g, " ")}</div>
+									</div>
+								</div>
+								<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+							</Link>
+						))}
+						{myProjects.length === 0 && (
+							<div className="glass-card p-8 text-center">
+								<p className="text-muted-foreground">No projects assigned to you yet.</p>
+							</div>
+						)}
+					</div>
+				</div>
+
+				{/* Role Info */}
+				<div className="glass-card p-5 flex items-center gap-4">
+					<div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center shadow-inner">
+						<span className="text-lg">🛡️</span>
+					</div>
+					<div>
+						<div className="text-sm font-semibold text-foreground">Your Role</div>
+						<div className="text-sm text-muted-foreground font-medium">{role?.replace(/_/g, " ")}</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	// ── ADMIN / PM: Full dashboard ──
+	const isAdminRole = role === "SUPER_ADMIN" || role === "ADMIN";
+
 	const [projectCount, activeProjectCount, paymentCount, userCount] = await Promise.all([
 		prisma.project.count(),
 		prisma.project.count({ where: { status: "IN_PROGRESS" } }),
-		prisma.payment.count(),
-		prisma.user.count(),
+		isAdminRole ? prisma.payment.count() : prisma.payment.count({
+			where: { project: { OR: [{ managerId: user?.id }, { members: { some: { userId: user?.id ?? "" } } }] } }
+		}),
+		isAdminRole ? prisma.user.count() : Promise.resolve(0),
 	]);
 
+	// Build KPI cards based on role
 	const kpiCards = [
 		{
 			label: "Total Projects",
@@ -52,13 +155,13 @@ export default async function DashboardPage() {
 			gradient: "gradient-purple",
 			shadow: "shadow-purple-500/20",
 		},
-		{
+		...(isAdminRole ? [{
 			label: "Team Members",
 			value: userCount,
 			icon: Users,
 			gradient: "gradient-orange",
 			shadow: "shadow-orange-500/20",
-		},
+		}] : []),
 	];
 
 	return (
@@ -74,7 +177,7 @@ export default async function DashboardPage() {
 			</div>
 
 			{/* KPI Cards */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+			<div className={`grid grid-cols-1 sm:grid-cols-2 ${isAdminRole ? "lg:grid-cols-4" : "lg:grid-cols-3"} gap-5`}>
 				{kpiCards.map((card) => (
 					<div
 						key={card.label}
@@ -111,22 +214,24 @@ export default async function DashboardPage() {
 						</div>
 						<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
 					</Link>
-					<Link
-						href="/payments"
-						className="glass-card p-5 hover-lift group flex items-center justify-between"
-					>
-						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-1 ring-purple-500/20">
-								<CreditCard className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+					{(role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER") && (
+						<Link
+							href="/payments"
+							className="glass-card p-5 hover-lift group flex items-center justify-between"
+						>
+							<div className="flex items-center gap-3">
+								<div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center ring-1 ring-purple-500/20">
+									<CreditCard className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+								</div>
+								<div>
+									<div className="font-semibold text-foreground">Payments</div>
+									<div className="text-xs text-muted-foreground">Track finances</div>
+								</div>
 							</div>
-							<div>
-								<div className="font-semibold text-foreground">Payments</div>
-								<div className="text-xs text-muted-foreground">Track finances</div>
-							</div>
-						</div>
-						<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
-					</Link>
-					{(role === "SUPER_ADMIN" || role === "ADMIN") && (
+							<ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+						</Link>
+					)}
+					{isAdminRole && (
 						<Link
 							href="/users"
 							className="glass-card p-5 hover-lift group flex items-center justify-between"
@@ -159,3 +264,4 @@ export default async function DashboardPage() {
 		</div>
 	);
 }
+
