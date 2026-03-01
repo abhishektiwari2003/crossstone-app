@@ -73,7 +73,7 @@ export default async function UsersPage() {
 			</div>
 			<div className="grid gap-3">
 				{users?.length ? users.map((u) => (
-					<div key={u.id} className="glass-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 hover-lift group">
+					<Link href={`/users/${u.id}`} key={u.id} className="glass-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 hover-lift group">
 						<div className="flex items-center gap-4 min-w-0">
 							<Avatar className="h-11 w-11 ring-2 ring-white shadow-md">
 								<AvatarFallback className={`bg-gradient-to-br ${getAvatarGradient(u.role)} text-white font-bold text-sm`}>
@@ -81,7 +81,7 @@ export default async function UsersPage() {
 								</AvatarFallback>
 							</Avatar>
 							<div className="min-w-0">
-								<div className="font-semibold text-slate-900 truncate">{u.name}</div>
+								<div className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">{u.name}</div>
 								<div className="text-sm text-slate-500 truncate">{u.email}</div>
 							</div>
 						</div>
@@ -91,7 +91,7 @@ export default async function UsersPage() {
 							</span>
 							<ArrowRight className="h-4 w-4 text-slate-300 opacity-0 sm:group-hover:opacity-100 transition-opacity hidden sm:block" />
 						</div>
-					</div>
+					</Link>
 				)) : (
 					<div className="glass-card p-12 text-center">
 						<div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
