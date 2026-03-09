@@ -211,3 +211,63 @@ export async function bulkUpdatePayments(
         status: 200,
     } as const;
 }
+
+// -------------------------------------------------------------
+// POST SINGLE PAYMENT
+// -------------------------------------------------------------
+export async function createPayment(
+    projectId: string,
+    data: {
+        amount: number;
+        currency: string;
+        status: PaymentStatus;
+        category?: PaymentCategory | null;
+        invoiceNumber?: string | null;
+        notes?: string | null;
+        dueDate?: string | null;
+        paidAt?: string | null;
+    },
+    currentUser: { id: string; role: AppRole }
+) {
+    if (currentUser.role === "SITE_ENGINEER") {
+        return { error: "Site Engineers cannot create payments", status: 403 } as const;
+    }
+
+    const allowed = await canViewProject(currentUser.id, currentUser.role, projectId);
+    if (!allowed) {
+        return { error: "Forbidden", status: 403 } as const;
+    }
+
+    // Convert date string if provided
+    const due = data.dueDate ? new Date(data.dueDate) : null;
+    const paid = data.paidAt ? new Date(data.paidAt) : data.status === "PAID" ? new Date() : null;
+
+    const payment = await prisma.payment.create({
+        data: {
+            projectId,
+            amount: data.amount,
+            currency: data.currency,
+            status: data.status,
+            category: data.category || null,
+            invoiceNumber: data.invoiceNumber || null,
+            notes: data.notes || null,
+            dueDate: due,
+            paidAt: paid,
+            createdById: currentUser.id,
+        },
+    });
+
+    await logAudit({
+        userId: currentUser.id,
+        action: "CREATE_PAYMENT",
+        entity: "Payment",
+        entityId: payment.id,
+        projectId,
+        metadata: {
+            amount: data.amount,
+            status: data.status,
+        },
+    });
+
+    return { data: payment, status: 201 } as const;
+}

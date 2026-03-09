@@ -62,7 +62,7 @@ export default function BulkPaymentActions({ selectedIds, onClearSelection, proj
     return (
         <>
             {/* Sticky Action Bar */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-5 fade-in duration-200">
+            <div className="fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-5 fade-in duration-200 w-11/12 max-w-fit">
                 <div className="bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl shadow-slate-900/20 flex flex-col md:flex-row items-center gap-4 md:gap-6 border border-slate-700/50 backdrop-blur-md">
 
                     <div className="flex items-center gap-3">
