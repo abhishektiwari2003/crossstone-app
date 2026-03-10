@@ -6,6 +6,7 @@ import PaymentsSearchBar from "./PaymentsSearchBar";
 import PaymentsFilterPanel from "./PaymentsFilterPanel";
 import PaymentCard from "./PaymentCard";
 import type { Role } from "@/generated/prisma";
+import { formatCurrency, formatNumber } from "@/lib/utils";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 // Represents the data structure passed from the server
@@ -112,16 +113,16 @@ export default function PaymentsClient({ initialPayments, role }: Props) {
 
                             <div className="flex items-center gap-3 mb-3 relative z-10">
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.gradient.includes('blue') ? 'bg-blue-100/50 dark:bg-blue-900/30 text-blue-600' :
-                                        card.gradient.includes('emerald') ? 'bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-600' :
-                                            card.gradient.includes('amber') ? 'bg-amber-100/50 dark:bg-amber-900/30 text-amber-600' :
-                                                'bg-red-100/50 dark:bg-red-900/30 text-red-600'
+                                    card.gradient.includes('emerald') ? 'bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-600' :
+                                        card.gradient.includes('amber') ? 'bg-amber-100/50 dark:bg-amber-900/30 text-amber-600' :
+                                            'bg-red-100/50 dark:bg-red-900/30 text-red-600'
                                     }`}>
                                     <card.icon className="h-5 w-5" />
                                 </div>
                                 <div className="text-sm font-semibold text-muted-foreground">{card.label}</div>
                             </div>
                             <div className="text-2xl font-bold text-foreground relative z-10">
-                                ₹{card.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                {formatCurrency(card.value)}
                             </div>
                         </div>
                     ))}
@@ -162,7 +163,7 @@ export default function PaymentsClient({ initialPayments, role }: Props) {
                                     <TableCell className="font-medium text-muted-foreground">
                                         {p.invoiceNumber || <span className="opacity-50">N/A</span>}
                                     </TableCell>
-                                    <TableCell className="font-bold text-foreground text-base">₹{Number(p.amount).toLocaleString()}</TableCell>
+                                    <TableCell className="font-bold text-foreground text-base">{formatCurrency(Number(p.amount))}</TableCell>
                                     <TableCell>
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase border ${getPaymentStatusStyle(p.status)}`}>
                                             {formatStatus(p.status)}

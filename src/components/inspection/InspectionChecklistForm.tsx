@@ -233,11 +233,14 @@ function ChecklistItemCard({
                 className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm bg-white/60 focus:bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 outline-none transition-all resize-none"
             />
 
-            <InspectionPhotoUpload
-                projectId={projectId}
-                mediaIds={response.mediaIds || []}
-                onChange={ids => onUpdate("mediaIds", ids)}
-            />
+            <div className="pt-2 border-t border-slate-100">
+                <div className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Evidence & Attachments</div>
+                <InspectionPhotoUpload
+                    projectId={projectId}
+                    mediaIds={response.mediaIds || []}
+                    onChange={ids => onUpdate("mediaIds", ids)}
+                />
+            </div>
         </div>
     );
 }

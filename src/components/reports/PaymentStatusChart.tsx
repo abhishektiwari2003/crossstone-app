@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, YAxis } from "recharts";
 import { CreditCard } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = {
     total: number;
@@ -28,7 +29,7 @@ export default function PaymentStatusChart({ total, pending }: Props) {
 
             <div className="mb-4">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Contract Value</div>
-                <div className="text-2xl font-bold text-slate-900">₹{total.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-slate-900">{formatCurrency(total)}</div>
             </div>
 
             {total === 0 ? (
@@ -50,7 +51,7 @@ export default function PaymentStatusChart({ total, pending }: Props) {
                             <Tooltip
                                 cursor={{ fill: 'rgba(0,0,0,0.02)' }}
                                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']}
+                                formatter={(value: number) => [formatCurrency(value), 'Amount']}
                             />
                             <Bar
                                 dataKey="value"

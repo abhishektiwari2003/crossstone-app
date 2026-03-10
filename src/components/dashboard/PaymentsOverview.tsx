@@ -3,6 +3,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { formatCurrency } from "@/lib/utils";
 
 export type PaymentsOverviewData = {
     totalPaid: number;
@@ -49,7 +50,7 @@ export default function PaymentsOverview({ data, role }: Props) {
             </div>
 
             {hasData ? (
-                <div className="flex-1 flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-1 flex flex-col items-center gap-6 mt-2">
                     {/* Ring Chart */}
                     <div className="h-[180px] w-[180px] shrink-0 relative">
                         <ResponsiveContainer width="100%" height="100%">
@@ -69,7 +70,7 @@ export default function PaymentsOverview({ data, role }: Props) {
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    formatter={(val: number) => [`₹${val.toLocaleString()}`, ""]}
+                                    formatter={(val: number) => [formatCurrency(val), ""]}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                                 />
                             </PieChart>
@@ -88,21 +89,21 @@ export default function PaymentsOverview({ data, role }: Props) {
                                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
                                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Paid</span>
                             </div>
-                            <span className="text-sm font-bold text-foreground">₹{data.totalPaid.toLocaleString()}</span>
+                            <span className="text-sm font-bold text-foreground">{formatCurrency(data.totalPaid)}</span>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-amber-500" />
                                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Pending</span>
                             </div>
-                            <span className="text-sm font-bold text-foreground">₹{data.totalPending.toLocaleString()}</span>
+                            <span className="text-sm font-bold text-foreground">{formatCurrency(data.totalPending)}</span>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-red-500" />
                                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Overdue</span>
                             </div>
-                            <span className="text-sm font-bold text-red-600">₹{data.totalOverdue.toLocaleString()}</span>
+                            <span className="text-sm font-bold text-red-600">{formatCurrency(data.totalOverdue)}</span>
                         </div>
                     </div>
                 </div>

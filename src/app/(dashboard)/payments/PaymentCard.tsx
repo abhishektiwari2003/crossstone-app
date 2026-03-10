@@ -3,6 +3,7 @@
 import { CreditCard, MoreVertical } from "lucide-react";
 import type { PaymentData } from "./PaymentsClient";
 import { formatStatus, getPaymentStatusStyle } from "./PaymentsClient";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = {
     payment: PaymentData;
@@ -19,21 +20,21 @@ export default function PaymentCard({ payment: p, showMaster }: Props) {
         <div className="p-4 sm:p-5 flex flex-col gap-3 group bg-transparent hover:bg-muted/30 transition-colors">
             {/* Top Row: Amount & Action */}
             <div className="flex items-start justify-between">
-                <div>
-                    <div className="flex items-center gap-2 mb-1">
+                <div className="flex flex-col gap-1.5 min-w-0 pr-2">
+                    <div className="flex items-center flex-wrap gap-2">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase border ${getPaymentStatusStyle(p.status)}`}>
                             {formatStatus(p.status)}
                         </span>
                         {p.category && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 truncate max-w-[120px]">
                                 {p.category}
                             </span>
                         )}
                     </div>
-                    <div className="font-bold text-foreground text-xl flex items-center gap-1.5">
-                        ₹{Number(p.amount).toLocaleString()}
+                    <div className="font-bold text-foreground text-xl flex items-center gap-1.5 flex-wrap">
+                        <span className="truncate">{formatCurrency(Number(p.amount))}</span>
                         {isPaid && (
-                            <span className="flex h-4 w-4 rounded-full bg-emerald-100 items-center justify-center">
+                            <span className="flex shrink-0 h-4 w-4 rounded-full bg-emerald-100 items-center justify-center">
                                 <svg className="h-2.5 w-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
