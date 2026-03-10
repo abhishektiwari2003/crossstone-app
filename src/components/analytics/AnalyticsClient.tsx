@@ -13,6 +13,7 @@ import EngineerActivityHeatmap from "@/components/analytics/EngineerActivityHeat
 import DateRangePicker, { type DateRange } from "@/components/analytics/DateRangePicker";
 import { ListSkeleton } from "@/components/ui/ListSkeleton";
 import Link from "next/link";
+import { formatNumber } from "@/lib/utils";
 
 export default function AnalyticsClient({ sessionRole }: { sessionRole: string }) {
     // Default to Last 6 Months
@@ -113,7 +114,7 @@ export default function AnalyticsClient({ sessionRole }: { sessionRole: string }
                             <KPICard
                                 title="Total Revenue"
                                 valuePrefix="₹"
-                                value={(data.kpis.totalRevenue >= 100000) ? (data.kpis.totalRevenue / 100000).toFixed(1) + "L" : data.kpis.totalRevenue.toLocaleString()}
+                                value={(data.kpis.totalRevenue >= 100000) ? (data.kpis.totalRevenue / 100000).toFixed(1) + "L" : formatNumber(data.kpis.totalRevenue)}
                                 icon={<TrendingUp className="h-6 w-6" />}
                                 trendValue={calculateTrend(data.paymentTrends, 'paid')}
                                 trendLabel="since last month"

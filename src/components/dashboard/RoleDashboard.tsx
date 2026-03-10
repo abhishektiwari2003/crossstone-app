@@ -77,7 +77,7 @@ export default function RoleDashboard({ role, userName, kpis, projects, payments
                 <div className="space-y-6">
                     {/* Section 3: Payments (Hidden for Site Engineers typically, but component handles zero-states) */}
                     {!isEngineer && (
-                        <div className="h-[320px]">
+                        <div className="min-h-[320px] lg:h-[320px] flex flex-col">
                             <PaymentsOverview data={payments} role={role} />
                         </div>
                     )}

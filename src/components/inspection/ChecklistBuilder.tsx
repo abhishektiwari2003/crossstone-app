@@ -107,14 +107,14 @@ export default function ChecklistBuilder({ milestoneId, items }: Props) {
             ) : (
                 <div className="space-y-2">
                     {items.map(item => (
-                        <div key={item.id} className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                                <GripVertical className="h-4 w-4 text-slate-300 cursor-grab shrink-0" />
+                        <div key={item.id} className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 flex flex-col gap-3">
+                            <div className="flex items-start gap-2">
+                                <GripVertical className="h-4 w-4 text-slate-300 cursor-grab shrink-0 mt-1" />
                                 {editingId === item.id ? (
                                     <input
                                         value={editTitle}
                                         onChange={e => setEditTitle(e.target.value)}
-                                        className="flex-1 rounded-lg border border-blue-300 px-2.5 py-1 text-sm focus:ring-2 focus:ring-blue-400/30 outline-none"
+                                        className="flex-1 rounded-lg border border-blue-300 px-2.5 py-1 text-sm focus:ring-2 focus:ring-blue-400/30 outline-none w-full"
                                         autoFocus
                                         onKeyDown={e => {
                                             if (e.key === "Enter") handleUpdateTitle(item.id);
@@ -124,39 +124,41 @@ export default function ChecklistBuilder({ milestoneId, items }: Props) {
                                 ) : (
                                     <button
                                         onClick={() => { setEditingId(item.id); setEditTitle(item.title); }}
-                                        className="text-sm text-slate-800 font-medium truncate text-left hover:text-blue-600 transition-colors"
+                                        className="text-sm text-slate-800 font-medium text-left hover:text-blue-600 transition-colors flex-1"
                                     >
                                         {item.title}
                                     </button>
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-3 sm:gap-4 shrink-0 pl-6 sm:pl-0">
-                                <label className="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
-                                    <Switch
-                                        checked={item.isRequired}
-                                        onCheckedChange={v => handleToggle(item.id, "isRequired", v)}
-                                        disabled={togglingId === item.id}
-                                        className="scale-75"
-                                    />
-                                    <span className="hidden sm:inline">Required</span>
-                                    <span className="sm:hidden">Req</span>
-                                </label>
+                            <div className="flex items-center justify-between pl-6 bg-slate-50/50 p-2 rounded-lg border border-slate-100">
+                                <div className="flex items-center gap-4">
+                                    <label className="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+                                        <Switch
+                                            checked={item.isRequired}
+                                            onCheckedChange={v => handleToggle(item.id, "isRequired", v)}
+                                            disabled={togglingId === item.id}
+                                            className="scale-75"
+                                        />
+                                        <span className="hidden sm:inline">Required</span>
+                                        <span className="sm:hidden">Req</span>
+                                    </label>
 
-                                <label className="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
-                                    <Switch
-                                        checked={item.isPhotoRequired}
-                                        onCheckedChange={v => handleToggle(item.id, "isPhotoRequired", v)}
-                                        disabled={togglingId === item.id}
-                                        className="scale-75"
-                                    />
-                                    <Camera className="h-3.5 w-3.5" />
-                                </label>
+                                    <label className="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+                                        <Switch
+                                            checked={item.isPhotoRequired}
+                                            onCheckedChange={v => handleToggle(item.id, "isPhotoRequired", v)}
+                                            disabled={togglingId === item.id}
+                                            className="scale-75"
+                                        />
+                                        <Camera className="h-3.5 w-3.5" />
+                                    </label>
+                                </div>
 
                                 <button
                                     onClick={() => handleDelete(item.id)}
                                     disabled={deletingId === item.id}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                                    className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all shrink-0"
                                 >
                                     {deletingId === item.id
                                         ? <Loader2 className="h-3.5 w-3.5 animate-spin" />

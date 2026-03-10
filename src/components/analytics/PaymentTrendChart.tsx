@@ -2,6 +2,7 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import type { PaymentSummaryMonthly } from "@/types/analytics";
+import { formatCurrency as globalFormatCurrency } from "@/lib/utils";
 
 const formatCurrency = (value: number) => {
     if (value >= 100000) {
@@ -41,7 +42,7 @@ export default function PaymentTrendChart({ data }: { data: PaymentSummaryMonthl
                         tick={{ fill: "#64748b", fontSize: 12 }}
                     />
                     <Tooltip
-                        formatter={(value: number) => [`₹${value.toLocaleString()}`, "Amount"]}
+                        formatter={(value: number) => [globalFormatCurrency(value), "Amount"]}
                         contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         labelStyle={{ color: '#64748b', fontWeight: 600, marginBottom: '8px' }}
                     />

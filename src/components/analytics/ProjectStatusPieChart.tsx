@@ -31,9 +31,9 @@ export default function ProjectStatusPieChart({ data }: { data: ProjectStatusDis
                     <Pie
                         data={data}
                         cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={90}
+                        cy="45%"
+                        innerRadius={55}
+                        outerRadius={80}
                         paddingAngle={5}
                         dataKey="count"
                         nameKey="status"
@@ -51,10 +51,10 @@ export default function ProjectStatusPieChart({ data }: { data: ProjectStatusDis
                     <Legend
                         formatter={formatStatusName}
                         iconType="circle"
-                        layout="vertical"
-                        verticalAlign="middle"
-                        align="right"
-                        wrapperStyle={{ fontSize: '12px', fontWeight: 500, color: '#64748b' }}
+                        layout="horizontal"
+                        verticalAlign="bottom"
+                        align="center"
+                        wrapperStyle={{ fontSize: '12px', fontWeight: 500, color: '#64748b', paddingTop: '20px' }}
                     />
                 </PieChart>
             </ResponsiveContainer>
