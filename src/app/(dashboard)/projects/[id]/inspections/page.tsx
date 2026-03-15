@@ -27,7 +27,7 @@ export default async function InspectionsPage({ params }: { params: Promise<{ id
 
             {isAdminUser ? (
                 <Tabs defaultValue="manage" className="w-full">
-                    <TabsList className="mb-6 h-12 w-full sm:w-auto p-1 bg-slate-100 rounded-xl justify-start">
+                    <TabsList className="mb-6 h-auto min-h-12 w-full p-1 bg-slate-100 rounded-xl justify-start overflow-x-auto flex-nowrap shrink-0">
                         <TabsTrigger value="manage" className="h-10 px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-orange-600 transition-all font-semibold gap-2">
                             <Settings className="h-4 w-4" />
                             Manage Templates

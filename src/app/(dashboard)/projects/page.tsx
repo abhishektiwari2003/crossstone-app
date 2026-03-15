@@ -48,10 +48,11 @@ export default async function ProjectsPage() {
 				{isAdmin ? (
 					<Link
 						href="/projects/new"
-						className="hidden sm:inline-flex items-center gap-2 rounded-xl gradient-blue px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-110 transition-all shrink-0"
+						className="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl gradient-blue px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-110 transition-all shrink-0"
 					>
-						<Plus className="h-4 w-4" />
-						<span>New Project</span>
+						<Plus className="h-4 w-4 sm:h-4 sm:w-4" />
+						<span className="hidden sm:inline">New Project</span>
+						<span className="sm:hidden">New</span>
 					</Link>
 				) : null}
 			</div>

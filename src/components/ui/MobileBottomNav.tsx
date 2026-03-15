@@ -38,7 +38,7 @@ export default function MobileBottomNav({ role }: Props) {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/60 bg-white/95 backdrop-blur-xl md:hidden pb-safe">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/60 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl md:hidden pb-safe">
             <div className="grid grid-cols-4 text-xs">
                 {links.map((link) => {
                     // Match exact path or subpaths (e.g. /projects/123)
@@ -48,13 +48,13 @@ export default function MobileBottomNav({ role }: Props) {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={`p-3 flex flex-col items-center gap-1.5 transition-colors min-h-[60px] justify-center ${isActive ? "text-blue-600" : "text-slate-500 hover:text-blue-600"
+                            className={`p-3 flex flex-col items-center gap-1.5 transition-colors min-h-[60px] justify-center ${isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                                 }`}
                         >
                             <div className="relative">
                                 <Icon className={`h-5 w-5 transition-transform ${isActive ? "scale-110 stroke-[2.5px]" : "stroke-2"}`} />
                                 {isActive && (
-                                    <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-600" />
+                                    <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-600 dark:bg-blue-400" />
                                 )}
                             </div>
                             <span className={`text-[10px] sm:text-xs tracking-wide ${isActive ? "font-bold" : "font-medium"}`}>
