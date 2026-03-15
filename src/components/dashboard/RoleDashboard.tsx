@@ -42,11 +42,22 @@ export default function RoleDashboard({ role, userName, kpis, projects, payments
             {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-                        {mounted ? greeting() : "Welcome"}, <span className="text-blue-600 dark:text-blue-400">{userName}</span> 👋
+                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight flex items-center gap-2">
+                        {role === "SUPER_ADMIN" ? (
+                            <span className="text-rose-600 dark:text-rose-500">Super Admin</span>
+                        ) : role === "PROJECT_MANAGER" ? (
+                            "Project Manager"
+                        ) : role === "SITE_ENGINEER" ? (
+                            "Engineer"
+                        ) : role === "CLIENT" ? (
+                            "Client"
+                        ) : (
+                            "Admin"
+                        )}{" "}
+                        Overview
                     </h1>
                     <p className="text-sm font-medium text-muted-foreground mt-1.5 flex items-center gap-2">
-                        <span>{mounted ? dateStr : "Loading..."}</span> <span className="hidden sm:inline">·</span> <span className="inline-flex px-2 py-0.5 rounded-md bg-muted text-[10px] uppercase font-bold tracking-wider">{role.replace(/_/g, " ")}</span>
+                        <span>{mounted ? dateStr : "Loading..."}</span> <span className="hidden sm:inline">·</span> <span className="inline-flex px-2 py-0.5 rounded-md bg-muted text-[10px] uppercase font-bold tracking-wider">{userName}</span>
                     </p>
                 </div>
 
