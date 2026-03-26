@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { isAdmin } from "@/lib/authz";
+import { isAdmin, isSuperAdmin } from "@/lib/authz";
 import type { Role } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -56,12 +56,19 @@ export default async function UsersPage() {
 		);
 	}
 	const users = await getUsers();
+	const viewerRole = (session?.user as { role?: Role } | null)?.role;
+	const viewerIsSuperAdmin = isSuperAdmin(viewerRole);
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
 				<div>
 					<h1 className="text-2xl font-bold text-slate-900 tracking-tight">Team Members</h1>
 					<p className="text-sm text-slate-500 mt-0.5">{users?.length ?? 0} total members</p>
+					{!viewerIsSuperAdmin && (
+						<p className="text-xs text-slate-500 mt-2 max-w-xl">
+							Only super admins can open a user to reset their password or delete their account. You can still add new users below.
+						</p>
+					)}
 				</div>
 				<Link
 					href="/users/new"
@@ -72,27 +79,44 @@ export default async function UsersPage() {
 				</Link>
 			</div>
 			<div className="grid gap-3">
-				{users?.length ? users.map((u) => (
-					<Link href={`/users/${u.id}`} key={u.id} className="glass-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 hover-lift group">
-						<div className="flex items-center gap-4 min-w-0">
-							<Avatar className="h-11 w-11 ring-2 ring-white shadow-md">
-								<AvatarFallback className={`bg-gradient-to-br ${getAvatarGradient(u.role)} text-white font-bold text-sm`}>
-									{u.name?.slice(0, 1) || "U"}
-								</AvatarFallback>
-							</Avatar>
-							<div className="min-w-0">
-								<div className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">{u.name}</div>
-								<div className="text-sm text-slate-500 truncate">{u.email}</div>
+				{users?.length ? users.map((u) => {
+					const rowInner = (
+						<>
+							<div className="flex items-center gap-4 min-w-0">
+								<Avatar className="h-11 w-11 ring-2 ring-white shadow-md">
+									<AvatarFallback className={`bg-gradient-to-br ${getAvatarGradient(u.role)} text-white font-bold text-sm`}>
+										{u.name?.slice(0, 1) || "U"}
+									</AvatarFallback>
+								</Avatar>
+								<div className="min-w-0">
+									<div className={`font-semibold text-slate-900 truncate ${viewerIsSuperAdmin ? "group-hover:text-indigo-600 transition-colors" : ""}`}>{u.name}</div>
+									<div className="text-sm text-slate-500 truncate">{u.email}</div>
+								</div>
 							</div>
+							<div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
+								<span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border ${getRoleBadgeStyle(u.role)}`}>
+									{formatRole(u.role)}
+								</span>
+								{viewerIsSuperAdmin ? (
+									<ArrowRight className="h-4 w-4 text-slate-300 opacity-0 sm:group-hover:opacity-100 transition-opacity hidden sm:block" />
+								) : null}
+							</div>
+						</>
+					);
+					const cardClass = "glass-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 group";
+					if (viewerIsSuperAdmin) {
+						return (
+							<Link href={`/users/${u.id}`} key={u.id} className={`${cardClass} hover-lift`}>
+								{rowInner}
+							</Link>
+						);
+					}
+					return (
+						<div key={u.id} className={cardClass}>
+							{rowInner}
 						</div>
-						<div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
-							<span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border ${getRoleBadgeStyle(u.role)}`}>
-								{formatRole(u.role)}
-							</span>
-							<ArrowRight className="h-4 w-4 text-slate-300 opacity-0 sm:group-hover:opacity-100 transition-opacity hidden sm:block" />
-						</div>
-					</Link>
-				)) : (
+					);
+				}) : (
 					<div className="glass-card p-12 text-center">
 						<div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
 							<UsersIcon className="h-8 w-8 text-slate-400" />

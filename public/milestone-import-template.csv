@@ -1,0 +1,4 @@
+milestone_name,milestone_order,checklist_title,checklist_order,is_required,is_photo_required
+Foundation,0,Verify excavation depth,0,true,true
+Foundation,0,Rebar spacing check,1,true,true
+Slab pour,1,Concrete slump test,0,true,false

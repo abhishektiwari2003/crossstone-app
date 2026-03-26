@@ -1,17 +1,17 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { UserProfileResponse } from "@/types/user-profile";
+import type { UserActivityTabsData } from "@/types/user-profile";
 import UserProjectsList from "./UserProjectsList";
 import UserActivityTimeline from "./UserActivityTimeline";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { FolderKanban, Activity } from "lucide-react";
 
 type Props = {
-    profile: UserProfileResponse;
+    data: UserActivityTabsData;
 };
 
-export default function UserActivityTabs({ profile }: Props) {
+export default function UserActivityTabs({ data }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -37,11 +37,11 @@ export default function UserActivityTabs({ profile }: Props) {
             </TabsList>
 
             <TabsContent value="projects" className="mt-6">
-                <UserProjectsList projects={profile.projectsAssigned} />
+                <UserProjectsList projects={data.projectsAssigned} />
             </TabsContent>
 
             <TabsContent value="timeline" className="mt-6">
-                <UserActivityTimeline timeline={profile.activityTimeline} />
+                <UserActivityTimeline timeline={data.activityTimeline} />
             </TabsContent>
         </Tabs>
     );

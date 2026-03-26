@@ -83,29 +83,41 @@ async function main() {
 	// ─── Project 1: Greenfield Villa ───
 	const project1 = await prisma.project.upsert({
 		where: { id: "project-greenfield" },
-		update: {},
+		update: {
+			totalValue: 4_85_00_000,
+			siteLatitude: 12.9716,
+			siteLongitude: 77.5946,
+			geofenceRadiusMeters: 500,
+			siteLabel: "Whitefield demo coordinates",
+		},
 		create: {
 			id: "project-greenfield",
 			name: "Greenfield Villa Construction",
 			description:
 				"Premium 4BHK villa construction at Whitefield, Bangalore. Total area 3200 sq ft with modern amenities, landscaped garden, and rooftop terrace.",
 			status: ProjectStatus.IN_PROGRESS,
+			totalValue: 4_85_00_000,
 			createdById: superAdmin.id,
 			managerId: pm.id,
 			clientId: client.id,
+			siteLatitude: 12.9716,
+			siteLongitude: 77.5946,
+			geofenceRadiusMeters: 500,
+			siteLabel: "Whitefield demo coordinates",
 		},
 	});
 
 	// ─── Project 2: Sunrise Apartments ───
 	const project2 = await prisma.project.upsert({
 		where: { id: "project-sunrise" },
-		update: {},
+		update: { totalValue: 12_40_00_000 },
 		create: {
 			id: "project-sunrise",
 			name: "Sunrise Apartments Phase 2",
 			description:
 				"Residential apartment complex with 48 flats across 6 floors. Located in Koramangala with underground parking and rooftop amenities.",
 			status: ProjectStatus.PLANNED,
+			totalValue: 12_40_00_000,
 			createdById: superAdmin.id,
 			managerId: pm.id,
 			clientId: client.id,

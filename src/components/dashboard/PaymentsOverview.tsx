@@ -34,7 +34,7 @@ export default function PaymentsOverview({ data, role }: Props) {
     const hasData = totalAmount > 0;
 
     return (
-        <div className="glass-card p-6 flex flex-col h-full">
+        <div className="glass-card p-6 flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
@@ -50,7 +50,7 @@ export default function PaymentsOverview({ data, role }: Props) {
             </div>
 
             {hasData ? (
-                <div className="flex-1 flex flex-col items-center gap-6 mt-2">
+                <div className="flex flex-col items-center gap-6 mt-2">
                     {/* Ring Chart */}
                     <div className="h-[180px] w-[180px] shrink-0 relative">
                         <ResponsiveContainer width="100%" height="100%">
@@ -83,7 +83,7 @@ export default function PaymentsOverview({ data, role }: Props) {
                     </div>
 
                     {/* Legend */}
-                    <div className="flex-1 w-full space-y-4">
+                    <div className="w-full space-y-4 shrink-0">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
@@ -108,7 +108,7 @@ export default function PaymentsOverview({ data, role }: Props) {
                     </div>
                 </div>
             ) : (
-                <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
+                <div className="flex flex-col items-center justify-center py-8 text-center">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
                         <CreditCard className="h-6 w-6 text-slate-400" />
                     </div>

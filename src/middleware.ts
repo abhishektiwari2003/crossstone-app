@@ -8,7 +8,9 @@ const securityHeaders = {
 	"X-Content-Type-Options": "nosniff",
 	"Referrer-Policy": "strict-origin-when-cross-origin",
 	"X-XSS-Protection": "1; mode=block",
-	"Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+	// geolocation=(self) allows this origin to use the Geolocation API (site picker, inspections).
+	// geolocation=() blocks it entirely and overrides per-site "Ask" in the browser UI.
+	"Permissions-Policy": "camera=(), microphone=(), geolocation=(self)",
 };
 
 const authMiddleware = withAuth({

@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import type { Role } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { isAdmin } from "@/lib/authz";
+import { canManageProjectRoster, type AppRole } from "@/lib/authz";
 import ProjectDetailTabs from "@/components/ProjectDetailTabs";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, IndianRupee } from "lucide-react";
 import Link from "next/link";
+import { formatCurrency } from "@/lib/utils";
 
 function getStatusStyle(status: string) {
   switch (status) {
@@ -25,6 +26,7 @@ function formatStatus(status: string) {
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   const userRole = (session?.user as { role?: Role } | null)?.role;
+  const userId = (session?.user as { id?: string } | null)?.id;
   const { id } = await params;
   const project = await prisma.project.findUnique({
     where: { id },
@@ -40,8 +42,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const canEditUpdates = userRole === "SUPER_ADMIN" || userRole === "ADMIN" || userRole === "PROJECT_MANAGER" || userRole === "SITE_ENGINEER";
   const canEditPayments = userRole === "SUPER_ADMIN" || userRole === "ADMIN" || userRole === "PROJECT_MANAGER";
-  const canManageMembers = isAdmin(userRole as import("@/lib/authz").AppRole);
+  const canManageMembers =
+    userId && userRole
+      ? await canManageProjectRoster(userId, userRole as AppRole, id)
+      : false;
   const existingMemberUserIds = project.members?.map(m => m.user.id) ?? [];
+  const isSuperAdmin = userRole === "SUPER_ADMIN";
+  const geofenceActive =
+    project.siteLatitude != null &&
+    project.siteLongitude != null &&
+    !Number.isNaN(project.siteLatitude) &&
+    !Number.isNaN(project.siteLongitude);
 
   return (
     <div className="space-y-6">
@@ -53,7 +64,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {/* Hero Header */}
       <div className="rounded-2xl overflow-hidden">
-        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 py-8 relative">
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-6 sm:px-6 sm:py-8 relative">
           {/* Decorative blurs */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" />
           <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-purple-500/8 rounded-full blur-[60px]" />
@@ -70,15 +81,27 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 {formatStatus(project.status)}
               </span>
             </div>
-            <div className="flex items-center gap-4 mt-5 text-sm text-slate-300">
-              <div className="flex items-center gap-1.5">
-                <Calendar className="h-3.5 w-3.5" />
-                Created {project.createdAt.toLocaleDateString()}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-5 text-sm text-slate-300">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Calendar className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">Created {project.createdAt.toLocaleDateString()}</span>
               </div>
+              {project.totalValue != null && (
+                <div className="flex items-center gap-1.5 font-medium text-white tabular-nums">
+                  <IndianRupee className="h-3.5 w-3.5 shrink-0 opacity-90" />
+                  <span>{formatCurrency(project.totalValue)} value</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {!geofenceActive && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50/80 dark:bg-amber-950/20 px-4 py-3 text-sm text-amber-900 dark:text-amber-200">
+          Site location is not set — <strong>geofencing is disabled</strong> for inspection submissions. Super admins can set coordinates in the overview tab.
+        </div>
+      )}
 
       {/* Tabs */}
       <ProjectDetailTabs
@@ -96,6 +119,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         canManageMembers={canManageMembers}
         userRole={(userRole || "CLIENT") as import("@/types/drawings").UserRole}
         existingMemberUserIds={existingMemberUserIds}
+        isSuperAdmin={isSuperAdmin}
+        siteLatitude={project.siteLatitude ?? null}
+        siteLongitude={project.siteLongitude ?? null}
+        geofenceRadiusMeters={project.geofenceRadiusMeters}
+        siteAddress={project.siteAddress ?? null}
+        siteLabel={project.siteLabel ?? null}
+        geofenceActive={geofenceActive}
       />
     </div>
   );

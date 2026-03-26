@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { canViewProject, type AppRole } from "@/lib/authz";
 import { CreateMilestoneSchema } from "@/modules/milestones/validation";
 import { createMilestone, getProjectMilestones } from "@/modules/milestones/service";
 import { getCurrentUser, AuthError } from "@/lib/session";
@@ -6,8 +7,10 @@ import { mutationLimiter, getClientIdentifier } from "@/lib/rateLimit";
 
 export async function GET(_: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
-        await getCurrentUser();
+        const currentUser = await getCurrentUser();
         const { id: projectId } = await context.params;
+        const allowed = await canViewProject(currentUser.id, currentUser.role as AppRole, projectId);
+        if (!allowed) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         const milestones = await getProjectMilestones(projectId);
 
         const response = NextResponse.json({ milestones });

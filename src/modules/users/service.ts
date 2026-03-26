@@ -1,18 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import type { AppRole } from "@/lib/authz";
-import { isAdmin } from "@/lib/authz";
 
 /**
- * Ensures a user can view a requested profile.
- * - Admin, Super Admin, PM can view any.
- * - Site Engineer can only view their own.
- * - Client can only view their own.
+ * User detail (`/users/[id]`) and profile API are restricted to super admins only.
  */
-export function canViewUserProfile(currentUser: { id: string; role: AppRole }, targetUserId: string) {
-    if (isAdmin(currentUser.role) || currentUser.role === "PROJECT_MANAGER") {
-        return true;
-    }
-    return currentUser.id === targetUserId;
+export function canViewUserProfile(currentUser: { id: string; role: AppRole }, _targetUserId: string) {
+    return currentUser.role === "SUPER_ADMIN";
 }
 
 export async function getUserProfileData(userId: string) {
@@ -121,6 +114,15 @@ export async function getUserProfileData(userId: string) {
 
     // We can also inject direct actions if we want heavily detailed timelines, but Audit logs usually capture everything.
 
+    const paymentsPlain = paymentsHandled.map((p) => ({
+        ...p,
+        amount: p.amount.toString(),
+        createdAt: p.createdAt.toISOString(),
+        updatedAt: p.updatedAt.toISOString(),
+        paidAt: p.paidAt?.toISOString() ?? null,
+        dueDate: p.dueDate?.toISOString() ?? null,
+    }));
+
     return {
         user: {
             ...user,
@@ -130,7 +132,7 @@ export async function getUserProfileData(userId: string) {
         inspectionsDone,
         updatesPosted,
         queriesCreated,
-        paymentsHandled,
+        paymentsHandled: paymentsPlain,
         activityTimeline,
         statsSummary,
     };

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { isAdmin, type AppRole } from "@/lib/authz";
+import { isAdmin, canManageProjectRoster, type AppRole } from "@/lib/authz";
 import type { ProjectMemberRole } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
@@ -56,8 +56,8 @@ export async function addMember(
     role: "SITE_ENGINEER" | "PROJECT_MANAGER",
     currentUser: { id: string; role: AppRole }
 ) {
-    // 1. Only admins can add members
-    if (!isAdmin(currentUser.role)) {
+    const canRoster = await canManageProjectRoster(currentUser.id, currentUser.role, projectId);
+    if (!canRoster) {
         return { error: "Forbidden", status: 403 } as const;
     }
 
@@ -137,8 +137,8 @@ export async function removeMember(
     memberId: string,
     currentUser: { id: string; role: AppRole }
 ) {
-    // 1. Only admins can remove members
-    if (!isAdmin(currentUser.role)) {
+    const canRoster = await canManageProjectRoster(currentUser.id, currentUser.role, projectId);
+    if (!canRoster) {
         return { error: "Forbidden", status: 403 } as const;
     }
 

@@ -143,6 +143,11 @@ exports.Prisma.ProjectScalarFieldEnum = {
   createdById: 'createdById',
   managerId: 'managerId',
   clientId: 'clientId',
+  siteLatitude: 'siteLatitude',
+  siteLongitude: 'siteLongitude',
+  geofenceRadiusMeters: 'geofenceRadiusMeters',
+  siteAddress: 'siteAddress',
+  siteLabel: 'siteLabel',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -254,6 +259,8 @@ exports.Prisma.InspectionScalarFieldEnum = {
   milestoneId: 'milestoneId',
   engineerId: 'engineerId',
   reviewedById: 'reviewedById',
+  submittedLatitude: 'submittedLatitude',
+  submittedLongitude: 'submittedLongitude',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

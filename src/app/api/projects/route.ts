@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { canManageProjects } from "@/lib/authz";
+import { canManageProjects, isSuperAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { getProjectsForUser, getPaginatedProjects } from "@/modules/projects/service";
@@ -12,7 +12,12 @@ const CreateProjectSchema = z.object({
 	description: z.string().optional(),
 	managerId: z.string().min(1),
 	clientId: z.string().min(1),
-	totalValue: z.number().positive().optional(),
+	totalValue: z.number().positive(),
+	siteLatitude: z.number().min(-90).max(90).optional().nullable(),
+	siteLongitude: z.number().min(-180).max(180).optional().nullable(),
+	geofenceRadiusMeters: z.number().int().min(10).max(10000).optional(),
+	siteAddress: z.string().max(500).optional().nullable(),
+	siteLabel: z.string().max(200).optional().nullable(),
 });
 
 export async function GET(req: Request) {
@@ -59,7 +64,39 @@ export async function POST(req: Request) {
 		const parsed = CreateProjectSchema.safeParse(body);
 		if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
-		const { name, description, managerId, clientId, totalValue } = parsed.data;
+		const {
+			name,
+			description,
+			managerId,
+			clientId,
+			totalValue,
+			siteLatitude,
+			siteLongitude,
+			geofenceRadiusMeters,
+			siteAddress,
+			siteLabel,
+		} = parsed.data;
+
+		const hasSiteInput =
+			siteLatitude != null ||
+			siteLongitude != null ||
+			geofenceRadiusMeters != null ||
+			(siteAddress != null && siteAddress !== "") ||
+			(siteLabel != null && siteLabel !== "");
+
+		if (hasSiteInput && !isSuperAdmin(currentUser.role)) {
+			return NextResponse.json({ error: "Only super admins can set project site location" }, { status: 403 });
+		}
+
+		if (
+			(siteLatitude != null) !== (siteLongitude != null)
+		) {
+			return NextResponse.json(
+				{ error: "siteLatitude and siteLongitude must both be set or both omitted" },
+				{ status: 400 }
+			);
+		}
+
 		const project = await prisma.project.create({
 			data: {
 				name: sanitizeInput(name),
@@ -68,6 +105,15 @@ export async function POST(req: Request) {
 				clientId,
 				totalValue,
 				createdById: currentUser.id,
+				...(siteLatitude != null && siteLongitude != null
+					? {
+							siteLatitude,
+							siteLongitude,
+							...(geofenceRadiusMeters != null ? { geofenceRadiusMeters } : {}),
+						}
+					: {}),
+				...(siteAddress ? { siteAddress: sanitizeInput(siteAddress) } : {}),
+				...(siteLabel ? { siteLabel: sanitizeInput(siteLabel) } : {}),
 			},
 		});
 		return NextResponse.json({ project }, { status: 201 });

@@ -135,6 +135,12 @@ model Project {
   createdById   String
   managerId     String
   clientId      String
+  /// Site geofence center (set by super admin). When both null, geofencing is disabled.
+  siteLatitude   Float?
+  siteLongitude  Float?
+  geofenceRadiusMeters Int      @default(200)
+  siteAddress    String?
+  siteLabel      String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -342,6 +348,9 @@ model Inspection {
 
   reviewedById String?
   reviewedBy   User? @relation("ReviewedBy", fields: [reviewedById], references: [id])
+
+  submittedLatitude  Float?
+  submittedLongitude Float?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

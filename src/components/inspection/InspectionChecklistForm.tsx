@@ -12,6 +12,8 @@ import type { Milestone, ChecklistItem, ChecklistResult, InspectionResponse } fr
 type Props = {
     projectId: string;
     milestoneId: string;
+    geofenceRequired: boolean;
+    geofenceRadiusMeters?: number;
 };
 
 const resultOptions: { value: ChecklistResult; label: string; icon: typeof CheckCircle2; color: string; bg: string }[] = [
@@ -20,7 +22,7 @@ const resultOptions: { value: ChecklistResult; label: string; icon: typeof Check
     { value: "NA", label: "N/A", icon: MinusCircle, color: "text-slate-500", bg: "bg-slate-50 border-slate-300 hover:bg-slate-100" },
 ];
 
-export default function InspectionChecklistForm({ projectId, milestoneId }: Props) {
+export default function InspectionChecklistForm({ projectId, milestoneId, geofenceRequired, geofenceRadiusMeters }: Props) {
     const [milestone, setMilestone] = useState<Milestone | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -172,6 +174,8 @@ export default function InspectionChecklistForm({ projectId, milestoneId }: Prop
                 milestoneId={milestoneId}
                 responses={buildResponses()}
                 onSuccess={() => { clearDraft(); setSubmitted(true); }}
+                geofenceRequired={geofenceRequired}
+                geofenceRadiusMeters={geofenceRadiusMeters}
             />
         </div>
     );

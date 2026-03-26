@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { isAdmin, type AppRole } from "@/lib/authz";
+import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
+import { haversineMeters } from "@/lib/geo";
 import type { CreateInspectionInput } from "./validation";
 import type { ChecklistResult, InspectionStatus } from "@/generated/prisma";
 import { logAudit } from "@/lib/audit";
@@ -23,20 +24,52 @@ const inspectionDetailInclude = {
     },
 } as const;
 
+async function notifyProjectManagersOfSubmission(projectId: string, milestoneName: string) {
+    const project = await prisma.project.findUnique({
+        where: { id: projectId },
+        select: { managerId: true, members: { where: { role: "PROJECT_MANAGER" }, select: { userId: true } } },
+    });
+    if (!project) return;
+
+    const recipientIds = new Set<string>();
+    for (const m of project.members) recipientIds.add(m.userId);
+    recipientIds.add(project.managerId);
+
+    const message = `An inspection for milestone "${milestoneName}" has been submitted for review.`;
+    const actionUrl = `/projects/${projectId}/inspections`;
+
+    await Promise.all(
+        [...recipientIds].map((userId) =>
+            createNotification({
+                userId,
+                title: "Inspection Submitted",
+                message,
+                type: "INSPECTION_SUBMITTED",
+                priority: "HIGH",
+                actionUrl,
+            })
+        )
+    );
+}
+
 // ─── Create an inspection (with transaction) ───
 export async function createInspection(
     data: CreateInspectionInput,
     currentUser: { id: string; role: AppRole }
 ) {
-    const { projectId, milestoneId, status: requestedStatus, responses } = data;
+    const { projectId, milestoneId, status: requestedStatus, responses, latitude, longitude } = data;
     const targetStatus = requestedStatus || "DRAFT";
 
-    // 1. Verify engineer is a member of the project
+    if (currentUser.role !== "SITE_ENGINEER") {
+        return { error: "Only site engineers can create or submit inspections", status: 403 } as const;
+    }
+
+    // 1. Verify engineer is a site engineer member of the project
     const membership = await prisma.projectMember.findFirst({
-        where: { projectId, userId: currentUser.id },
+        where: { projectId, userId: currentUser.id, role: "SITE_ENGINEER" },
     });
     if (!membership) {
-        return { error: "You are not assigned to this project", status: 403 } as const;
+        return { error: "You are not assigned to this project as a site engineer", status: 403 } as const;
     }
 
     // 2. Verify milestone belongs to the project and is active
@@ -50,6 +83,24 @@ export async function createInspection(
     if (!milestone.isActive) {
         return { error: "Milestone is inactive", status: 400 } as const;
     }
+
+    const project = await prisma.project.findUnique({
+        where: { id: projectId },
+        select: {
+            siteLatitude: true,
+            siteLongitude: true,
+            geofenceRadiusMeters: true,
+        },
+    });
+    if (!project) {
+        return { error: "Project not found", status: 404 } as const;
+    }
+
+    const geofenceActive =
+        project.siteLatitude != null &&
+        project.siteLongitude != null &&
+        !Number.isNaN(project.siteLatitude) &&
+        !Number.isNaN(project.siteLongitude);
 
     // 3. Check for existing SUBMITTED inspection for this milestone+engineer
     if (targetStatus === "SUBMITTED") {
@@ -66,6 +117,27 @@ export async function createInspection(
         const validationError = validateSubmission(milestone.checklistItems, responses);
         if (validationError) {
             return { error: validationError, status: 400 } as const;
+        }
+
+        if (geofenceActive) {
+            if (latitude == null || longitude == null || Number.isNaN(latitude) || Number.isNaN(longitude)) {
+                return {
+                    error: "Location is required to submit: enable GPS or move within range of the project site.",
+                    status: 400,
+                } as const;
+            }
+            const distance = haversineMeters(
+                latitude,
+                longitude,
+                project.siteLatitude!,
+                project.siteLongitude!
+            );
+            if (distance > project.geofenceRadiusMeters) {
+                return {
+                    error: `You must be within ${project.geofenceRadiusMeters}m of the project site to submit (currently ~${Math.round(distance)}m away).`,
+                    status: 400,
+                } as const;
+            }
         }
     }
 
@@ -85,6 +157,11 @@ export async function createInspection(
         }
     }
 
+    const submitCoords =
+        targetStatus === "SUBMITTED" && latitude != null && longitude != null
+            ? { submittedLatitude: latitude, submittedLongitude: longitude }
+            : {};
+
     // 6. Transaction: create inspection + bulk create responses
     const inspection = await prisma.$transaction(async (tx) => {
         const created = await tx.inspection.create({
@@ -93,6 +170,7 @@ export async function createInspection(
                 milestoneId,
                 engineerId: currentUser.id,
                 status: targetStatus as InspectionStatus,
+                ...submitCoords,
             },
         });
 
@@ -133,20 +211,7 @@ export async function createInspection(
     });
 
     if (targetStatus === "SUBMITTED") {
-        const pmMembership = await prisma.projectMember.findFirst({
-            where: { projectId, role: "PROJECT_MANAGER" }
-        });
-
-        if (pmMembership) {
-            await createNotification({
-                userId: pmMembership.userId,
-                title: "Inspection Submitted",
-                message: `An inspection for milestone "${milestone.name}" has been submitted for review.`,
-                type: "INSPECTION_SUBMITTED",
-                priority: "HIGH",
-                actionUrl: `/projects/${projectId}/inspections/${inspection.id}`,
-            });
-        }
+        await notifyProjectManagersOfSubmission(projectId, milestone.name);
     }
 
     return { inspection, status: 201 } as const;
@@ -227,12 +292,11 @@ export async function getProjectInspections(
     return inspections;
 }
 
-// ─── Review an inspection (ADMIN/PM only) ───
+// ─── Review an inspection (ADMIN/PM on project only) ───
 export async function reviewInspection(
     inspectionId: string,
     currentUser: { id: string; role: AppRole }
 ) {
-    // Only Admin or PM can review
     if (!isAdmin(currentUser.role) && currentUser.role !== "PROJECT_MANAGER") {
         return { error: "Forbidden", status: 403 } as const;
     }
@@ -243,6 +307,13 @@ export async function reviewInspection(
 
     if (!inspection) {
         return { error: "Inspection not found", status: 404 } as const;
+    }
+
+    if (currentUser.role === "PROJECT_MANAGER") {
+        const allowed = await canViewProject(currentUser.id, currentUser.role, inspection.projectId);
+        if (!allowed) {
+            return { error: "Forbidden", status: 403 } as const;
+        }
     }
 
     // Can only review SUBMITTED inspections
@@ -334,4 +405,3 @@ export async function getPaginatedProjectInspections(
         nextCursor,
     };
 }
-

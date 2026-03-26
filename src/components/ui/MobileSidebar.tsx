@@ -57,10 +57,10 @@ export default function MobileSidebar({ role }: Props) {
                     <SidebarLink href="/projects" icon={FolderKanban} label="Projects" onClick={() => setOpen(false)} />
 
                     {(role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER") && (
-                        <>
-                            <SidebarLink href="/payments" icon={CreditCard} label="Payments" onClick={() => setOpen(false)} />
-                            <SidebarLink href="/users" icon={Users} label="Users" onClick={() => setOpen(false)} />
-                        </>
+                        <SidebarLink href="/payments" icon={CreditCard} label="Payments" onClick={() => setOpen(false)} />
+                    )}
+                    {(role === "SUPER_ADMIN" || role === "ADMIN") && (
+                        <SidebarLink href="/users" icon={Users} label="Users" onClick={() => setOpen(false)} />
                     )}
 
                     {(role === "SUPER_ADMIN" || role === "ADMIN") && (

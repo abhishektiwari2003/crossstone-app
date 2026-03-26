@@ -4,6 +4,7 @@ import { canManageProjects, type AppRole } from "@/lib/authz";
 import Link from "next/link";
 import { FolderKanban, Plus, ArrowRight, HardHat } from "lucide-react";
 import { getProjectsForUser } from "@/modules/projects/service";
+import { formatCurrency } from "@/lib/utils";
 
 function getStatusStyle(status: string) {
 	switch (status) {
@@ -40,15 +41,15 @@ export default async function ProjectsPage() {
 	return (
 		<div className="space-y-6">
 			{/* Header */}
-			<div className="flex items-center justify-between">
-				<div>
-					<h1 className="text-2xl font-bold text-foreground tracking-tight">Projects</h1>
+			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<div className="min-w-0">
+					<h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">Projects</h1>
 					<p className="text-sm text-muted-foreground mt-0.5">{projects?.length ?? 0} total projects</p>
 				</div>
 				{isAdmin ? (
 					<Link
 						href="/projects/new"
-						className="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl gradient-blue px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-110 transition-all shrink-0"
+						className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl gradient-blue px-3 py-2.5 sm:px-4 sm:py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:brightness-110 transition-all shrink-0 w-full sm:w-auto"
 					>
 						<Plus className="h-4 w-4 sm:h-4 sm:w-4" />
 						<span className="hidden sm:inline">New Project</span>
@@ -70,6 +71,11 @@ export default async function ProjectsPage() {
 									<div className="font-semibold text-foreground text-[15px] sm:text-base truncate leading-tight">{p.name}</div>
 									{p.description && (
 										<div className="text-sm text-muted-foreground truncate mt-1">{p.description}</div>
+									)}
+									{p.totalValue != null && (
+										<div className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-1.5 tabular-nums">
+											{formatCurrency(p.totalValue)} <span className="font-normal text-muted-foreground">project value</span>
+										</div>
 									)}
 								</div>
 							</div>

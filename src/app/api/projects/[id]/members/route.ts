@@ -5,12 +5,17 @@ import type { Role } from "@/generated/prisma";
 import { AddMemberSchema } from "@/modules/projects/validation";
 import { addMember, getProjectMembers } from "@/modules/projects/service";
 import type { AppRole } from "@/lib/authz";
+import { canViewProject } from "@/lib/authz";
 
 export async function GET(_: NextRequest, context: { params: Promise<{ id: string }> }) {
     const session = await getServerSession(authOptions);
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const currentUser = session.user as { id: string; role?: import("@/generated/prisma").Role };
     const { id: projectId } = await context.params;
+    const allowed = await canViewProject(currentUser.id, currentUser.role as AppRole, projectId);
+    if (!allowed) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
     const members = await getProjectMembers(projectId);
     return NextResponse.json({ members });
 }

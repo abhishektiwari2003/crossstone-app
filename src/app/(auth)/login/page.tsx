@@ -3,7 +3,6 @@
 import { signIn } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 
@@ -53,8 +52,8 @@ function LoginInner() {
     }
 
     return (
-        <div className="min-h-dvh flex items-center justify-center px-6 animate-in fade-in duration-500">
-            <div className="w-full max-w-[420px]">
+        <div className="min-h-dvh flex items-center justify-center px-4 sm:px-6 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] animate-in fade-in duration-500">
+            <div className="w-full max-w-[420px] min-w-0">
                 {/* Logo */}
                 <div className="flex items-center justify-center gap-3 mb-10">
                     <div className="flex items-center h-12 w-36 relative">
@@ -63,7 +62,7 @@ function LoginInner() {
                 </div>
 
                 {/* Card */}
-                <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 shadow-2xl shadow-black/20">
+                <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 sm:p-8 shadow-2xl shadow-black/20">
                     <div className="mb-7">
                         <h2 className="text-[22px] font-bold text-white tracking-tight">Welcome back</h2>
                         <p className="text-sm text-slate-400 mt-1.5">Sign in to your account to continue</p>
@@ -84,12 +83,7 @@ function LoginInner() {
                         </div>
 
                         <div>
-                            <div className="flex items-center justify-between mb-1.5">
-                                <label htmlFor="password" className="block text-sm font-medium text-slate-300">Password</label>
-                                <button type="button" className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors">
-                                    Forgot password?
-                                </button>
-                            </div>
+                            <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
                             <div className="relative">
                                 <input
                                     id="password"
@@ -148,13 +142,6 @@ function LoginInner() {
                             )}
                         </button>
                     </form>
-
-                    <p className="text-center text-sm text-slate-500 mt-6">
-                        Don&apos;t have an account?{" "}
-                        <Link href="/signup" className="text-blue-400 font-medium hover:text-blue-300 transition-colors">
-                            Create account
-                        </Link>
-                    </p>
                 </div>
 
                 <p className="text-center text-xs text-slate-600 mt-8">

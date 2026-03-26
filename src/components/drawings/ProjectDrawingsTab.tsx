@@ -7,7 +7,7 @@ import DrawingUploadForm from "@/components/drawings/DrawingUploadForm";
 import DrawingCard from "@/components/drawings/DrawingCard";
 import DrawingApprovalButton from "@/components/drawings/DrawingApprovalButton";
 import type { Drawing, UserRole } from "@/types/drawings";
-import { getDrawingStatus, canApproveDrawing } from "@/types/drawings";
+import { getDrawingStatus, canApproveDrawing, canUploadDrawing } from "@/types/drawings";
 
 type Props = {
     projectId: string;
@@ -21,6 +21,7 @@ export default function ProjectDrawingsTab({ projectId, userRole }: Props) {
     const [view, setView] = useState<"grid" | "versions">("grid");
 
     const isAdmin = canApproveDrawing(userRole);
+    const showUpload = canUploadDrawing(userRole);
 
     const fetchDrawings = useCallback(async () => {
         setLoading(true);
@@ -58,7 +59,7 @@ export default function ProjectDrawingsTab({ projectId, userRole }: Props) {
     if (loading) {
         return (
             <div className="space-y-4">
-                {isAdmin && (
+                {showUpload && (
                     <div className="glass-card p-6 space-y-4">
                         <div className="h-5 w-36 rounded shimmer" />
                         <div className="h-32 rounded-xl shimmer" />
@@ -93,7 +94,7 @@ export default function ProjectDrawingsTab({ projectId, userRole }: Props) {
     return (
         <div className="space-y-6">
             {/* Admin upload form */}
-            {isAdmin && <DrawingUploadForm projectId={projectId} onSuccess={fetchDrawings} />}
+            {showUpload && <DrawingUploadForm projectId={projectId} onSuccess={fetchDrawings} />}
 
             {/* View toggle + count */}
             {drawings.length > 0 && (
@@ -129,7 +130,7 @@ export default function ProjectDrawingsTab({ projectId, userRole }: Props) {
                     </div>
                     <h3 className="text-base font-semibold text-slate-900 mb-1">No drawings uploaded yet</h3>
                     <p className="text-sm text-slate-500">
-                        {isAdmin ? "Upload drawings to share with the project team." : "No drawings have been uploaded for this project yet."}
+                        {showUpload ? "Upload drawings to share with the project team." : "No drawings have been uploaded for this project yet."}
                     </p>
                 </div>
             )}

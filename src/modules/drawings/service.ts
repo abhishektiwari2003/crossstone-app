@@ -1,15 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { type AppRole, canViewProject, isAdmin } from "@/lib/authz";
+import { type AppRole, canViewProject, canUploadProjectDrawings, isAdmin } from "@/lib/authz";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
 
-// ─── Create a drawing (ADMIN only) ───
+// ─── Create a drawing (admin or PM on project) ───
 export async function createDrawing(
     projectId: string,
     data: { url: string; version: number },
     currentUser: { id: string; role: AppRole }
 ) {
-    if (!isAdmin(currentUser.role)) {
+    const allowed = await canUploadProjectDrawings(currentUser.id, currentUser.role, projectId);
+    if (!allowed) {
         return { error: "Forbidden", status: 403 } as const;
     }
 

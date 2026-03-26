@@ -18,7 +18,7 @@ type Props = {
 export default function RecentActivityTimeline({ activities }: Props) {
     if (!activities || activities.length === 0) {
         return (
-            <div className="glass-card p-6 flex flex-col h-full bg-slate-50/50 dark:bg-slate-900/10">
+            <div className="glass-card p-6 flex flex-col bg-slate-50/50 dark:bg-slate-900/10">
                 <h2 className="text-lg font-bold text-foreground mb-6">Recent Activity</h2>
                 <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
                     <Clock className="h-8 w-8 text-muted-foreground mb-3" />
@@ -30,7 +30,7 @@ export default function RecentActivityTimeline({ activities }: Props) {
     }
 
     return (
-        <div className="glass-card p-6 flex flex-col h-full">
+        <div className="glass-card p-6 flex flex-col">
             <h2 className="text-lg font-bold text-foreground mb-6">Recent Activity</h2>
 
             <div className="relative pl-3 space-y-6 before:absolute before:inset-y-0 before:left-[21px] before:w-[2px] before:bg-slate-100 dark:before:bg-slate-800">

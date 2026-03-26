@@ -41,8 +41,11 @@ export type UserProfileResponse = {
     statsSummary: UserProfileStats;
     activityTimeline: UserProfileTimelineItem[];
     projectsAssigned: UserProfileProjectAssigned[];
-    inspectionsDone: any[];
-    updatesPosted: any[];
-    queriesCreated: any[];
-    paymentsHandled: any[];
+    inspectionsDone: unknown[];
+    updatesPosted: unknown[];
+    queriesCreated: unknown[];
+    paymentsHandled: unknown[];
 };
+
+/** Serializable subset passed from Server Components to `UserActivityTabs` (no Prisma Decimal, etc.). */
+export type UserActivityTabsData = Pick<UserProfileResponse, "projectsAssigned" | "activityTimeline">;

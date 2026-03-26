@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Plus, Loader2, ClipboardList, Milestone as MilestoneIcon } from "lucide-react";
+import { Plus, Loader2, ClipboardList, Milestone as MilestoneIcon, Upload, Download } from "lucide-react";
 import MilestoneCard from "@/components/inspection/MilestoneCard";
 import type { Milestone } from "@/types/inspections";
 
@@ -19,6 +19,7 @@ export default function ProjectMilestonesManager({ projectId }: Props) {
     const [newName, setNewName] = useState("");
     const [adding, setAdding] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
+    const [importing, setImporting] = useState(false);
 
     const fetchMilestones = useCallback(async () => {
         setLoading(true);
@@ -37,6 +38,37 @@ export default function ProjectMilestonesManager({ projectId }: Props) {
     }, [projectId]);
 
     useEffect(() => { fetchMilestones(); }, [fetchMilestones]);
+
+    async function handleCsvImport(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        e.target.value = "";
+        if (!file) return;
+        setImporting(true);
+        try {
+            const fd = new FormData();
+            fd.append("file", file);
+            const res = await fetch(`/api/projects/${projectId}/milestones/import`, {
+                method: "POST",
+                body: fd,
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || "Import failed");
+            const errCount = (data.errors || []).length;
+            toast.success(
+                `Imported ${data.milestonesCreated ?? 0} milestone(s), ${data.checklistItemsCreated ?? 0} checklist row(s)` +
+                    (errCount ? ` (${errCount} row warnings)` : "")
+            );
+            if (errCount && data.errors?.length) {
+                console.warn("CSV import row errors", data.errors);
+            }
+            router.refresh();
+            fetchMilestones();
+        } catch (err: unknown) {
+            toast.error((err as Error).message);
+        } finally {
+            setImporting(false);
+        }
+    }
 
     async function handleCreate() {
         if (!newName.trim()) return;
@@ -91,20 +123,36 @@ export default function ProjectMilestonesManager({ projectId }: Props) {
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                     <MilestoneIcon className="h-5 w-5 text-orange-600" />
                     <h2 className="text-lg font-semibold text-slate-900">Milestones</h2>
                     <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{milestones.length}</span>
                 </div>
-                <button
-                    onClick={() => setShowAdd(!showAdd)}
-                    className="rounded-xl gradient-orange border-0 text-white font-semibold gap-1.5 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:brightness-110 transition-all inline-flex items-center px-4 py-2.5 text-sm"
-                >
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Add Milestone</span>
-                    <span className="sm:hidden">Add</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                    <a
+                        href="/milestone-import-template.csv"
+                        download
+                        className="rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold inline-flex items-center gap-1.5 px-3 py-2 text-sm hover:bg-slate-50"
+                    >
+                        <Download className="h-4 w-4" />
+                        Template
+                    </a>
+                    <label className="rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold inline-flex items-center gap-1.5 px-3 py-2 text-sm hover:bg-slate-50 cursor-pointer">
+                        {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                        Import CSV
+                        <input type="file" accept=".csv,text/csv" className="hidden" onChange={handleCsvImport} disabled={importing} />
+                    </label>
+                    <button
+                        type="button"
+                        onClick={() => setShowAdd(!showAdd)}
+                        className="rounded-xl gradient-orange border-0 text-white font-semibold gap-1.5 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:brightness-110 transition-all inline-flex items-center px-4 py-2.5 text-sm"
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span className="hidden sm:inline">Add Milestone</span>
+                        <span className="sm:hidden">Add</span>
+                    </button>
+                </div>
             </div>
 
             {showAdd && (

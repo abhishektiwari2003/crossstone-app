@@ -11,6 +11,7 @@ import ProjectDrawingsTab from "@/components/drawings/ProjectDrawingsTab";
 import ProjectServicesMenu from "@/components/ProjectServicesMenu";
 import ProjectQuarriesTab from "@/components/queries/ProjectQuarriesTab";
 import ProjectContactsTab from "@/components/projects/ProjectContactsTab";
+import ProjectSiteLocationForm from "@/components/projects/ProjectSiteLocationForm";
 import ProjectActivityTab from "@/components/audit/ProjectActivityTab";
 import ProjectPaymentsTab from "@/components/payments/ProjectPaymentsTab";
 import ProjectMaterialsTab from "@/components/materials/ProjectMaterialsTab";
@@ -50,6 +51,13 @@ type Props = {
 	canManageMembers: boolean;
 	userRole: UserRole;
 	existingMemberUserIds?: string[];
+	isSuperAdmin: boolean;
+	siteLatitude: number | null;
+	siteLongitude: number | null;
+	geofenceRadiusMeters: number;
+	siteAddress: string | null;
+	siteLabel: string | null;
+	geofenceActive: boolean;
 };
 
 function getPaymentStatusStyle(status: string) {
@@ -93,7 +101,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<TabsTrigger value="drawings" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Design & Documents</TabsTrigger>
 				<TabsTrigger value="quarries" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Quarries & Issues</TabsTrigger>
 				<TabsTrigger value="contacts" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium">Contacts</TabsTrigger>
-				{(props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
+				{(props.userRole === "SUPER_ADMIN" || props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
 					<TabsTrigger value="activity" className="flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-2.5 min-h-[44px] text-sm font-medium border border-indigo-100 text-indigo-700 data-[state=active]:border-indigo-200">Activity</TabsTrigger>
 				)}
 			</TabsList>
@@ -139,11 +147,34 @@ export default function ProjectDetailTabs(props: Props) {
 							<p className="text-sm text-muted-foreground leading-relaxed">{props.description}</p>
 						</div>
 					)}
+					{props.geofenceActive && (
+						<div className="glass-card p-5 text-sm text-muted-foreground">
+							<h3 className="text-sm font-semibold text-foreground mb-2">Site geofence</h3>
+							<p>
+								Active — engineers must be within <strong>{props.geofenceRadiusMeters}m</strong> of the site to submit inspections.
+							</p>
+							{props.siteLabel && <p className="mt-1 font-medium text-foreground">{props.siteLabel}</p>}
+							{props.siteAddress && <p className="mt-1">{props.siteAddress}</p>}
+							<p className="mt-1 text-xs font-mono">
+								{props.siteLatitude?.toFixed(6)}, {props.siteLongitude?.toFixed(6)}
+							</p>
+						</div>
+					)}
+					{props.isSuperAdmin && (
+						<ProjectSiteLocationForm
+							projectId={props.projectId}
+							initialLatitude={props.siteLatitude}
+							initialLongitude={props.siteLongitude}
+							initialRadius={props.geofenceRadiusMeters}
+							initialAddress={props.siteAddress}
+							initialLabel={props.siteLabel}
+						/>
+					)}
 				</div>
 			</TabsContent>
 
 			{/* ─── Activity Tab (Admin & PM only) ─── */}
-			{(props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
+			{(props.userRole === "SUPER_ADMIN" || props.userRole === "ADMIN" || props.userRole === "PROJECT_MANAGER") && (
 				<TabsContent value="activity" className="space-y-4 mt-6">
 					<ProjectActivityTab projectId={props.projectId} />
 				</TabsContent>
@@ -197,7 +228,7 @@ export default function ProjectDetailTabs(props: Props) {
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
 						<HardHat className="h-5 w-5 text-amber-600" />
-						<h2 className="text-lg font-semibold text-foreground">Assigned Engineers</h2>
+						<h2 className="text-lg font-semibold text-foreground">Project team</h2>
 					</div>
 					{props.canManageMembers && (
 						<ProjectEngineerSelector

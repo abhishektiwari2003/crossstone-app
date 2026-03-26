@@ -34,6 +34,10 @@ export function canApproveDrawing(role: UserRole): boolean {
     return role === "SUPER_ADMIN" || role === "ADMIN";
 }
 
+export function canUploadDrawing(role: UserRole): boolean {
+    return role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER";
+}
+
 export function canDeleteDrawing(role: UserRole, drawing: Drawing): boolean {
     if (role === "SUPER_ADMIN") return true;
     if (role === "ADMIN" && !drawing.approvedAt) return true;

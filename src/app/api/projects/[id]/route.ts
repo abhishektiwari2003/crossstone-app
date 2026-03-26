@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { canManageProjects, canViewProject, type AppRole } from "@/lib/authz";
+import { canManageProjects, canViewProject, isSuperAdmin, type AppRole } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma_new";
 import { z } from "zod";
 import { getCurrentUser, AuthError } from "@/lib/session";
 import { sanitizeInput } from "@/lib/sanitize";
@@ -13,6 +14,11 @@ const UpdateSchema = z.object({
 	managerId: z.string().optional(),
 	clientId: z.string().optional(),
 	totalValue: z.number().positive().optional().nullable(),
+	siteLatitude: z.number().min(-90).max(90).optional().nullable(),
+	siteLongitude: z.number().min(-180).max(180).optional().nullable(),
+	geofenceRadiusMeters: z.number().int().min(10).max(10000).optional().nullable(),
+	siteAddress: z.string().max(500).optional().nullable(),
+	siteLabel: z.string().max(200).optional().nullable(),
 });
 
 export async function GET(_: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -66,12 +72,39 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
 		const { id } = await context.params;
 
-		// Sanitize string fields
 		const data = { ...parsed.data };
 		if (data.name) data.name = sanitizeInput(data.name);
 		if (data.description) data.description = sanitizeInput(data.description);
+		if (data.siteAddress) data.siteAddress = sanitizeInput(data.siteAddress);
+		if (data.siteLabel) data.siteLabel = sanitizeInput(data.siteLabel);
 
-		const project = await prisma.project.update({ where: { id }, data });
+		const siteKeys = [
+			"siteLatitude",
+			"siteLongitude",
+			"geofenceRadiusMeters",
+			"siteAddress",
+			"siteLabel",
+		] as const;
+		const touchesSite = siteKeys.some((k) => k in parsed.data && parsed.data[k] !== undefined);
+		if (touchesSite && !isSuperAdmin(currentUser.role)) {
+			return NextResponse.json({ error: "Only super admins can update project site location" }, { status: 403 });
+		}
+
+		if (
+			(data.siteLatitude != null && data.siteLongitude == null) ||
+			(data.siteLongitude != null && data.siteLatitude == null)
+		) {
+			return NextResponse.json(
+				{ error: "siteLatitude and siteLongitude must both be set or both null" },
+				{ status: 400 }
+			);
+		}
+
+		const updatePayload = Object.fromEntries(
+			Object.entries(data).filter(([, v]) => v !== undefined)
+		) as Prisma.ProjectUpdateInput;
+
+		const project = await prisma.project.update({ where: { id }, data: updatePayload });
 		return NextResponse.json({ project });
 	} catch (error) {
 		if (error instanceof AuthError) {

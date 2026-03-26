@@ -14,12 +14,18 @@ export default function MobileBottomNav({ role }: Props) {
 
     let links = [];
 
-    if (role === "SUPER_ADMIN" || role === "ADMIN" || role === "PROJECT_MANAGER") {
+    if (role === "SUPER_ADMIN" || role === "ADMIN") {
         links = [
             { href: "/dashboard", label: "Home", icon: Home },
             { href: "/projects", label: "Projects", icon: FolderKanban },
             { href: "/payments", label: "Payments", icon: CreditCard },
             { href: "/users", label: "Users", icon: Users },
+        ];
+    } else if (role === "PROJECT_MANAGER") {
+        links = [
+            { href: "/dashboard", label: "Home", icon: Home },
+            { href: "/projects", label: "Projects", icon: FolderKanban },
+            { href: "/payments", label: "Payments", icon: CreditCard },
         ];
     } else if (role === "SITE_ENGINEER") {
         links = [
@@ -39,7 +45,7 @@ export default function MobileBottomNav({ role }: Props) {
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/60 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl md:hidden pb-safe">
-            <div className="grid grid-cols-4 text-xs">
+            <div className={`grid text-xs ${links.length === 3 ? "grid-cols-3" : "grid-cols-4"}`}>
                 {links.map((link) => {
                     // Match exact path or subpaths (e.g. /projects/123)
                     const isActive = pathname === link.href || (link.href !== "/dashboard" && pathname.startsWith(link.href + "/"));

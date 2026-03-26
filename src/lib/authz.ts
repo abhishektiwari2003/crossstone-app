@@ -19,6 +19,10 @@ export function isAdmin(role?: AppRole | null) {
   return role === Role.SUPER_ADMIN || role === Role.ADMIN;
 }
 
+export function isSuperAdmin(role?: AppRole | null) {
+  return role === Role.SUPER_ADMIN;
+}
+
 export function canManageUsers(role?: AppRole | null) {
   return isAdmin(role);
 }
@@ -82,6 +86,61 @@ export async function canViewProject(
   }
 
   return false;
+}
+
+/** True if user is primary manager or PM project member (used for milestone/drawing management). */
+export async function isProjectManagerOnProject(
+  userId: string,
+  projectId: string
+): Promise<boolean> {
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { managerId: true },
+  });
+  if (project?.managerId === userId) return true;
+  const membership = await prisma.projectMember.findFirst({
+    where: { projectId, userId, role: "PROJECT_MANAGER" },
+  });
+  return !!membership;
+}
+
+/** Admins or project managers (primary or member) assigned to this project. */
+export async function canManageProjectMilestones(
+  userId: string,
+  role: AppRole,
+  projectId: string
+): Promise<boolean> {
+  if (isAdmin(role)) return true;
+  if (role !== "PROJECT_MANAGER") return false;
+  return isProjectManagerOnProject(userId, projectId);
+}
+
+/** Same scope as milestones: admins + PMs on the project. */
+export async function canUploadProjectDrawings(
+  userId: string,
+  role: AppRole,
+  projectId: string
+): Promise<boolean> {
+  return canManageProjectMilestones(userId, role, projectId);
+}
+
+export async function isSiteEngineerOnProject(
+  userId: string,
+  projectId: string
+): Promise<boolean> {
+  const membership = await prisma.projectMember.findFirst({
+    where: { projectId, userId, role: "SITE_ENGINEER" },
+  });
+  return !!membership;
+}
+
+/** PM on project or admin: may add/remove project members (roster). */
+export async function canManageProjectRoster(
+  userId: string,
+  role: AppRole,
+  projectId: string
+): Promise<boolean> {
+  return canManageProjectMilestones(userId, role, projectId);
 }
 
 /**

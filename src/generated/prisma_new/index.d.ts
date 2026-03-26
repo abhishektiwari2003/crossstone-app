@@ -4515,10 +4515,16 @@ export namespace Prisma {
 
   export type ProjectAvgAggregateOutputType = {
     totalValue: number | null
+    siteLatitude: number | null
+    siteLongitude: number | null
+    geofenceRadiusMeters: number | null
   }
 
   export type ProjectSumAggregateOutputType = {
     totalValue: number | null
+    siteLatitude: number | null
+    siteLongitude: number | null
+    geofenceRadiusMeters: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -4531,6 +4537,11 @@ export namespace Prisma {
     createdById: string | null
     managerId: string | null
     clientId: string | null
+    siteLatitude: number | null
+    siteLongitude: number | null
+    geofenceRadiusMeters: number | null
+    siteAddress: string | null
+    siteLabel: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4545,6 +4556,11 @@ export namespace Prisma {
     createdById: string | null
     managerId: string | null
     clientId: string | null
+    siteLatitude: number | null
+    siteLongitude: number | null
+    geofenceRadiusMeters: number | null
+    siteAddress: string | null
+    siteLabel: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4559,6 +4575,11 @@ export namespace Prisma {
     createdById: number
     managerId: number
     clientId: number
+    siteLatitude: number
+    siteLongitude: number
+    geofenceRadiusMeters: number
+    siteAddress: number
+    siteLabel: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4567,10 +4588,16 @@ export namespace Prisma {
 
   export type ProjectAvgAggregateInputType = {
     totalValue?: true
+    siteLatitude?: true
+    siteLongitude?: true
+    geofenceRadiusMeters?: true
   }
 
   export type ProjectSumAggregateInputType = {
     totalValue?: true
+    siteLatitude?: true
+    siteLongitude?: true
+    geofenceRadiusMeters?: true
   }
 
   export type ProjectMinAggregateInputType = {
@@ -4583,6 +4610,11 @@ export namespace Prisma {
     createdById?: true
     managerId?: true
     clientId?: true
+    siteLatitude?: true
+    siteLongitude?: true
+    geofenceRadiusMeters?: true
+    siteAddress?: true
+    siteLabel?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4597,6 +4629,11 @@ export namespace Prisma {
     createdById?: true
     managerId?: true
     clientId?: true
+    siteLatitude?: true
+    siteLongitude?: true
+    geofenceRadiusMeters?: true
+    siteAddress?: true
+    siteLabel?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4611,6 +4648,11 @@ export namespace Prisma {
     createdById?: true
     managerId?: true
     clientId?: true
+    siteLatitude?: true
+    siteLongitude?: true
+    geofenceRadiusMeters?: true
+    siteAddress?: true
+    siteLabel?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4712,6 +4754,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude: number | null
+    siteLongitude: number | null
+    geofenceRadiusMeters: number
+    siteAddress: string | null
+    siteLabel: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProjectCountAggregateOutputType | null
@@ -4745,6 +4792,11 @@ export namespace Prisma {
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
+    siteLatitude?: boolean
+    siteLongitude?: boolean
+    geofenceRadiusMeters?: boolean
+    siteAddress?: boolean
+    siteLabel?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -4772,6 +4824,11 @@ export namespace Prisma {
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
+    siteLatitude?: boolean
+    siteLongitude?: boolean
+    geofenceRadiusMeters?: boolean
+    siteAddress?: boolean
+    siteLabel?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -4789,6 +4846,11 @@ export namespace Prisma {
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
+    siteLatitude?: boolean
+    siteLongitude?: boolean
+    geofenceRadiusMeters?: boolean
+    siteAddress?: boolean
+    siteLabel?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -4806,11 +4868,16 @@ export namespace Prisma {
     createdById?: boolean
     managerId?: boolean
     clientId?: boolean
+    siteLatitude?: boolean
+    siteLongitude?: boolean
+    geofenceRadiusMeters?: boolean
+    siteAddress?: boolean
+    siteLabel?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "isArchived" | "totalValue" | "createdById" | "managerId" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "status" | "isArchived" | "totalValue" | "createdById" | "managerId" | "clientId" | "siteLatitude" | "siteLongitude" | "geofenceRadiusMeters" | "siteAddress" | "siteLabel" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     manager?: boolean | UserDefaultArgs<ExtArgs>
@@ -4863,6 +4930,14 @@ export namespace Prisma {
       createdById: string
       managerId: string
       clientId: string
+      /**
+       * Site geofence center (set by super admin). When both null, geofencing is disabled.
+       */
+      siteLatitude: number | null
+      siteLongitude: number | null
+      geofenceRadiusMeters: number
+      siteAddress: string | null
+      siteLabel: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["project"]>
@@ -5309,6 +5384,11 @@ export namespace Prisma {
     readonly createdById: FieldRef<"Project", 'String'>
     readonly managerId: FieldRef<"Project", 'String'>
     readonly clientId: FieldRef<"Project", 'String'>
+    readonly siteLatitude: FieldRef<"Project", 'Float'>
+    readonly siteLongitude: FieldRef<"Project", 'Float'>
+    readonly geofenceRadiusMeters: FieldRef<"Project", 'Int'>
+    readonly siteAddress: FieldRef<"Project", 'String'>
+    readonly siteLabel: FieldRef<"Project", 'String'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
   }
@@ -15337,8 +15417,20 @@ export namespace Prisma {
 
   export type AggregateInspection = {
     _count: InspectionCountAggregateOutputType | null
+    _avg: InspectionAvgAggregateOutputType | null
+    _sum: InspectionSumAggregateOutputType | null
     _min: InspectionMinAggregateOutputType | null
     _max: InspectionMaxAggregateOutputType | null
+  }
+
+  export type InspectionAvgAggregateOutputType = {
+    submittedLatitude: number | null
+    submittedLongitude: number | null
+  }
+
+  export type InspectionSumAggregateOutputType = {
+    submittedLatitude: number | null
+    submittedLongitude: number | null
   }
 
   export type InspectionMinAggregateOutputType = {
@@ -15348,6 +15440,8 @@ export namespace Prisma {
     milestoneId: string | null
     engineerId: string | null
     reviewedById: string | null
+    submittedLatitude: number | null
+    submittedLongitude: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15359,6 +15453,8 @@ export namespace Prisma {
     milestoneId: string | null
     engineerId: string | null
     reviewedById: string | null
+    submittedLatitude: number | null
+    submittedLongitude: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15370,11 +15466,23 @@ export namespace Prisma {
     milestoneId: number
     engineerId: number
     reviewedById: number
+    submittedLatitude: number
+    submittedLongitude: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type InspectionAvgAggregateInputType = {
+    submittedLatitude?: true
+    submittedLongitude?: true
+  }
+
+  export type InspectionSumAggregateInputType = {
+    submittedLatitude?: true
+    submittedLongitude?: true
+  }
 
   export type InspectionMinAggregateInputType = {
     id?: true
@@ -15383,6 +15491,8 @@ export namespace Prisma {
     milestoneId?: true
     engineerId?: true
     reviewedById?: true
+    submittedLatitude?: true
+    submittedLongitude?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15394,6 +15504,8 @@ export namespace Prisma {
     milestoneId?: true
     engineerId?: true
     reviewedById?: true
+    submittedLatitude?: true
+    submittedLongitude?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15405,6 +15517,8 @@ export namespace Prisma {
     milestoneId?: true
     engineerId?: true
     reviewedById?: true
+    submittedLatitude?: true
+    submittedLongitude?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15448,6 +15562,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: InspectionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InspectionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: InspectionMinAggregateInputType
@@ -15478,6 +15604,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: InspectionCountAggregateInputType | true
+    _avg?: InspectionAvgAggregateInputType
+    _sum?: InspectionSumAggregateInputType
     _min?: InspectionMinAggregateInputType
     _max?: InspectionMaxAggregateInputType
   }
@@ -15489,9 +15617,13 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById: string | null
+    submittedLatitude: number | null
+    submittedLongitude: number | null
     createdAt: Date
     updatedAt: Date
     _count: InspectionCountAggregateOutputType | null
+    _avg: InspectionAvgAggregateOutputType | null
+    _sum: InspectionSumAggregateOutputType | null
     _min: InspectionMinAggregateOutputType | null
     _max: InspectionMaxAggregateOutputType | null
   }
@@ -15517,6 +15649,8 @@ export namespace Prisma {
     milestoneId?: boolean
     engineerId?: boolean
     reviewedById?: boolean
+    submittedLatitude?: boolean
+    submittedLongitude?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -15534,6 +15668,8 @@ export namespace Prisma {
     milestoneId?: boolean
     engineerId?: boolean
     reviewedById?: boolean
+    submittedLatitude?: boolean
+    submittedLongitude?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -15549,6 +15685,8 @@ export namespace Prisma {
     milestoneId?: boolean
     engineerId?: boolean
     reviewedById?: boolean
+    submittedLatitude?: boolean
+    submittedLongitude?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -15564,11 +15702,13 @@ export namespace Prisma {
     milestoneId?: boolean
     engineerId?: boolean
     reviewedById?: boolean
+    submittedLatitude?: boolean
+    submittedLongitude?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InspectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "projectId" | "milestoneId" | "engineerId" | "reviewedById" | "createdAt" | "updatedAt", ExtArgs["result"]["inspection"]>
+  export type InspectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "projectId" | "milestoneId" | "engineerId" | "reviewedById" | "submittedLatitude" | "submittedLongitude" | "createdAt" | "updatedAt", ExtArgs["result"]["inspection"]>
   export type InspectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     milestone?: boolean | MilestoneDefaultArgs<ExtArgs>
@@ -15606,6 +15746,8 @@ export namespace Prisma {
       milestoneId: string
       engineerId: string
       reviewedById: string | null
+      submittedLatitude: number | null
+      submittedLongitude: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["inspection"]>
@@ -16042,6 +16184,8 @@ export namespace Prisma {
     readonly milestoneId: FieldRef<"Inspection", 'String'>
     readonly engineerId: FieldRef<"Inspection", 'String'>
     readonly reviewedById: FieldRef<"Inspection", 'String'>
+    readonly submittedLatitude: FieldRef<"Inspection", 'Float'>
+    readonly submittedLongitude: FieldRef<"Inspection", 'Float'>
     readonly createdAt: FieldRef<"Inspection", 'DateTime'>
     readonly updatedAt: FieldRef<"Inspection", 'DateTime'>
   }
@@ -22238,6 +22382,11 @@ export namespace Prisma {
     createdById: 'createdById',
     managerId: 'managerId',
     clientId: 'clientId',
+    siteLatitude: 'siteLatitude',
+    siteLongitude: 'siteLongitude',
+    geofenceRadiusMeters: 'geofenceRadiusMeters',
+    siteAddress: 'siteAddress',
+    siteLabel: 'siteLabel',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22376,6 +22525,8 @@ export namespace Prisma {
     milestoneId: 'milestoneId',
     engineerId: 'engineerId',
     reviewedById: 'reviewedById',
+    submittedLatitude: 'submittedLatitude',
+    submittedLongitude: 'submittedLongitude',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -22577,6 +22728,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ProjectMemberRole'
    */
   export type EnumProjectMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectMemberRole'>
@@ -22601,20 +22766,6 @@ export namespace Prisma {
    * Reference to a field of type 'MediaType[]'
    */
   export type ListEnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -22902,6 +23053,11 @@ export namespace Prisma {
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
+    siteLatitude?: FloatNullableFilter<"Project"> | number | null
+    siteLongitude?: FloatNullableFilter<"Project"> | number | null
+    geofenceRadiusMeters?: IntFilter<"Project"> | number
+    siteAddress?: StringNullableFilter<"Project"> | string | null
+    siteLabel?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -22928,6 +23084,11 @@ export namespace Prisma {
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
+    siteLatitude?: SortOrderInput | SortOrder
+    siteLongitude?: SortOrderInput | SortOrder
+    geofenceRadiusMeters?: SortOrder
+    siteAddress?: SortOrderInput | SortOrder
+    siteLabel?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: UserOrderByWithRelationInput
@@ -22957,6 +23118,11 @@ export namespace Prisma {
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
+    siteLatitude?: FloatNullableFilter<"Project"> | number | null
+    siteLongitude?: FloatNullableFilter<"Project"> | number | null
+    geofenceRadiusMeters?: IntFilter<"Project"> | number
+    siteAddress?: StringNullableFilter<"Project"> | string | null
+    siteLabel?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -22983,6 +23149,11 @@ export namespace Prisma {
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
+    siteLatitude?: SortOrderInput | SortOrder
+    siteLongitude?: SortOrderInput | SortOrder
+    geofenceRadiusMeters?: SortOrder
+    siteAddress?: SortOrderInput | SortOrder
+    siteLabel?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
@@ -23005,6 +23176,11 @@ export namespace Prisma {
     createdById?: StringWithAggregatesFilter<"Project"> | string
     managerId?: StringWithAggregatesFilter<"Project"> | string
     clientId?: StringWithAggregatesFilter<"Project"> | string
+    siteLatitude?: FloatNullableWithAggregatesFilter<"Project"> | number | null
+    siteLongitude?: FloatNullableWithAggregatesFilter<"Project"> | number | null
+    geofenceRadiusMeters?: IntWithAggregatesFilter<"Project"> | number
+    siteAddress?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    siteLabel?: StringNullableWithAggregatesFilter<"Project"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
   }
@@ -23690,6 +23866,8 @@ export namespace Prisma {
     milestoneId?: StringFilter<"Inspection"> | string
     engineerId?: StringFilter<"Inspection"> | string
     reviewedById?: StringNullableFilter<"Inspection"> | string | null
+    submittedLatitude?: FloatNullableFilter<"Inspection"> | number | null
+    submittedLongitude?: FloatNullableFilter<"Inspection"> | number | null
     createdAt?: DateTimeFilter<"Inspection"> | Date | string
     updatedAt?: DateTimeFilter<"Inspection"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
@@ -23706,6 +23884,8 @@ export namespace Prisma {
     milestoneId?: SortOrder
     engineerId?: SortOrder
     reviewedById?: SortOrderInput | SortOrder
+    submittedLatitude?: SortOrderInput | SortOrder
+    submittedLongitude?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
@@ -23726,6 +23906,8 @@ export namespace Prisma {
     milestoneId?: StringFilter<"Inspection"> | string
     engineerId?: StringFilter<"Inspection"> | string
     reviewedById?: StringNullableFilter<"Inspection"> | string | null
+    submittedLatitude?: FloatNullableFilter<"Inspection"> | number | null
+    submittedLongitude?: FloatNullableFilter<"Inspection"> | number | null
     createdAt?: DateTimeFilter<"Inspection"> | Date | string
     updatedAt?: DateTimeFilter<"Inspection"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
@@ -23742,11 +23924,15 @@ export namespace Prisma {
     milestoneId?: SortOrder
     engineerId?: SortOrder
     reviewedById?: SortOrderInput | SortOrder
+    submittedLatitude?: SortOrderInput | SortOrder
+    submittedLongitude?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InspectionCountOrderByAggregateInput
+    _avg?: InspectionAvgOrderByAggregateInput
     _max?: InspectionMaxOrderByAggregateInput
     _min?: InspectionMinOrderByAggregateInput
+    _sum?: InspectionSumOrderByAggregateInput
   }
 
   export type InspectionScalarWhereWithAggregatesInput = {
@@ -23759,6 +23945,8 @@ export namespace Prisma {
     milestoneId?: StringWithAggregatesFilter<"Inspection"> | string
     engineerId?: StringWithAggregatesFilter<"Inspection"> | string
     reviewedById?: StringNullableWithAggregatesFilter<"Inspection"> | string | null
+    submittedLatitude?: FloatNullableWithAggregatesFilter<"Inspection"> | number | null
+    submittedLongitude?: FloatNullableWithAggregatesFilter<"Inspection"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Inspection"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Inspection"> | Date | string
   }
@@ -24303,6 +24491,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -24329,6 +24522,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -24349,6 +24547,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -24375,6 +24578,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -24398,6 +24606,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24409,6 +24622,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24423,6 +24641,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25138,6 +25361,8 @@ export namespace Prisma {
   export type InspectionCreateInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutInspectionsInput
@@ -25154,6 +25379,8 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responses?: InspectionResponseUncheckedCreateNestedManyWithoutInspectionInput
@@ -25162,6 +25389,8 @@ export namespace Prisma {
   export type InspectionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutInspectionsNestedInput
@@ -25178,6 +25407,8 @@ export namespace Prisma {
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responses?: InspectionResponseUncheckedUpdateManyWithoutInspectionNestedInput
@@ -25190,6 +25421,8 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25197,6 +25430,8 @@ export namespace Prisma {
   export type InspectionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25208,6 +25443,8 @@ export namespace Prisma {
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25911,6 +26148,17 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -25936,12 +26184,20 @@ export namespace Prisma {
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
+    siteLatitude?: SortOrder
+    siteLongitude?: SortOrder
+    geofenceRadiusMeters?: SortOrder
+    siteAddress?: SortOrder
+    siteLabel?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ProjectAvgOrderByAggregateInput = {
     totalValue?: SortOrder
+    siteLatitude?: SortOrder
+    siteLongitude?: SortOrder
+    geofenceRadiusMeters?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -25954,6 +26210,11 @@ export namespace Prisma {
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
+    siteLatitude?: SortOrder
+    siteLongitude?: SortOrder
+    geofenceRadiusMeters?: SortOrder
+    siteAddress?: SortOrder
+    siteLabel?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -25968,12 +26229,20 @@ export namespace Prisma {
     createdById?: SortOrder
     managerId?: SortOrder
     clientId?: SortOrder
+    siteLatitude?: SortOrder
+    siteLongitude?: SortOrder
+    geofenceRadiusMeters?: SortOrder
+    siteAddress?: SortOrder
+    siteLabel?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ProjectSumOrderByAggregateInput = {
     totalValue?: SortOrder
+    siteLatitude?: SortOrder
+    siteLongitude?: SortOrder
+    geofenceRadiusMeters?: SortOrder
   }
 
   export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -26000,6 +26269,22 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumProjectMemberRoleFilter<$PrismaModel = never> = {
@@ -26085,17 +26370,6 @@ export namespace Prisma {
     in?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.MediaType[] | ListEnumMediaTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -26225,22 +26499,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMediaTypeFilter<$PrismaModel>
     _max?: NestedEnumMediaTypeFilter<$PrismaModel>
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -26602,8 +26860,15 @@ export namespace Prisma {
     milestoneId?: SortOrder
     engineerId?: SortOrder
     reviewedById?: SortOrder
+    submittedLatitude?: SortOrder
+    submittedLongitude?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InspectionAvgOrderByAggregateInput = {
+    submittedLatitude?: SortOrder
+    submittedLongitude?: SortOrder
   }
 
   export type InspectionMaxOrderByAggregateInput = {
@@ -26613,6 +26878,8 @@ export namespace Prisma {
     milestoneId?: SortOrder
     engineerId?: SortOrder
     reviewedById?: SortOrder
+    submittedLatitude?: SortOrder
+    submittedLongitude?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26624,8 +26891,15 @@ export namespace Prisma {
     milestoneId?: SortOrder
     engineerId?: SortOrder
     reviewedById?: SortOrder
+    submittedLatitude?: SortOrder
+    submittedLongitude?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InspectionSumOrderByAggregateInput = {
+    submittedLatitude?: SortOrder
+    submittedLongitude?: SortOrder
   }
 
   export type EnumInspectionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -27836,6 +28110,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutProjectsCreatedNestedInput = {
     create?: XOR<UserCreateWithoutProjectsCreatedInput, UserUncheckedCreateWithoutProjectsCreatedInput>
     connectOrCreate?: UserCreateOrConnectWithoutProjectsCreatedInput
@@ -28266,14 +28548,6 @@ export namespace Prisma {
 
   export type EnumMediaTypeFieldUpdateOperationsInput = {
     set?: $Enums.MediaType
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -29239,6 +29513,33 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumProjectMemberRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.ProjectMemberRole | EnumProjectMemberRoleFieldRefInput<$PrismaModel>
     in?: $Enums.ProjectMemberRole[] | ListEnumProjectMemberRoleFieldRefInput<$PrismaModel>
@@ -29282,33 +29583,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMediaTypeFilter<$PrismaModel>
     _max?: NestedEnumMediaTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -29677,6 +29951,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -29701,6 +29980,11 @@ export namespace Prisma {
     totalValue?: number | null
     createdById: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -29731,6 +30015,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -29755,6 +30044,11 @@ export namespace Prisma {
     totalValue?: number | null
     createdById: string
     managerId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -29959,6 +30253,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     manager: UserCreateNestedOneWithoutManagedProjectsInput
@@ -29983,6 +30282,11 @@ export namespace Prisma {
     totalValue?: number | null
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -30009,6 +30313,8 @@ export namespace Prisma {
   export type InspectionCreateWithoutEngineerInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutInspectionsInput
@@ -30023,6 +30329,8 @@ export namespace Prisma {
     projectId: string
     milestoneId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responses?: InspectionResponseUncheckedCreateNestedManyWithoutInspectionInput
@@ -30041,6 +30349,8 @@ export namespace Prisma {
   export type InspectionCreateWithoutReviewedByInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutInspectionsInput
@@ -30055,6 +30365,8 @@ export namespace Prisma {
     projectId: string
     milestoneId: string
     engineerId: string
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responses?: InspectionResponseUncheckedCreateNestedManyWithoutInspectionInput
@@ -30355,6 +30667,11 @@ export namespace Prisma {
     createdById?: StringFilter<"Project"> | string
     managerId?: StringFilter<"Project"> | string
     clientId?: StringFilter<"Project"> | string
+    siteLatitude?: FloatNullableFilter<"Project"> | number | null
+    siteLongitude?: FloatNullableFilter<"Project"> | number | null
+    geofenceRadiusMeters?: IntFilter<"Project"> | number
+    siteAddress?: StringNullableFilter<"Project"> | string | null
+    siteLabel?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
   }
@@ -30576,6 +30893,8 @@ export namespace Prisma {
     milestoneId?: StringFilter<"Inspection"> | string
     engineerId?: StringFilter<"Inspection"> | string
     reviewedById?: StringNullableFilter<"Inspection"> | string | null
+    submittedLatitude?: FloatNullableFilter<"Inspection"> | number | null
+    submittedLongitude?: FloatNullableFilter<"Inspection"> | number | null
     createdAt?: DateTimeFilter<"Inspection"> | Date | string
     updatedAt?: DateTimeFilter<"Inspection"> | Date | string
   }
@@ -31115,6 +31434,8 @@ export namespace Prisma {
   export type InspectionCreateWithoutProjectInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     milestone: MilestoneCreateNestedOneWithoutInspectionsInput
@@ -31129,6 +31450,8 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responses?: InspectionResponseUncheckedCreateNestedManyWithoutInspectionInput
@@ -31614,6 +31937,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -31639,6 +31967,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     updates?: ProjectUpdateUncheckedCreateNestedManyWithoutProjectInput
@@ -31735,6 +32068,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -31760,6 +32098,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updates?: ProjectUpdateUncheckedUpdateManyWithoutProjectNestedInput
@@ -31846,6 +32189,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -31871,6 +32219,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -32015,6 +32368,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32040,6 +32398,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -32142,6 +32505,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -32167,6 +32535,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -32405,6 +32778,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32430,6 +32808,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -32682,6 +33065,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -32707,6 +33095,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -32851,6 +33244,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -32876,6 +33274,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -33234,6 +33637,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -33259,6 +33667,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -33313,6 +33726,8 @@ export namespace Prisma {
   export type InspectionCreateWithoutMilestoneInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutInspectionsInput
@@ -33327,6 +33742,8 @@ export namespace Prisma {
     projectId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     responses?: InspectionResponseUncheckedCreateNestedManyWithoutInspectionInput
@@ -33360,6 +33777,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -33385,6 +33807,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -33559,6 +33986,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -33584,6 +34016,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -33798,6 +34235,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -33823,6 +34265,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -34023,6 +34470,8 @@ export namespace Prisma {
   export type InspectionCreateWithoutResponsesInput = {
     id?: string
     status?: $Enums.InspectionStatus
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutInspectionsInput
@@ -34038,6 +34487,8 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34181,6 +34632,8 @@ export namespace Prisma {
   export type InspectionUpdateWithoutResponsesInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutInspectionsNestedInput
@@ -34196,6 +34649,8 @@ export namespace Prisma {
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34307,6 +34762,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -34332,6 +34792,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -34500,6 +34965,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -34525,6 +34995,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -34900,6 +35375,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -34925,6 +35405,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -35027,6 +35512,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35052,6 +35542,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -35071,6 +35566,11 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     isArchived?: boolean
     totalValue?: number | null
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutProjectsCreatedInput
@@ -35096,6 +35596,11 @@ export namespace Prisma {
     createdById: string
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -35192,6 +35697,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35217,6 +35727,11 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -35317,6 +35832,11 @@ export namespace Prisma {
     totalValue?: number | null
     createdById: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35330,6 +35850,11 @@ export namespace Prisma {
     totalValue?: number | null
     createdById: string
     managerId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35402,6 +35927,11 @@ export namespace Prisma {
     totalValue?: number | null
     managerId: string
     clientId: string
+    siteLatitude?: number | null
+    siteLongitude?: number | null
+    geofenceRadiusMeters?: number
+    siteAddress?: string | null
+    siteLabel?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35412,6 +35942,8 @@ export namespace Prisma {
     projectId: string
     milestoneId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35422,6 +35954,8 @@ export namespace Prisma {
     projectId: string
     milestoneId: string
     engineerId: string
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35543,6 +36077,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35567,6 +36106,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -35589,6 +36133,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35600,6 +36149,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutProjectsCreatedNestedInput
@@ -35624,6 +36178,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -35646,6 +36205,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     createdById?: StringFieldUpdateOperationsInput | string
     managerId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35840,6 +36404,11 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagedProjectsNestedInput
@@ -35864,6 +36433,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -35886,6 +36460,11 @@ export namespace Prisma {
     totalValue?: NullableFloatFieldUpdateOperationsInput | number | null
     managerId?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
+    siteLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    siteLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    geofenceRadiusMeters?: IntFieldUpdateOperationsInput | number
+    siteAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35893,6 +36472,8 @@ export namespace Prisma {
   export type InspectionUpdateWithoutEngineerInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutInspectionsNestedInput
@@ -35907,6 +36488,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responses?: InspectionResponseUncheckedUpdateManyWithoutInspectionNestedInput
@@ -35918,6 +36501,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35925,6 +36510,8 @@ export namespace Prisma {
   export type InspectionUpdateWithoutReviewedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutInspectionsNestedInput
@@ -35939,6 +36526,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responses?: InspectionResponseUncheckedUpdateManyWithoutInspectionNestedInput
@@ -35950,6 +36539,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36148,6 +36739,8 @@ export namespace Prisma {
     milestoneId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -36374,6 +36967,8 @@ export namespace Prisma {
   export type InspectionUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     milestone?: MilestoneUpdateOneRequiredWithoutInspectionsNestedInput
@@ -36388,6 +36983,8 @@ export namespace Prisma {
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responses?: InspectionResponseUncheckedUpdateManyWithoutInspectionNestedInput
@@ -36399,6 +36996,8 @@ export namespace Prisma {
     milestoneId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36711,6 +37310,8 @@ export namespace Prisma {
     projectId: string
     engineerId: string
     reviewedById?: string | null
+    submittedLatitude?: number | null
+    submittedLongitude?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -36753,6 +37354,8 @@ export namespace Prisma {
   export type InspectionUpdateWithoutMilestoneInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumInspectionStatusFieldUpdateOperationsInput | $Enums.InspectionStatus
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutInspectionsNestedInput
@@ -36767,6 +37370,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     responses?: InspectionResponseUncheckedUpdateManyWithoutInspectionNestedInput
@@ -36778,6 +37383,8 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     engineerId?: StringFieldUpdateOperationsInput | string
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedLatitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    submittedLongitude?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

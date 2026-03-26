@@ -106,8 +106,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 </header>
 
                 {/* Page content */}
-                <main className="flex-1 min-h-0 page-bg pb-24 md:pb-8">
-                    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+                <main className="flex-1 min-h-0 min-w-0 page-bg pb-24 md:pb-8">
+                    <div className="mx-auto w-full max-w-6xl min-w-0 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                         {children}
                     </div>
                 </main>

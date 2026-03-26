@@ -42,10 +42,11 @@ export default function ProjectEngineerSelector({ projectId, existingMemberUserI
     async function handleAdd(user: User) {
         setAddingId(user.id);
         try {
+            const memberRole = user.role === "PROJECT_MANAGER" ? "PROJECT_MANAGER" : "SITE_ENGINEER";
             const res = await fetch(`/api/projects/${projectId}/members`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: user.id, role: user.role }),
+                body: JSON.stringify({ userId: user.id, role: memberRole }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to assign engineer");

@@ -12,6 +12,9 @@ export const CreateInspectionSchema = z.object({
     milestoneId: z.string().min(1),
     status: z.enum(["DRAFT", "SUBMITTED"]).optional().default("DRAFT"),
     responses: z.array(ResponseSchema).min(1, "At least one response is required"),
+    /** Required when submitting and project has site geofence configured */
+    latitude: z.number().min(-90).max(90).optional(),
+    longitude: z.number().min(-180).max(180).optional(),
 });
 
 export const ReviewInspectionSchema = z.object({
