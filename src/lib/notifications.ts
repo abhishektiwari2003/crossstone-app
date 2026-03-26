@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NotificationPriority } from "@/generated/prisma";
+import { NotificationPriority } from "@/generated/prisma_new";
 
 export type NotificationType =
     | "INSPECTION_SUBMITTED"

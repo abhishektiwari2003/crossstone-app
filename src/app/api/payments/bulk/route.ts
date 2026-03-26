@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { bulkUpdatePayments } from "@/modules/payments/service";
-import type { PaymentStatus } from "@/generated/prisma";
+import type { PaymentStatus } from "@/generated/prisma_new";
 import { getCurrentUser, AuthError } from "@/lib/session";
 import { mutationLimiter, getClientIdentifier } from "@/lib/rateLimit";
 

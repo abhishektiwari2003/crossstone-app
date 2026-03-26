@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma_new";
 import { Button } from "@/components/ui/button";
 import { CheckSquare, Square, Loader2, AlertTriangle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

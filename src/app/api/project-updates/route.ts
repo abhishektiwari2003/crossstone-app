@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { canCreateProjectUpdate } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 const CreateSchema = z.object({
 	projectId: z.string().min(1),

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
 import { haversineMeters } from "@/lib/geo";
 import type { CreateInspectionInput } from "./validation";
-import type { ChecklistResult, InspectionStatus } from "@/generated/prisma";
+import type { ChecklistResult, InspectionStatus } from "@/generated/prisma_new";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
 import { sanitizeInput } from "@/lib/sanitize";

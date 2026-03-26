@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, canViewProject, type AppRole } from "@/lib/authz";
 import type { CreateQueryInput, UpdateQueryInput } from "./validation";
-import type { QueryPriority, QueryStatus } from "@/generated/prisma";
+import type { QueryPriority, QueryStatus } from "@/generated/prisma_new";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
 import { sanitizeInput } from "@/lib/sanitize";

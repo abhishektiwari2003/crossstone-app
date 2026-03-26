@@ -5,7 +5,7 @@ import { isSuperAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma_new";
 import { z } from "zod";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 const UpdateSchema = z.object({
 	name: z.string().min(1).optional(),

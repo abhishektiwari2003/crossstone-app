@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { type AppRole, canViewProject, isAdmin } from "@/lib/authz";
 import { logAudit } from "@/lib/audit";
-import { PaymentStatus, PaymentCategory } from "@/generated/prisma";
+import { PaymentStatus, PaymentCategory } from "@/generated/prisma_new";
 
 // -------------------------------------------------------------
 // GET FINANCIAL DASHBOARD SUMMARY

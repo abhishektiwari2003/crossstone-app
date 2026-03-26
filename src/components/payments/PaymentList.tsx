@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { CheckSquare, Square, FileText, Download, Building2, User } from "lucide-react";
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma_new";
 import type { AdvancedPayment, PaymentCategory } from "@/types/payments";
 import { cn } from "@/lib/utils";
 import BulkPaymentActions from "@/components/payments/BulkPaymentActions";

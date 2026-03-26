@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import { AddMemberSchema } from "@/modules/projects/validation";
 import { addMember, getProjectMembers } from "@/modules/projects/service";
 import type { AppRole } from "@/lib/authz";
@@ -11,7 +11,7 @@ export async function GET(_: NextRequest, context: { params: Promise<{ id: strin
     const session = await getServerSession(authOptions);
     if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const currentUser = session.user as { id: string; role?: import("@/generated/prisma").Role };
+    const currentUser = session.user as { id: string; role?: import("@/generated/prisma_new").Role };
     const { id: projectId } = await context.params;
     const allowed = await canViewProject(currentUser.id, currentUser.role as AppRole, projectId);
     if (!allowed) return NextResponse.json({ error: "Forbidden" }, { status: 403 });

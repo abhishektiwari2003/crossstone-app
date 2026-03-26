@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { canManageProjectRoster, type AppRole } from "@/lib/authz";

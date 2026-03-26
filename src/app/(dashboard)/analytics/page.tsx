@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import AnalyticsClient from "@/components/analytics/AnalyticsClient";
 
 export default async function AnalyticsDashboardPage() {

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { CalendarIcon, Plus, Loader2 } from "lucide-react";
 
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma_new";
 import type { PaymentCategory } from "@/types/payments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

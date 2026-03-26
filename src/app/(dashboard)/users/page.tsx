@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isAdmin, isSuperAdmin } from "@/lib/authz";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import { prisma } from "@/lib/prisma";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";

@@ -5,7 +5,7 @@ import { CreditCard, TrendingUp, Clock, AlertTriangle } from "lucide-react";
 import PaymentsSearchBar from "./PaymentsSearchBar";
 import PaymentsFilterPanel from "./PaymentsFilterPanel";
 import PaymentCard from "./PaymentCard";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 

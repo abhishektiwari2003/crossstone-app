@@ -1,4 +1,4 @@
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma_new";
 
 
 export type PaymentCategory = "MATERIAL" | "LABOR" | "CONTRACTOR" | "OTHER";

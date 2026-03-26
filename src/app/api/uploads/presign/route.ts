@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { presignPutObject } from "@/lib/s3";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 const BodySchema = z.object({
 	type: z.enum(["inspection", "receipt", "drawing"]),

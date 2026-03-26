@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import AuditLogClient from "@/components/audit/AuditLogClient";
 
 export default async function AuditLogPage() {

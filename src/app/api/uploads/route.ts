@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { createS3Client } from "@/lib/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 // Force Node.js runtime (not Edge) for Buffer/S3 SDK support
 export const runtime = "nodejs";

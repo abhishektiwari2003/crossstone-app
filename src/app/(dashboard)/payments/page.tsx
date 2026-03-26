@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import { prisma } from "@/lib/prisma";
 import PaymentsClient from "./PaymentsClient";
 

@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { FolderKanban, CreditCard, Users, TrendingUp, ArrowRight, Activity, MessageSquare, FileText } from "lucide-react";

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { isAdmin, canManageProjectRoster, type AppRole } from "@/lib/authz";
-import type { ProjectMemberRole } from "@/generated/prisma";
+import type { ProjectMemberRole } from "@/generated/prisma_new";
 import { logAudit } from "@/lib/audit";
 import { createNotification } from "@/lib/notifications";
 

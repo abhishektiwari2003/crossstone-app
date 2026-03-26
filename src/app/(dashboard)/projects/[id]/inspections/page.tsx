@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { canManageProjectMilestones, type AppRole } from "@/lib/authz";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import Link from "next/link";
 import { ArrowLeft, Settings, ClipboardCheck } from "lucide-react";
 import ProjectMilestonesManager from "@/components/inspection/ProjectMilestonesManager";

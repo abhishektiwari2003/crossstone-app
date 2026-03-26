@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 const BodySchema = z.object({
 	key: z.string().min(1),

@@ -5,7 +5,7 @@ import { isAdmin } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 
 const CreateUserSchema = z.object({
 	name: z.string().min(1),

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { canViewProject } from "@/lib/authz";
-import { User } from "@/generated/prisma";
+import { User } from "@/generated/prisma_new";
 import React from "react";
 import { renderToStream } from "@react-pdf/renderer";
 import { ProjectReportPDF } from "./pdf/ProjectReportPDF";

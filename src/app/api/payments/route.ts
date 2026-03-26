@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import type { PaymentStatus } from "@/generated/prisma";
+import type { PaymentStatus } from "@/generated/prisma_new";
 import { canEditPayments, isAdmin, validateProjectAccess } from "@/lib/authz";
 import { getCurrentUser, AuthError } from "@/lib/session";
 import { sanitizeInput } from "@/lib/sanitize";

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { getFilteredPayments, createPayment } from "@/modules/payments/service";
-import { PaymentStatus, PaymentCategory } from "@/generated/prisma";
+import { PaymentStatus, PaymentCategory } from "@/generated/prisma_new";
 import type { AppRole } from "@/lib/authz";
 import { z } from "zod";
 

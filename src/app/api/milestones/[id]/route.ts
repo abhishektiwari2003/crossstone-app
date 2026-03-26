@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import type { Role } from "@/generated/prisma";
+import type { Role } from "@/generated/prisma_new";
 import type { AppRole } from "@/lib/authz";
 import { UpdateMilestoneSchema } from "@/modules/milestones/validation";
 import { updateMilestone, deleteMilestone } from "@/modules/milestones/service";

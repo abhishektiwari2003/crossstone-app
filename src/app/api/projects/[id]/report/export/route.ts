@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { generateProjectReportPDF } from "@/modules/reports/service";
-import { User } from "@/generated/prisma";
+import { User } from "@/generated/prisma_new";
 
 export async function GET(
     req: Request,
